@@ -1,0 +1,70 @@
+[
+  {
+    "name": "sandisk",
+    "price": "1223",
+    "description": "it's a san disk image copied from google hahahah",
+    "rating": "4.1",
+    "images": [
+      {
+        "public_id": "products/tzfrsdsads",
+        "url": "https://shop.westerndigital.com/content/dam/store/en-us/assets/products/memory-cards/extreme-pro-uhs-i-sd/gallery/extreme-pro-uhs-i-sd-64gb-front.png"
+      }
+    ],
+    "catagory": "Electronics",
+    "seller": "amazon",
+    "stock": "3",
+    "NumOfReviews": "121",
+    "Reviews": []
+  },
+  {
+    "name": "Apple Macbook",
+    "price": "2223",
+    "description": "new macbook pro 15 inch with retina display",
+    "rating": "4.5",
+    "images": [
+      {
+        "public_id": "products/tzfwresdsrytaads",
+        "url": "https://images-na.ssl-images-amazon.com/images/I/91OspXmLfDL._AC_SL1500_.jpg"
+      }
+    ],
+    "catagory": "Laptops",
+    "seller": "ebay",
+    "stock": "13",
+    "NumOfReviews": "221",
+    "Reviews": []
+  },
+  {
+    "name": "sony dslr",
+    "price": "1293",
+    "description": "the photos you want to show to the world",
+    "rating": "4.2",
+    "images": [
+      {
+        "public_id": "products/tzzxcvbnbsads",
+        "url": "https://www.tuttofoto.com/_img/_imgArt/1409__1.jpg"
+      }
+    ],
+    "catagory": "Cameras",
+    "seller": "cammmm",
+    "stock": "31",
+    "NumOfReviews": "191",
+    "Reviews": []
+  },
+  {
+    "name": "Apple",
+    "price": "2",
+    "description": "Eat Fresh & Healthy",
+    "rating": "4.7",
+    "images": [
+      {
+        "public_id": "products/uyghtsdsrytaads",
+        "url": "https://images-na.ssl-images-amazon.com/images/I/91OspXmLfDL._AC_SL1500_.jpg"
+      }
+    ],
+    "catagory": "Foods",
+    "seller": "shops",
+    "stock": "131",
+    "NumOfReviews": "11",
+    "Reviews": []
+  }
+]
