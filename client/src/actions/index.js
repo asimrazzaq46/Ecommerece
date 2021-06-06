@@ -18,6 +18,9 @@ import {
   LOGIN_SUCCESS,
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAIL,
   REGISTER_USER_FAIL,
 } from "../constants/userConstants";
 
@@ -107,6 +110,22 @@ export const register = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_USER_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+////////////////////  LOAD USER ACTION  (CONSIST LOGIN) /////////////////////
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_USER_REQUEST });
+
+    const { data } = await axios.post(`/api/v1/me`);
+    dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
+  } catch (error) {
+    dispatch({
+      type: LOAD_USER_FAIL,
       payload: error.response.data.Message,
     });
   }

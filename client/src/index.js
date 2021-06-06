@@ -19,7 +19,7 @@ const options = {
   transition: transitions.SCALE,
 };
 
-const store = createStore(
+export const store = createStore(
   reducers,
   {},
   composeWithDevTools(applyMiddleware(thunk))
