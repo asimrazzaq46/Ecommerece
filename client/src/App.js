@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import Header from "./components/layouts/Header";
 
 import Home from "./components/Home";
@@ -15,8 +17,10 @@ import { loadUser } from "./actions";
 import { store } from "./index";
 
 function App() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    store.dispatch(loadUser());
+    dispatch(loadUser());
   }, []);
   return (
     <Router>
