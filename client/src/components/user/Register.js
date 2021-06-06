@@ -15,10 +15,12 @@ const Register = ({ history }) => {
   });
 
   const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("/images/logo.png");
+  const [avatarPreview, setAvatarPreview] = useState(
+    "/images/default_avatar.jpg"
+  );
 
   const { isAuthenticated, loading, error } = useSelector(
-    (state) => state.auth
+    (state) => state.registerUser
   );
 
   const { name, email, password } = user;
@@ -28,10 +30,10 @@ const Register = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.set(name, "name");
-    formData.set(email, "email");
-    formData.set(password, "password");
-    formData.set(avatar, "avatar");
+    formData.set("name", name);
+    formData.set("email", email);
+    formData.set("password", password);
+    formData.set("avatar", avatar);
     dispatch(register(formData));
   };
 
