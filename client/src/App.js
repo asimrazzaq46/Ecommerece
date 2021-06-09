@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -9,6 +10,7 @@ import productDetails from "./components/products/productDetails";
 
 import Register from "./components/user/Register";
 import Login from "./components/user/Login";
+import Profile from "./components/user/Profile";
 
 import Footer from "./components/layouts/Footer";
 
@@ -32,6 +34,7 @@ function App() {
           <Route path="/product/:id" exact component={productDetails} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/me" exact component={Profile} />
         </div>
         <Footer />
       </div>
