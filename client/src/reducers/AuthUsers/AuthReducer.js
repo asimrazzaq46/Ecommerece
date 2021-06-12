@@ -8,7 +8,7 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
   CLEAR_ERRORS,
-} from "../../constants/userConstants";
+} from "../../constants/authConstants";
 const authReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:

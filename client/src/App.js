@@ -5,12 +5,15 @@ import { useDispatch } from "react-redux";
 
 import Header from "./components/layouts/Header";
 
+import ProtectedRoute from "./components/route/ProtectedRoute";
+
 import Home from "./components/Home";
 import productDetails from "./components/products/productDetails";
 
 import Register from "./components/user/Register";
 import Login from "./components/user/Login";
 import Profile from "./components/user/Profile";
+import UpdateProfile from "./components/user/UpdateProfile";
 
 import Footer from "./components/layouts/Footer";
 
@@ -34,7 +37,8 @@ function App() {
           <Route path="/product/:id" exact component={productDetails} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/me" exact component={Profile} />
+          <ProtectedRoute path="/me" exact component={Profile} />
+          <ProtectedRoute path="/me/update" exact component={UpdateProfile} />
         </div>
         <Footer />
       </div>

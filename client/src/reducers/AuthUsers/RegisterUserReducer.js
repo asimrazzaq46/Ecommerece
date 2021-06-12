@@ -3,7 +3,7 @@ import {
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAIL,
   CLEAR_ERRORS,
-} from "../../constants/userConstants";
+} from "../../constants/authConstants";
 
 const RegisterUserReducer = (state = {}, action) => {
   switch (action.type) {
