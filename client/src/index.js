@@ -21,7 +21,13 @@ const options = {
 
 export const store = createStore(
   reducers,
-  {},
+  {
+    cart: {
+      cartItems: localStorage.getItem("cartItems")
+        ? JSON.parse(localStorage.getItem("cartItems"))
+        : [],
+    },
+  },
   composeWithDevTools(applyMiddleware(thunk))
 );
 ReactDOM.render(

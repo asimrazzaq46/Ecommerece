@@ -18,11 +18,12 @@ import UpdatePassword from "./components/user/UpdatePassword";
 import ForgotPassword from "./components/user/ForgotPassword";
 import NewPassword from "./components/user/NewPassword";
 
+import Cart from "./components/cart/Cart";
+
 import Footer from "./components/layouts/Footer";
 
 import "./App.css";
 import { loadUser } from "./actions";
-import { store } from "./index";
 
 function App() {
   const dispatch = useDispatch();
@@ -38,6 +39,9 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/search/:keyword" component={Home} />
           <Route path="/product/:id" exact component={productDetails} />
+
+          <Route path="/cart" exact component={Cart} />
+
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/password/forgot" exact component={ForgotPassword} />

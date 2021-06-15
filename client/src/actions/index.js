@@ -43,6 +43,20 @@ import {
   NEW_PASSWORD_FAIL,
 } from "../constants/userConstants";
 
+// CART CONSTANTS
+
+import { ADD_TO_CART, REMOVE_ITEM_CART } from "../constants/cartConstants";
+
+// SHIPPING CONSTANTS
+
+import { SAVE_SHIPPING_INFO } from "../constants/shippingConstants";
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////// PRODUCTS(HOME AND PRODUCT DETAIL) ///////
+
+//////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////  PRODUCTS ACTION ///////////////////////////////////////////////////
 
 // get all product on the Home screen
@@ -89,6 +103,12 @@ export const getProductDetail = (id) => async (dispatch) => {
     });
   }
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////// AUTHORIZATION (REGISTRATION, LOGIN , LOGOUT) ///////
+
+//////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////  AUTHORIZATION ACTION ///////////////////////////////////////////////////
 
@@ -163,6 +183,12 @@ export const logout = () => async (dispatch) => {
     });
   }
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////// PASSWORD AND PROFILE ///////
+
+//////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////  UPDATE PROFILE ACTION ///////////////////////////////////////////////////
 
@@ -250,6 +276,56 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
       payload: error.response.data.Message,
     });
   }
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////// CART ///////
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////  ADD TO CART ACTION //////////////////////////////
+
+export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
+  const { data } = await axios.get(`/api/v1/product/${id}`);
+
+  dispatch({
+    type: ADD_TO_CART,
+    payload: {
+      product: data.product._id,
+      name: data.product.name,
+      price: data.product.price,
+      stock: data.product.stock,
+      image: data.product.images[0].url,
+      quantity,
+    },
+  });
+
+  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+};
+
+////////////////////////////////  REMOVE ITEM FROM CART ACTION //////////////////////////////
+
+export const removeItemFromCart = (id) => async (dispatch, getState) => {
+  const { data } = await axios.get(`/api/v1/product/${id}`);
+
+  dispatch({
+    type: REMOVE_ITEM_CART,
+    payload: id,
+  });
+
+  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+};
+
+////////////////////////////////  SHIPPING INFO ACTION //////////////////////////////
+
+export const saveShippingInfo = (data) => async (dispatch) => {
+  dispatch({
+    type: SAVE_SHIPPING_INFO,
+    payload: data,
+  });
+
+  localStorage.setItem("shippingInfo", JSON.stringify(data));
 };
 
 export const clearError = () => async (dispatch) => {

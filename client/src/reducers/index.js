@@ -6,6 +6,7 @@ import AuthReducer from "./AuthUsers/AuthReducer";
 import RegisterUserReducer from "./AuthUsers/RegisterUserReducer";
 import UserReducer from "./Users/UserReducer";
 import PasswordReducers from "./Users/PasswordReducers";
+import cartReducers from "./CartReducers/cartReducers";
 
 const reducers = combineReducers({
   products: productReducer,
@@ -14,6 +15,7 @@ const reducers = combineReducers({
   registerUser: RegisterUserReducer,
   user: UserReducer,
   userPasswords: PasswordReducers,
+  cart: cartReducers,
 });
 
 export default reducers;
