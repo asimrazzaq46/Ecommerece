@@ -6,7 +6,7 @@ import { useAlert } from "react-alert";
 import { addItemToCart, removeItemFromCart } from "../../actions";
 import MetaDAta from "../layouts/MetaDAta";
 
-const Cart = () => {
+const Cart = ({ history }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const { cartItems } = useSelector((state) => state.cart);
@@ -33,6 +33,11 @@ const Cart = () => {
     alert.success("Item Removed Successfully");
   };
 
+  // CLICK ON CHECKOUT BUTTON
+  const checkoutHandler = () => {
+    history.push("/login?redirect=shipping");
+  };
+
   return (
     <Fragment>
       <MetaDAta title={"Your Cart"} />
@@ -40,7 +45,6 @@ const Cart = () => {
         <h2 className="mt-5">Your cart is empty</h2>
       ) : (
         <Fragment>
-          {" "}
           <h2 className="mt-5">
             Your Cart: <b>{cartItems.length} items</b>
           </h2>
@@ -143,7 +147,11 @@ const Cart = () => {
                 </p>
 
                 <hr />
-                <button id="checkout_btn" className="btn btn-primary btn-block">
+                <button
+                  id="checkout_btn"
+                  className="btn btn-primary btn-block"
+                  onClick={checkoutHandler}
+                >
                   Check out
                 </button>
               </div>

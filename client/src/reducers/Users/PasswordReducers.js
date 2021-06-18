@@ -9,7 +9,6 @@ import {
   NEW_PASSWORD_REQUEST,
   NEW_PASSWORD_SUCCESS,
   NEW_PASSWORD_FAIL,
-  CLEAR_ERRORS,
 } from "../../constants/userConstants";
 
 const passwordReducer = (state = {}, action) => {
@@ -68,11 +67,7 @@ const passwordReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        error: null,
-      };
+
     default:
       return state;
   }

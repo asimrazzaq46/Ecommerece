@@ -25,9 +25,10 @@ const NewPassword = ({ history, match }) => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
-      dispatch(clearError);
+      alert.error(error);
+      dispatch(clearError());
     }
+
     if (success) {
       alert.success("Password updated successfully");
       history.push("/login");

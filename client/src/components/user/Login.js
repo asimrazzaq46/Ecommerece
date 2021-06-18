@@ -7,17 +7,20 @@ import MetaDAta from "../layouts/MetaDAta";
 import { login, clearError } from "../../actions";
 import Loader from "../layouts/Loader";
 
-const Login = ({ history }) => {
+const Login = ({ history, location }) => {
   // here come all the states for the LOGIN
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isAuthenticated, loading, user, error } = useSelector(
+  const { isAuthenticated, loading, error } = useSelector(
     (state) => state.auth
   );
 
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
   const alert = useAlert();
+
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
@@ -27,12 +30,12 @@ const Login = ({ history }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      history.push("/");
+      history.push(redirect);
     }
 
     if (error) {
-      return alert.error(error);
-      dispatch(clearError);
+      alert.error(error);
+      dispatch(clearError());
     }
   }, [dispatch, alert, error, isAuthenticated, history]);
 

@@ -60,8 +60,8 @@ const Register = ({ history }) => {
     }
 
     if (error) {
-      return alert.error(error);
-      dispatch(clearError);
+      alert.error(error);
+      dispatch(clearError());
     }
   }, [dispatch, alert, error, isAuthenticated, history]);
   return (

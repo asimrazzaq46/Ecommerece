@@ -19,6 +19,8 @@ import ForgotPassword from "./components/user/ForgotPassword";
 import NewPassword from "./components/user/NewPassword";
 
 import Cart from "./components/cart/Cart";
+import Shipping from "./components/cart/Shipping";
+import ConfirmOrder from "./components/cart/ConfirmOrder";
 
 import Footer from "./components/layouts/Footer";
 
@@ -41,6 +43,12 @@ function App() {
           <Route path="/product/:id" exact component={productDetails} />
 
           <Route path="/cart" exact component={Cart} />
+          <ProtectedRoute path="/shipping" exact component={Shipping} />
+          <ProtectedRoute
+            path="/order/confirm"
+            exact
+            component={ConfirmOrder}
+          />
 
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />

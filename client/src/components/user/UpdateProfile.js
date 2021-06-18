@@ -53,8 +53,8 @@ const UpdateProfile = ({ history }) => {
     }
 
     if (error) {
-      return alert.error(error);
-      dispatch(clearError);
+      alert.error(error);
+      dispatch(clearError());
     }
     if (isUpdated) {
       alert.success("user updated successfully");

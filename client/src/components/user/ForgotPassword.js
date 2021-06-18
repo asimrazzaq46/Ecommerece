@@ -26,8 +26,8 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
-      dispatch(clearError);
+      alert.error(error);
+      dispatch(clearError());
     }
     if (message) {
       alert.success(message);

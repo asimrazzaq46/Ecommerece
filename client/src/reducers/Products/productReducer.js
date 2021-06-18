@@ -2,7 +2,6 @@ import {
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
   ALL_PRODUCT_FAIL,
-  CLEAR_ERRORS,
 } from "../../constants/productConstants";
 
 const productReducer = (state = { products: [] }, action) => {
@@ -25,11 +24,7 @@ const productReducer = (state = { products: [] }, action) => {
         loading: false,
         error: action.payload,
       };
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        error: null,
-      };
+
     default:
       return state;
   }

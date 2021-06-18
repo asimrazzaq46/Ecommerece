@@ -1,18 +1,39 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { useAlert } from "react-alert";
+import { countries } from "countries-list";
 
 import { saveShippingInfo } from "../../actions";
 import MetaDAta from "../layouts/MetaDAta";
+import CheckoutSteps from "./CheckoutSteps";
 
-const Shipping = () => {
+const Shipping = ({ history }) => {
+  const { shippingInfo } = useSelector((state) => state.cart);
+
+  //ALL STATES COMES HERE
+
+  const [address, setAddress] = useState(shippingInfo.address);
+  const [city, setCity] = useState(shippingInfo.city);
+  const [postalCode, setPostalCode] = useState(shippingInfo.postalCode);
+  const [phoneNo, setPhoneNo] = useState(shippingInfo.phoneNo);
+  const [country, setCountry] = useState(shippingInfo.country);
+
+  const dispatch = useDispatch();
+
+  const countriesList = Object.values(countries);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(saveShippingInfo({ address, city, postalCode, phoneNo, country }));
+    history.push("/order/confirm");
+  };
+
   return (
     <Fragment>
       <MetaDAta title={"Shipping Information"} />
+      <CheckoutSteps shipping />
       <div className="row wrapper">
         <div className="col-10 col-lg-5">
-          <form className="shadow-lg">
+          <form className="shadow-lg" onSubmit={submitHandler}>
             <h1 className="mb-4">Shipping Info</h1>
             <div className="form-group">
               <label htmlFor="address_field">Address</label>
@@ -20,7 +41,8 @@ const Shipping = () => {
                 type="text"
                 id="address_field"
                 className="form-control"
-                value=""
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 required
               />
             </div>
@@ -31,7 +53,8 @@ const Shipping = () => {
                 type="text"
                 id="city_field"
                 className="form-control"
-                value=""
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
                 required
               />
             </div>
@@ -42,7 +65,8 @@ const Shipping = () => {
                 type="phone"
                 id="phone_field"
                 className="form-control"
-                value=""
+                value={phoneNo}
+                onChange={(e) => setPhoneNo(e.target.value)}
                 required
               />
             </div>
@@ -53,7 +77,8 @@ const Shipping = () => {
                 type="number"
                 id="postal_code_field"
                 className="form-control"
-                value=""
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
                 required
               />
             </div>
@@ -63,10 +88,15 @@ const Shipping = () => {
               <select
                 id="country_field"
                 className="form-control"
-                value=""
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
                 required
               >
-                <option>USA</option>
+                {countriesList.map((country) => (
+                  <option key={country.name} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
               </select>
             </div>
 

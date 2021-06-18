@@ -3,7 +3,6 @@ import {
   UPDATE_PROFILE_FAIL,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_RESET,
-  CLEAR_ERRORS,
 } from "../../constants/userConstants";
 
 const userReducer = (state = {}, action) => {
@@ -30,11 +29,7 @@ const userReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        error: null,
-      };
+
     default:
       return state;
   }

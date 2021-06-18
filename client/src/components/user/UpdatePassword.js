@@ -29,8 +29,8 @@ const UpdatePassword = ({ history }) => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
-      dispatch(clearError);
+      alert.error(error);
+      dispatch(clearError());
     }
     if (isUpdated) {
       alert.success("Password updated successfully");

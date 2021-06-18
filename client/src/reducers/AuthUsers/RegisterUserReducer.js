@@ -2,7 +2,6 @@ import {
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAIL,
-  CLEAR_ERRORS,
 } from "../../constants/authConstants";
 
 const RegisterUserReducer = (state = {}, action) => {
@@ -27,11 +26,7 @@ const RegisterUserReducer = (state = {}, action) => {
         user: null,
         error: action.payload,
       };
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        error: null,
-      };
+
     default:
       return state;
   }
