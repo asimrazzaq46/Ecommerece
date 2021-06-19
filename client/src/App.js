@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import axios from "axios";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import Header from "./components/layouts/Header";
@@ -22,11 +23,16 @@ import NewPassword from "./components/user/NewPassword";
 import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
+import Payment from "./components/cart/Payment";
 
 import Footer from "./components/layouts/Footer";
 
 import "./App.css";
 import { loadUser } from "./actions";
+
+//PAYMENT
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState("");
@@ -57,7 +63,11 @@ function App() {
             exact
             component={ConfirmOrder}
           />
-
+          {stripeApiKey && (
+            <Elements stripe={loadStripe(stripeApiKey)}>
+              <ProtectedRoute path="/payment" component={Payment} />
+            </Elements>
+          )}
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/password/forgot" exact component={ForgotPassword} />
