@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import axios from "axios";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -28,10 +29,17 @@ import "./App.css";
 import { loadUser } from "./actions";
 
 function App() {
+  const [stripeApiKey, setStripeApiKey] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(loadUser());
+
+    async function getStripeApiKey() {
+      const { data } = await axios.get("/api/v1/stripeapi");
+      setStripeApiKey(data.stripeApiKey);
+    }
+    getStripeApiKey();
   }, []);
   return (
     <Router>

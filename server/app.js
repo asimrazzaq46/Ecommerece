@@ -18,12 +18,14 @@ const auth = require("./routes/auth");
 const admin = require("./routes/admin");
 const order = require("./routes/order");
 const review = require("./routes/review");
+const payment = require("./routes/payment");
 
 app.use("/api/v1", products);
 app.use("/api/v1", auth);
 app.use("/api/v1", admin);
 app.use("/api/v1", order);
 app.use("/api/v1", review);
+app.use("/api/v1", payment);
 
 // Error handling with middlwares
 app.use(errorMiddleware);
