@@ -24,6 +24,9 @@ import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
 import Payment from "./components/cart/Payment";
+import OrderSuccess from "./components/cart/OrderSuccess";
+
+import ListOrders from "./components/orders/ListOrders";
 
 import Footer from "./components/layouts/Footer";
 
@@ -65,9 +68,13 @@ function App() {
           />
           {stripeApiKey && (
             <Elements stripe={loadStripe(stripeApiKey)}>
-              <ProtectedRoute path="/payment" component={Payment} />
+              <ProtectedRoute path="/payment" exact component={Payment} />
             </Elements>
           )}
+          <ProtectedRoute path="/success" exact component={OrderSuccess} />
+
+          <ProtectedRoute path="/orders/me" exact component={ListOrders} />
+
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/password/forgot" exact component={ForgotPassword} />

@@ -51,6 +51,19 @@ import { ADD_TO_CART, REMOVE_ITEM_CART } from "../constants/cartConstants";
 
 import { SAVE_SHIPPING_INFO } from "../constants/shippingConstants";
 
+// ORDER CONSTANTS
+import {
+  CREATE_ORDER_REQUEST,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAIL,
+  MY_ORDERS_REQUEST,
+  MY_ORDERS_SUCCESS,
+  MY_ORDERS_FAIL,
+  ORDER_DETAILS_REQUEST,
+  ORDER_DETAILS_SUCCESS,
+  ORDER_DETAILS_FAIL,
+} from "../constants/orderConstants";
+
 //////////////////////////////////////////////////////////////////////////////////
 
 ////// PRODUCTS(HOME AND PRODUCT DETAIL) ///////
@@ -325,6 +338,75 @@ export const saveShippingInfo = (data) => async (dispatch) => {
 
   localStorage.setItem("shippingInfo", JSON.stringify(data));
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////// ORDERS ///////
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////  NEW ORDER ACTION //////////////////////////////
+
+export const createOrder = (order) => async (dispatch, getstate) => {
+  try {
+    dispatch({ type: CREATE_ORDER_REQUEST });
+    const config = {
+      headers: {
+        "content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(`api/v1/order/new`, order, config);
+    dispatch({
+      type: CREATE_ORDER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({ type: CREATE_ORDER_FAIL, error: error.response.data.Message });
+  }
+};
+
+////////////////////////////////  MY ORDERS ACTION //////////////////////////////
+
+export const myAllOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: MY_ORDERS_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/order/me`);
+    dispatch({
+      type: MY_ORDERS_SUCCESS,
+      payload: data.order,
+    });
+    console.log("orders in action", data.order);
+  } catch (error) {
+    dispatch({
+      type: MY_ORDERS_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+////////////////////////////////  GET ORDER DETAILS ACTION //////////////////////////////
+
+export const getOrderDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_DETAILS_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/order/${id}`);
+    dispatch({
+      type: ORDER_DETAILS_SUCCESS,
+      payload: data.order,
+    });
+    console.log("orders in action", data.order);
+  } catch (error) {
+    dispatch({
+      type: ORDER_DETAILS_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+// CLEAR ALL ERRORS
 
 export const clearError = () => async (dispatch) => {
   dispatch({
