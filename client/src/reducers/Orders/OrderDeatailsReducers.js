@@ -4,7 +4,7 @@ import {
   ORDER_DETAILS_FAIL,
 } from "../../constants/orderConstants";
 
-const orderDetailReducers = (state = { order: [] }, action) => {
+const orderDetailReducers = (state = { order: {} }, action) => {
   switch (action.type) {
     case ORDER_DETAILS_REQUEST:
       return {

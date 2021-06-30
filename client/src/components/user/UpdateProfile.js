@@ -65,7 +65,7 @@ const UpdateProfile = ({ history }) => {
         type: UPDATE_PROFILE_RESET,
       });
     }
-  }, [dispatch, alert, error, isUpdated, history]);
+  }, [dispatch, alert, error, isUpdated, user, history]);
 
   return (
     <Fragment>

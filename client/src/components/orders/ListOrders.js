@@ -13,7 +13,6 @@ const ListOrders = () => {
   const dispatch = useDispatch();
 
   const { loading, error, orders } = useSelector((state) => state.myOrder);
-  console.log(loading, orders);
 
   const setOrders = () => {
     const data = {

@@ -1,11 +1,9 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { saveShippingInfo } from "../../actions";
 
 import MetaDAta from "../layouts/MetaDAta";
 import CheckoutSteps from "./CheckoutSteps";
-import Shipping from "./Shipping";
 
 const ConfirmOrder = ({ history }) => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);

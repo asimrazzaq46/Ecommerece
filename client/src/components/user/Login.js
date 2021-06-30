@@ -37,7 +37,7 @@ const Login = ({ history, location }) => {
       alert.error(error);
       dispatch(clearError());
     }
-  }, [dispatch, alert, error, isAuthenticated, history]);
+  }, [dispatch, alert, error, isAuthenticated, history, redirect]);
 
   return (
     <Fragment>

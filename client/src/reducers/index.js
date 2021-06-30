@@ -9,8 +9,8 @@ import PasswordReducers from "./Users/PasswordReducers";
 import cartReducers from "./CartReducers/cartReducers";
 import OrderReducers from "./Orders/OrderReducers";
 import MyOrderReducers from "./Orders/MyOrderReducers";
-import OrderDeatailsReducers from "./Orders/OrderDeatailsReducers";
 import orderDetailReducers from "./Orders/OrderDeatailsReducers";
+import reviewReducers from "./Reviews/reviewReducers";
 
 const reducers = combineReducers({
   products: productReducer,
@@ -23,6 +23,7 @@ const reducers = combineReducers({
   newOrder: OrderReducers,
   myOrder: MyOrderReducers,
   orderDetails: orderDetailReducers,
+  newReview: reviewReducers,
 });
 
 export default reducers;

@@ -12,6 +12,8 @@ import ProtectedRoute from "./components/route/ProtectedRoute";
 import Home from "./components/Home";
 import productDetails from "./components/products/productDetails";
 
+// AUTH IMPORTS
+
 import Register from "./components/user/Register";
 import Login from "./components/user/Login";
 import Profile from "./components/user/Profile";
@@ -20,13 +22,22 @@ import UpdatePassword from "./components/user/UpdatePassword";
 import ForgotPassword from "./components/user/ForgotPassword";
 import NewPassword from "./components/user/NewPassword";
 
+// CART IMPORTS
+
 import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
 import Payment from "./components/cart/Payment";
 import OrderSuccess from "./components/cart/OrderSuccess";
 
+// ORDER IMPORTS
+
+import Dashboard from "./components/admin/Dashboard";
+
 import ListOrders from "./components/orders/ListOrders";
+import OrderDetails from "./components/orders/OrderDetails";
+
+// ADMIN IMPORTS
 
 import Footer from "./components/layouts/Footer";
 
@@ -49,7 +60,7 @@ function App() {
       setStripeApiKey(data.stripeApiKey);
     }
     getStripeApiKey();
-  }, []);
+  }, [dispatch]);
   return (
     <Router>
       <div className="App">
@@ -74,6 +85,7 @@ function App() {
           <ProtectedRoute path="/success" exact component={OrderSuccess} />
 
           <ProtectedRoute path="/orders/me" exact component={ListOrders} />
+          <ProtectedRoute path="/order/:id" exact component={OrderDetails} />
 
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
@@ -88,6 +100,14 @@ function App() {
             component={UpdatePassword}
           />
         </div>
+        {/* ADMIN ROUTES */}
+        <ProtectedRoute
+          path="/dashboard"
+          isAdmin={true}
+          exact
+          component={Dashboard}
+        />
+
         <Footer />
       </div>
     </Router>

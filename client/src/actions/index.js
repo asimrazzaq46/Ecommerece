@@ -8,6 +8,9 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
+  NEW_REVIEW_REQUEST,
+  NEW_REVIEW_SUCCESS,
+  NEW_REVIEW_FAIL,
   CLEAR_ERRORS,
 } from "../constants/productConstants";
 
@@ -113,6 +116,39 @@ export const getProductDetail = (id) => async (dispatch) => {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
       payload: error.response.data.Message,
+    });
+  }
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+
+////// REVIEWS ///////
+
+//////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////// CREATE NEW REVIEW ACTION ///////////////////////////////////////////////////
+
+// NEW REVIEW
+
+export const newReview = (reviewData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: NEW_REVIEW_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(`/api/v1/review`, reviewData, config);
+
+    dispatch({ type: NEW_REVIEW_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: NEW_REVIEW_FAIL,
+      payload: error.response.data.message,
     });
   }
 };
@@ -377,7 +413,6 @@ export const myAllOrders = () => async (dispatch) => {
       type: MY_ORDERS_SUCCESS,
       payload: data.order,
     });
-    console.log("orders in action", data.order);
   } catch (error) {
     dispatch({
       type: MY_ORDERS_FAIL,
@@ -393,11 +428,11 @@ export const getOrderDetails = (id) => async (dispatch) => {
     dispatch({ type: ORDER_DETAILS_REQUEST });
 
     const { data } = await axios.get(`/api/v1/order/${id}`);
+
     dispatch({
       type: ORDER_DETAILS_SUCCESS,
       payload: data.order,
     });
-    console.log("orders in action", data.order);
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
