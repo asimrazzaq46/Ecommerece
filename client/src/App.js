@@ -32,12 +32,13 @@ import OrderSuccess from "./components/cart/OrderSuccess";
 
 // ORDER IMPORTS
 
-import Dashboard from "./components/admin/Dashboard";
-
 import ListOrders from "./components/orders/ListOrders";
 import OrderDetails from "./components/orders/OrderDetails";
 
 // ADMIN IMPORTS
+
+import Dashboard from "./components/admin/Dashboard";
+import ProductList from "./components/admin/ProductList";
 
 import Footer from "./components/layouts/Footer";
 
@@ -106,6 +107,12 @@ function App() {
           isAdmin={true}
           exact
           component={Dashboard}
+        />
+        <ProtectedRoute
+          path="/admin/products"
+          isAdmin={true}
+          exact
+          component={ProductList}
         />
 
         <Footer />

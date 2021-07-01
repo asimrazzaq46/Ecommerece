@@ -12,7 +12,11 @@ const {
   allOrders,
   updateOrder,
   deleteOrder,
+  getAdminProducts,
 } = require("../controllers/adminController");
+
+//PRODUCTS
+router.route("/admin/products").get(getAdminProducts);
 
 router
   .route("/admin/users")

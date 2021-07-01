@@ -11,10 +11,12 @@ import OrderReducers from "./Orders/OrderReducers";
 import MyOrderReducers from "./Orders/MyOrderReducers";
 import orderDetailReducers from "./Orders/OrderDeatailsReducers";
 import reviewReducers from "./Reviews/reviewReducers";
+import newProductReducers from "./Products/newProductReducers";
 
 const reducers = combineReducers({
   products: productReducer,
   productDetails: productDetailReducer,
+  newProduct: newProductReducers,
   auth: AuthReducer,
   registerUser: RegisterUserReducer,
   user: UserReducer,
