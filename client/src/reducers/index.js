@@ -12,11 +12,15 @@ import MyOrderReducers from "./Orders/MyOrderReducers";
 import orderDetailReducers from "./Orders/OrderDeatailsReducers";
 import reviewReducers from "./Reviews/reviewReducers";
 import newProductReducers from "./Products/newProductReducers";
+import deleteandUpdateProductReducers from "./Products/deleteandUpdateProductReducers";
+import allOrderReducers from "./Orders/AllOrderReducers";
+import updateOrderReducers from "./Orders/UpdateOrderReducers";
 
 const reducers = combineReducers({
   products: productReducer,
   productDetails: productDetailReducer,
   newProduct: newProductReducers,
+  product: deleteandUpdateProductReducers,
   auth: AuthReducer,
   registerUser: RegisterUserReducer,
   user: UserReducer,
@@ -26,6 +30,8 @@ const reducers = combineReducers({
   myOrder: MyOrderReducers,
   orderDetails: orderDetailReducers,
   newReview: reviewReducers,
+  allOrders: allOrderReducers,
+  order: updateOrderReducers,
 });
 
 export default reducers;

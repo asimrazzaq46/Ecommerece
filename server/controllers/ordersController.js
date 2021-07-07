@@ -67,24 +67,3 @@ exports.myOrders = catchAsyncError(async (req, res, next) => {
     order,
   });
 });
-
-// Get ALL orders => api/v1/admin/orders/
-
-exports.allOrderss = catchAsyncError(async (req, res, next) => {
-  const orders = await Orders.find();
-  let totalAmount = 0;
-
-  if (!orders) {
-    return next(new ErrorHandler("No Order Found!"), 404);
-  }
-
-  orders.forEach((order) => {
-    totalAmount += order.totalPrice;
-  });
-
-  res.status(200).json({
-    success: true,
-    totalAmount,
-    orders,
-  });
-});

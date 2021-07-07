@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
 
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Header from "./components/layouts/Header";
 
@@ -39,17 +39,23 @@ import OrderDetails from "./components/orders/OrderDetails";
 
 import Dashboard from "./components/admin/Dashboard";
 import ProductList from "./components/admin/ProductList";
+import NewProduct from "./components/admin/NewProduct";
+import UpdateProduct from "./components/admin/UpdateProduct";
+import OrdersList from "./components/admin/OrdersList";
+import ProcessOrder from "./components/admin/ProcessOrder";
 
 import Footer from "./components/layouts/Footer";
 
 import "./App.css";
-import { loadUser } from "./actions";
+import { loadUser, newProduct } from "./actions";
 
 //PAYMENT
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 function App() {
+  const { loading, user, isAuthenticated } = useSelector((state) => state.auth);
+
   const [stripeApiKey, setStripeApiKey] = useState("");
   const dispatch = useDispatch();
 
@@ -114,8 +120,35 @@ function App() {
           exact
           component={ProductList}
         />
+        <ProtectedRoute
+          path="/admin/product"
+          isAdmin={true}
+          exact
+          component={NewProduct}
+        />
 
-        <Footer />
+        <ProtectedRoute
+          path="/admin/product/:id"
+          isAdmin={true}
+          exact
+          component={UpdateProduct}
+        />
+
+        <ProtectedRoute
+          path="/admin/orders"
+          isAdmin={true}
+          exact
+          component={OrdersList}
+        />
+
+        <ProtectedRoute
+          path="/admin/order/:id"
+          isAdmin={true}
+          exact
+          component={ProcessOrder}
+        />
+
+        {!loading && (!isAuthenticated || user.role !== "admin") && <Footer />}
       </div>
     </Router>
   );
