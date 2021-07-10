@@ -83,7 +83,7 @@ const NewProduct = ({ history }) => {
     }
 
     if (success) {
-      history.push("admin/products");
+      history.push("/admin/products");
       alert.success("Product Created Successfully");
       dispatch({ type: NEW_PRODUCT_RESET });
     }

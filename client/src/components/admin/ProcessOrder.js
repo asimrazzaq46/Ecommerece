@@ -27,7 +27,7 @@ const ProcessOrder = ({ match }) => {
     orderStatus,
   } = order;
 
-  const { error, isUpdated } = useSelector((state) => state.order);
+  const { error: updateError, isUpdated } = useSelector((state) => state.order);
 
   const orderId = match.params.id;
 
@@ -48,8 +48,8 @@ const ProcessOrder = ({ match }) => {
   useEffect(() => {
     dispatch(getOrderDetails(orderId));
 
-    if (error) {
-      alert.error(error);
+    if (updateError) {
+      alert.error(updateError);
       dispatch(clearError());
     }
 
@@ -57,7 +57,7 @@ const ProcessOrder = ({ match }) => {
       alert.success("Order updated Successfully");
       dispatch({ type: UPDATE_ORDER_RESET });
     }
-  }, [dispatch, error, orderId, isUpdated]);
+  }, [dispatch, updateError, orderId, isUpdated]);
 
   return (
     <Fragment>

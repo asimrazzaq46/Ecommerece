@@ -15,6 +15,8 @@ import newProductReducers from "./Products/newProductReducers";
 import deleteandUpdateProductReducers from "./Products/deleteandUpdateProductReducers";
 import allOrderReducers from "./Orders/AllOrderReducers";
 import updateOrderReducers from "./Orders/UpdateOrderReducers";
+import AllUserReducers from "./Users/AllUserReducers";
+import UserDetailsReducers from "./Users/UserDetailsReducers";
 
 const reducers = combineReducers({
   products: productReducer,
@@ -24,6 +26,8 @@ const reducers = combineReducers({
   auth: AuthReducer,
   registerUser: RegisterUserReducer,
   user: UserReducer,
+  allUsers: AllUserReducers,
+  userDetails: UserDetailsReducers,
   userPasswords: PasswordReducers,
   cart: cartReducers,
   newOrder: OrderReducers,

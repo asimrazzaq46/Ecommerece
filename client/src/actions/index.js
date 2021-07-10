@@ -56,6 +56,15 @@ import {
   NEW_PASSWORD_REQUEST,
   NEW_PASSWORD_SUCCESS,
   NEW_PASSWORD_FAIL,
+  ALL_USERS_REQUEST,
+  ALL_USERS_SUCCESS,
+  ALL_USERS_FAIL,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAIL,
 } from "../constants/userConstants";
 
 // CART CONSTANTS
@@ -83,6 +92,9 @@ import {
   UPDATE_ORDER_REQUEST,
   UPDATE_ORDER_SUCCESS,
   UPDATE_ORDER_FAIL,
+  DELETE_ORDER_REQUEST,
+  DELETE_ORDER_SUCCESS,
+  DELETE_ORDER_FAIL,
 } from "../constants/orderConstants";
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -581,7 +593,7 @@ export const allOrders = () => async (dispatch) => {
 
 //////////////////////////////// UPDATE ORDER ACTION (DASHBOARD) //////////////////////////////
 
-export const updateOrder = (id, orderData) => async (dispatch, getstate) => {
+export const updateOrder = (id, orderData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_ORDER_REQUEST });
     const config = {
@@ -600,7 +612,78 @@ export const updateOrder = (id, orderData) => async (dispatch, getstate) => {
       payload: data.success,
     });
   } catch (error) {
-    dispatch({ type: UPDATE_ORDER_FAIL, error: error.response.data.Message });
+    dispatch({ type: UPDATE_ORDER_FAIL, payload: error.response.data.Message });
+  }
+};
+
+//////////////////////////////// DELETE ORDER ACTION (DASHBOARD) //////////////////////////////
+
+export const deleteOrder = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_ORDER_REQUEST });
+
+    const { data } = await axios.delete(`/api/v1/admin/order/${id}`);
+
+    dispatch({ type: DELETE_ORDER_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({ type: DELETE_ORDER_FAIL, payload: error.response.data.Message });
+  }
+};
+
+//////////////////////////////// ALL USERS ORDER ACTION (DASHBOARD) //////////////////////////////
+
+export const allUsers = () => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_USERS_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/admin/users`);
+    dispatch({ type: ALL_USERS_SUCCESS, payload: data.users });
+    console.log(data);
+  } catch (error) {
+    dispatch({
+      type: ALL_USERS_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+//////////////////////////////// UPDATE USER ORDER ACTION (DASHBOARD) //////////////////////////////
+
+export const updateUser = (id, userData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_USER_REQUEST });
+    const config = {
+      headers: {
+        "content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.put(
+      `/api/v1/admin/user/${id}`,
+      userData,
+      config
+    );
+    dispatch({ type: UPDATE_USER_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_USER_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+//////////////////////////////// GET USER DETAILS ORDER ACTION (DASHBOARD) //////////////////////////////
+
+export const getUserDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_DETAILS_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/admin/user/${id}`);
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data.user });
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_FAIL,
+      payload: error.response.data.Message,
+    });
   }
 };
 

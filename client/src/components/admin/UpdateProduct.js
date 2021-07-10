@@ -108,7 +108,7 @@ const UpdateProduct = ({ match, history }) => {
     }
 
     if (isUpdated) {
-      history.push("admin/products");
+      history.push("/admin/products");
       alert.success("Product updated Successfully");
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }

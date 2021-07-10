@@ -43,7 +43,10 @@ import NewProduct from "./components/admin/NewProduct";
 import UpdateProduct from "./components/admin/UpdateProduct";
 import OrdersList from "./components/admin/OrdersList";
 import ProcessOrder from "./components/admin/ProcessOrder";
+import UsersList from "./components/admin/UsersList";
+import UpdateUser from "./components/admin/UpdateUser";
 
+//FOOTER
 import Footer from "./components/layouts/Footer";
 
 import "./App.css";
@@ -146,6 +149,20 @@ function App() {
           isAdmin={true}
           exact
           component={ProcessOrder}
+        />
+
+        <ProtectedRoute
+          path="/admin/users"
+          isAdmin={true}
+          exact
+          component={UsersList}
+        />
+
+        <ProtectedRoute
+          path="/admin/user/:id"
+          isAdmin={true}
+          exact
+          component={UpdateUser}
         />
 
         {!loading && (!isAuthenticated || user.role !== "admin") && <Footer />}
