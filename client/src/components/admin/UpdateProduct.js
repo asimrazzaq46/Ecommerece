@@ -112,7 +112,16 @@ const UpdateProduct = ({ match, history }) => {
       alert.success("Product updated Successfully");
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
-  }, [dispatch, error, updateError, isUpdated, product, productId, history]);
+  }, [
+    dispatch,
+    alert,
+    error,
+    updateError,
+    isUpdated,
+    product,
+    productId,
+    history,
+  ]);
   return (
     <Fragment>
       <MetaDAta title={"Update Product"} />

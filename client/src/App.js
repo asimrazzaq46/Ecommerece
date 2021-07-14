@@ -45,12 +45,13 @@ import OrdersList from "./components/admin/OrdersList";
 import ProcessOrder from "./components/admin/ProcessOrder";
 import UsersList from "./components/admin/UsersList";
 import UpdateUser from "./components/admin/UpdateUser";
+import ProductReviews from "./components/admin/ProductReviews";
 
 //FOOTER
 import Footer from "./components/layouts/Footer";
 
 import "./App.css";
-import { loadUser, newProduct } from "./actions";
+import { loadUser } from "./actions";
 
 //PAYMENT
 import { loadStripe } from "@stripe/stripe-js";
@@ -163,6 +164,13 @@ function App() {
           isAdmin={true}
           exact
           component={UpdateUser}
+        />
+
+        <ProtectedRoute
+          path="/admin/reviews"
+          isAdmin={true}
+          exact
+          component={ProductReviews}
         />
 
         {!loading && (!isAuthenticated || user.role !== "admin") && <Footer />}

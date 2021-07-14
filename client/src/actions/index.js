@@ -11,6 +11,12 @@ import {
   NEW_REVIEW_REQUEST,
   NEW_REVIEW_SUCCESS,
   NEW_REVIEW_FAIL,
+  GET_REVIEWS_REQUEST,
+  GET_REVIEWS_SUCCESS,
+  GET_REVIEWS_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
+  DELETE_REVIEW_FAIL,
   ADMIN_PRODUCT_REQUEST,
   ADMIN_PRODUCT_SUCCESS,
   ADMIN_PRODUCT_FAIL,
@@ -65,6 +71,9 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAIL,
 } from "../constants/userConstants";
 
 // CART CONSTANTS
@@ -682,6 +691,56 @@ export const getUserDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+//////////////////////////////// DELETE USER ORDER ACTION (DASHBOARD) //////////////////////////////
+
+export const deleteUser = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_USER_REQUEST });
+
+    const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
+    dispatch({ type: DELETE_USER_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: DELETE_USER_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+//////////////////////////////// GET ALL REVIEWS ACTION (DASHBOARD) //////////////////////////////
+
+export const getProductReviews = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_REVIEWS_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/reviews?id=${id}`);
+    dispatch({ type: GET_REVIEWS_SUCCESS, payload: data.reviews });
+  } catch (error) {
+    dispatch({
+      type: GET_REVIEWS_FAIL,
+      payload: error.response.data.Message,
+    });
+  }
+};
+
+//////////////////////////////// DELETE REVIEWS ACTION (DASHBOARD) //////////////////////////////
+
+export const deleteReview = (id, productId) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_REVIEW_REQUEST });
+
+    const { data } = await axios.delete(
+      `/api/v1/reviews?id=${id}&productId=${productId}`
+    );
+    dispatch({ type: DELETE_REVIEW_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
       payload: error.response.data.Message,
     });
   }

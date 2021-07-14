@@ -52,7 +52,7 @@ const UpdateUser = ({ match, history }) => {
         type: UPDATE_USER_RESET,
       });
     }
-  }, [dispatch, alert, error, isUpdated, user, history]);
+  }, [dispatch, alert, error, isUpdated, user, userId, history]);
 
   return (
     <Fragment>

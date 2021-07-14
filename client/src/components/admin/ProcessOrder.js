@@ -57,7 +57,7 @@ const ProcessOrder = ({ match }) => {
       alert.success("Order updated Successfully");
       dispatch({ type: UPDATE_ORDER_RESET });
     }
-  }, [dispatch, updateError, orderId, isUpdated]);
+  }, [dispatch, alert, updateError, orderId, isUpdated]);
 
   return (
     <Fragment>

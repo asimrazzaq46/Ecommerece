@@ -4,19 +4,19 @@ import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { MDBDataTable } from "mdbreact";
 
-import { allUsers, clearError } from "../../actions";
+import { allUsers, deleteUser, clearError } from "../../actions";
 import MetaDAta from "../layouts/MetaDAta";
 import Loader from "../layouts/Loader";
 import Sidebar from "./Sidebar";
 
-// import { DELETE_USER_RESET } from "../../constants/userConstants";
+import { DELETE_USER_RESET } from "../../constants/userConstants";
 
-const UsersList = () => {
+const UsersList = ({ history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
 
   const { error, loading, users } = useSelector((state) => state.allUsers);
-  //   const { isDeleted } = useSelector((state) => state.user);
+  const { isDeleted } = useSelector((state) => state.user);
 
   const setUsers = () => {
     const data = {
@@ -64,7 +64,10 @@ const UsersList = () => {
             >
               <i className="fa fa-pencil"></i>
             </Link>
-            <button className="btn btn-danger py-1 px-2 ml-2">
+            <button
+              className="btn btn-danger py-1 px-2 ml-2"
+              onClick={() => deleteUserHandler(user._id)}
+            >
               <i className="fa fa-trash"></i>
             </button>
           </Fragment>
@@ -75,9 +78,9 @@ const UsersList = () => {
     return data;
   };
 
-  //   const deleteUserHandler = (id) => {
-  //     dispatch(deleteOrder(id));
-  //   };
+  const deleteUserHandler = (id) => {
+    dispatch(deleteUser(id));
+  };
 
   useEffect(() => {
     dispatch(allUsers());
@@ -87,12 +90,12 @@ const UsersList = () => {
       dispatch(clearError());
     }
 
-    // if (isDeleted) {
-    //   alert.success("ORDER Deleted Successfully");
-    //   history.push("/admin/orders");
-    //   dispatch({ type: DELETE_ORDER_RESET });
-    // }
-  }, [dispatch, alert, error]);
+    if (isDeleted) {
+      alert.success("User Deleted Successfully");
+      history.push("/admin/users");
+      dispatch({ type: DELETE_USER_RESET });
+    }
+  }, [dispatch, alert, error, isDeleted, history]);
   return (
     <Fragment>
       <MetaDAta title={"All Users"} />

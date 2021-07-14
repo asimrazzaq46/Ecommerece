@@ -20,9 +20,7 @@ const NewProduct = ({ history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  const { loading, error, success, product } = useSelector(
-    (state) => state.newProduct
-  );
+  const { loading, error, success } = useSelector((state) => state.newProduct);
 
   const categories = [
     "Electronics",

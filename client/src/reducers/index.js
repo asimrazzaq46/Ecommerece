@@ -17,6 +17,8 @@ import allOrderReducers from "./Orders/AllOrderReducers";
 import updateOrderReducers from "./Orders/UpdateOrderReducers";
 import AllUserReducers from "./Users/AllUserReducers";
 import UserDetailsReducers from "./Users/UserDetailsReducers";
+import GetReviewReducers from "./Reviews/GetReviewReducers";
+import DeleteReviewReducers from "./Reviews/DeleteReviewReducers";
 
 const reducers = combineReducers({
   products: productReducer,
@@ -34,6 +36,8 @@ const reducers = combineReducers({
   myOrder: MyOrderReducers,
   orderDetails: orderDetailReducers,
   newReview: reviewReducers,
+  productReviews: GetReviewReducers,
+  deleteReview: DeleteReviewReducers,
   allOrders: allOrderReducers,
   order: updateOrderReducers,
 });
