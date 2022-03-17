@@ -15,7 +15,6 @@ import MetaDAta from "../layouts/MetaDAta";
 import { NEW_REVIEW_RESET } from "../../constants/productConstants";
 import ListReviews from "../reviews/ListReviews";
 
-
 const ProductDetails = ({ match }) => {
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0);
@@ -220,7 +219,7 @@ const ProductDetails = ({ match }) => {
                 </button>
               ) : (
                 <div className="alert alert-danger mt-5" type="alert">
-                  Login to post your review.
+                  Login first to post your review.
                 </div>
               )}
 
@@ -293,10 +292,9 @@ const ProductDetails = ({ match }) => {
             </div>
           </div>
           {console.log(product)}
-          {product.Reviews &&
-            product.Reviews.length > 0 &&
+          {product.Reviews && product.Reviews.length > 0 && (
             <ListReviews reviews={product.Reviews} />
-            }
+          )}
         </Fragment>
       )}
     </Fragment>

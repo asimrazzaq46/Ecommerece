@@ -16,7 +16,7 @@ const OrderDetails = ({ match }) => {
     error,
     order = {},
   } = useSelector((state) => state.orderDetails);
-  console.log(order.shippingInfo);
+  console.log(order);
   console.log(order.orderItems);
   const {
     shippingInfo,

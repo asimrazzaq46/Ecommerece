@@ -22,7 +22,7 @@ const CheckoutSteps = ({ shipping, ConfirmOrder, payment }) => {
 
       {/* IF IT'S ON CONFIRM ORDER STEP */}
       {ConfirmOrder ? (
-        <Link to="/order/confirm" className="float-right">
+        <Link to="/confirm" className="float-right">
           <div className="triangle2-active"></div>
           <div className="step active-step">Confirm Order</div>
           <div className="triangle-active"></div>

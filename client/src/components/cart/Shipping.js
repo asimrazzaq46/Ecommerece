@@ -8,6 +8,7 @@ import CheckoutSteps from "./CheckoutSteps";
 
 const Shipping = ({ history }) => {
   const { shippingInfo } = useSelector((state) => state.cart);
+  const { order = {} } = useSelector((state) => state.orderDetails);
 
   //ALL STATES COMES HERE
 
@@ -24,7 +25,7 @@ const Shipping = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(saveShippingInfo({ address, city, postalCode, phoneNo, country }));
-    history.push("/order/confirm");
+    history.push(`/confirm`);
   };
 
   return (
