@@ -109,36 +109,35 @@ exports.allOrders = catchAsyncError(async (req, res, next) => {
 
 // Update / Process orders => api/v1/admin/order/:id
 
-exports.updateOrder = catchAsyncError(async (req, res, next) => {
-  const order = await Orders.findById(req.params.id);
-
-  if (order.orderStatus === "Delivered") {
-    return next(
-      new ErrorHandler("You have already Delivered this Product"),
-      400
-    );
-  }
-
-  order.orderItems.forEach(async (item) => {
-    await updateStock(item.product, item.quantity);
+exports.updateOrder = catchAsyncError(async (req, res) => {
+  const { inTransaction } = require("../utils/transaction");
+  const status = req.body.status;
+  if (!["Processing", "Shipped", "Delivered"].includes(status)) throw new ErrorHandler("Invalid order status", 400);
+  await inTransaction(async session => {
+    const order = await Orders.findById(req.params.id).session(session);
+    if (!order) throw new ErrorHandler("Order not found", 404);
+    if (order.orderStatus === status) return;
+    const transitions = { Processing: ["Shipped", "Delivered"], Shipped: ["Delivered"], Delivered: [] };
+    if (!transitions[order.orderStatus] || !transitions[order.orderStatus].includes(status)) {
+      throw new ErrorHandler("Invalid order status transition", 400);
+    }
+    if (!order.paymentInfo || order.paymentInfo.status !== "succeeded") throw new ErrorHandler("Order is not paid", 400);
+    // Legacy shipped orders already had stock deducted by the previous implementation.
+    if (!order.stockDeducted && order.orderStatus === "Processing") {
+      for (const item of order.orderItems) {
+        if (!Number.isSafeInteger(item.quantity) || item.quantity < 1) throw new ErrorHandler("Invalid order quantity", 400);
+        const result = await Product.updateOne({ _id: item.product, stock: { $gte: item.quantity } },
+          { $inc: { stock: -item.quantity } }, { session });
+        if (result.nModified !== 1) throw new ErrorHandler("Product is missing or stock is insufficient", 409);
+      }
+    }
+    order.stockDeducted = true;
+    order.orderStatus = status;
+    if (status === "Delivered") order.deliveredAt = Date.now();
+    await order.save({ session });
   });
-
-  order.orderStatus = req.body.status;
-  order.deliveredAt = Date.now();
-
-  await order.save();
-
-  res.status(200).json({
-    success: true,
-  });
+  res.status(200).json({ success: true });
 });
-
-async function updateStock(id, quantity) {
-  const product = await Product.findById(id);
-
-  product.stock = product.stock - quantity;
-  await product.save({ validateBeforeSave: false });
-}
 
 // Delete order => api/v1/admin/order/:id
 

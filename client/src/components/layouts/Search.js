@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 const Search = ({ history }) => {
   const [keyWord, setKeyword] = useState("");
+  
+  
+  
   const SearchHandler = (e) => {
     e.preventDefault();
     if (keyWord.trim()) {

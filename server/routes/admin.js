@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const { isAuthenticatedUser, authorizeRole } = require("../middlewares/auth");
+const validateAuth = require("../middlewares/validateAuth");
 
 const {
   allUser,
@@ -16,7 +17,7 @@ const {
 } = require("../controllers/adminController");
 
 //PRODUCTS
-router.route("/admin/products").get(getAdminProducts);
+router.route("/admin/products").get(isAuthenticatedUser, authorizeRole("admin"), getAdminProducts);
 
 router
   .route("/admin/users")
@@ -26,7 +27,7 @@ router
   .route("/admin/user/:id")
   .get(isAuthenticatedUser, authorizeRole("admin"), getUserDetails)
 
-  .put(isAuthenticatedUser, authorizeRole("admin"), updateUser)
+  .put(isAuthenticatedUser, authorizeRole("admin"), validateAuth("admin"), updateUser)
 
   .delete(isAuthenticatedUser, authorizeRole("admin"), deleteUser);
 

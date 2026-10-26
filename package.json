@@ -7,7 +7,10 @@
     "start": "node server/server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon server/server",
     "prod": "SET NODE_ENV=PRODUCTION& nodemon server/server",
-    "seeder": "node server/utils/seeder.js"
+    "seeder": "node server/utils/seeder.js",
+    "test": "node scripts/test.js",
+    "test:server": "node client/node_modules/jest/bin/jest.js --config server/jest.config.js --runInBand",
+    "test:client": "npm --prefix client test -- --watchAll=false --runInBand"
   },
   "author": "Asim Razzaq",
   "license": "ISC",

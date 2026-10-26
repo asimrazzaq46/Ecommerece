@@ -13,6 +13,6 @@ router.route("/review").put(isAuthenticatedUser, createProductReview);
 
 router.route("/reviews").get(isAuthenticatedUser, getProductReview);
 
-router.route("/reviews").delete(isAuthenticatedUser, deleteProductReview);
+router.route("/reviews").delete(isAuthenticatedUser, authorizeRole("admin"), deleteProductReview);
 
 module.exports = router;

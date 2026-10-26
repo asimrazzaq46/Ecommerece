@@ -123,6 +123,8 @@ export const getProducts =
         type: ALL_PRODUCT_REQUEST,
       });
 
+      console.log(`requesting for products`);
+
       let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}
                   &price[gte]=${price[0]}&rating[gte]=${rating}`;
 
@@ -134,6 +136,7 @@ export const getProducts =
       const { data } = await axios.get(link); // REQUEST TO THE SERVER
 
       dispatch({ type: ALL_PRODUCT_SUCCESS, payload: data });
+      console.log(`dispatched for products`);
     } catch (error) {
       dispatch({
         type: ALL_PRODUCT_FAIL,
@@ -431,13 +434,14 @@ export const createOrder = (order) => async (dispatch, getstate) => {
       },
     };
 
-    const { data } = await axios.post(`api/v1/order/new`, order, config);
+    const { data } = await axios.post(`/api/v1/order/new`, order, config);
     dispatch({
       type: CREATE_ORDER_SUCCESS,
       payload: data,
     });
+    return data.order;
   } catch (error) {
-    dispatch({ type: CREATE_ORDER_FAIL, error: error.response.data.Message });
+    dispatch({ type: CREATE_ORDER_FAIL, payload: error.response?.data?.Message || error.message || "Unable to create order" });
   }
 };
 

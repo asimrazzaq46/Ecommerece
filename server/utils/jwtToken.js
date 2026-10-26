@@ -1,4 +1,4 @@
-// create and send token and also save in the cookie
+const authCookie = require("./authCookie");
 
 const sendToken = (user, statusCode, res) => {
   // create JWT token
@@ -9,7 +9,7 @@ const sendToken = (user, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true,
+    ...authCookie(),
   };
   res.status(statusCode).cookie("token", token, options).json({
     success: true,

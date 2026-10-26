@@ -4,6 +4,13 @@
 # Installed dependencies (all project folders)
 node_modules/
 
+# Local reports and test output
+/docs/
+coverage/
+
+# Local credentials (existing tracked files must also be untracked by the owner)
+/server/config/config.env
+
 # Environment secrets; safe example templates remain trackable
 .env
 .env.*

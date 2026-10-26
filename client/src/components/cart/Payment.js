@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 import axios from "axios";
@@ -13,7 +13,7 @@ import {
 
 import MetaDAta from "../layouts/MetaDAta";
 import CheckoutSteps from "./CheckoutSteps";
-import { createOrder, clearError } from "../../actions";
+import { createOrder, removeItemFromCart } from "../../actions";
 const options = {
   style: {
     base: {
@@ -33,86 +33,88 @@ const Payment = ({ history }) => {
 
   const { user } = useSelector((state) => state.auth);
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
-  const { error } = useSelector((state) => state.newOrder);
-
-  // creating an order...the data we have to send to backend that we passed in orderController => new Order
-  const order = {
-    orderItems: cartItems,
-    shippingInfo,
+  const orderError = useSelector((state) => state.newOrder.error);
+  const [busy, setBusy] = useState(false);
+  const submitting = useRef(false);
+  const [message, setMessage] = useState("");
+  const readSession = key => {
+    try { return JSON.parse(sessionStorage.getItem(key)); } catch { return null; }
   };
+  const orderInfo = readSession("orderInfo");
+  const pending = readSession("pendingCheckout");
+  const userId = user && (user._id || user.id || user.email);
+  const recoverable = pending && pending.userId === userId;
+  const [total, setTotal] = useState(() => recoverable ? pending.totalPrice : orderInfo && orderInfo.totalPrice);
 
-  const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
-
-  if (orderInfo) {
-    order.itemsPrice = orderInfo.itemsPrice;
-    order.shippingPrice = orderInfo.shippingPrice;
-    order.taxPrice = orderInfo.taxPrice;
-    order.totalPrice = orderInfo.totalPrice;
-  }
-
-  const paymentData = {
-    amount: Math.round(orderInfo.totalPrice * 100),
-  };
-
-  const submitHandler = async (e) => {
+  const submitHandler = async e => {
     e.preventDefault();
-    document.getElementById("pay_btn").disabled = true;
-    let res;
+    if (submitting.current || !user) return;
+    submitting.current = true;
+    setBusy(true);
+    setMessage("");
     try {
-      const config = {
-        headers: {
-          "content-Type": "application/json",
-        },
-      };
-
-      res = await axios.post("/api/v1/payment/process", paymentData, config);
-
-      const clientSecret = res.data.client_secret;
-
-      if (!stripe || !element) {
+      let attempt = readSession("pendingCheckout");
+      if (!attempt || attempt.userId !== userId) {
+        const bytes = new Uint8Array(16);
+        window.crypto.getRandomValues(bytes);
+        attempt = {
+          userId, checkoutKey: Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join(""),
+          orderItems: cartItems, shippingInfo, totalPrice: total,
+        };
+        sessionStorage.setItem("pendingCheckout", JSON.stringify(attempt));
+      }
+      if (!attempt.paid) {
+        if (!stripe || !element) throw new Error("Payment form is still loading. Please try again");
+        const { data } = await axios.post("/api/v1/payment/process", attempt);
+        attempt.paymentId = data.paymentIntentId;
+        const changed = Number(data.totalPrice) !== Number(total);
+        attempt.totalPrice = data.totalPrice;
+        sessionStorage.setItem("pendingCheckout", JSON.stringify(attempt));
+        setTotal(data.totalPrice);
+        if (changed && data.status !== "succeeded") {
+          setMessage("The latest order total is shown below. Review it and press Pay to continue.");
+          return;
+        }
+        if (data.status !== "succeeded") {
+          const result = await stripe.confirmCardPayment(data.client_secret, {
+            payment_method: {
+              card: element.getElement(CardNumberElement),
+              billing_details: { name: user.name, email: user.email },
+            },
+          });
+          if (result.error) throw new Error(result.error.message);
+          if (result.paymentIntent.status !== "succeeded") throw new Error("Payment is still pending. Retry to check its status; do not start another checkout.");
+          attempt.paymentId = result.paymentIntent.id;
+        }
+        attempt.paid = true;
+        sessionStorage.setItem("pendingCheckout", JSON.stringify(attempt));
+      }
+      const saved = await dispatch(createOrder({ paymentInfo: { id: attempt.paymentId } }));
+      if (!saved) {
+        setMessage("Payment received but order confirmation is pending. Retry confirmation without paying again. Reference: " + attempt.paymentId);
         return;
       }
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: element.getElement(CardNumberElement),
-          billing_details: {
-            name: user.name,
-            email: user.email,
-          },
-        },
-      });
-
-      if (result.error) {
-        alert.error(result.error.message);
-        document.querySelector("#pay_btn").disabled = false;
-      } else {
-        //   the payment is processes or Not
-        if (result.paymentIntent.status === "succeeded") {
-          //new order
-          order.paymentInfo = {
-            id: result.paymentIntent.id,
-            status: result.paymentIntent.status,
-          };
-          dispatch(createOrder(order));
-          history.push("/success");
-        } else {
-          alert.error("There is some issue while payment processing");
+      for (const item of attempt.orderItems) {
+        if (cartItems.some(current => current.product === item.product && current.quantity === item.quantity)) {
+          dispatch(removeItemFromCart(item.product));
         }
       }
-    } catch (error) {
-      document.querySelector("#pay_btn").disabled = false;
-      alert.error(error.response.data.Message);
-
-      console.log(error.response.data);
+      sessionStorage.removeItem("pendingCheckout");
+      sessionStorage.removeItem("orderInfo");
+      history.push("/success");
+    } catch (err) {
+      const text = (err.response && err.response.data && err.response.data.Message) || err.message || "Unable to complete checkout";
+      setMessage(text);
+      alert.error(text);
+    } finally {
+      submitting.current = false;
+      setBusy(false);
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearError());
-    }
-  }, [dispatch, alert, error]);
+  if (!recoverable && (!orderInfo || !cartItems.length)) {
+    return <div role="alert">Please confirm your cart before making a payment. <button onClick={() => history.push("/confirm")}>Return to checkout</button></div>;
+  }
 
   return (
     <Fragment>
@@ -124,6 +126,9 @@ const Payment = ({ history }) => {
         <div className="col-10 col-lg-5">
           <form className="shadow-lg" onSubmit={submitHandler}>
             <h1 className="mb-4">Card Info</h1>
+            {message && <p role="alert">{message}</p>}
+            {orderError && <p role="alert">{orderError}</p>}
+            {recoverable && <p>Continue your saved checkout. A completed payment will not be charged again.</p>}
             <div className="form-group">
               <label htmlFor="card_num_field">Card Number</label>
               <CardNumberElement
@@ -154,8 +159,8 @@ const Payment = ({ history }) => {
               />
             </div>
 
-            <button id="pay_btn" type="submit" className="btn btn-block py-3">
-              Pay {` - ${orderInfo && orderInfo.totalPrice}`}
+            <button id="pay_btn" type="submit" disabled={busy || (!stripe && !(recoverable && pending.paid))} className="btn btn-block py-3">
+              {busy ? "Processing..." : recoverable && pending.paid ? "Retry order confirmation" : `Pay - ${total || "0.00"}`}
             </button>
           </form>
         </div>

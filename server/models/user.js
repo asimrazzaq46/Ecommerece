@@ -36,6 +36,7 @@ const userSchema = mongoose.Schema({
   role: {
     type: String,
     default: "user",
+    enum: ["user", "admin"],
   },
   createdAt: {
     type: Date,
@@ -45,12 +46,21 @@ const userSchema = mongoose.Schema({
   resetPasswordExpire: Date,
 });
 
+userSchema.set("toJSON", {
+  transform(doc, user) {
+    delete user.password;
+    delete user.resetPasswordToken;
+    delete user.resetPasswordExpire;
+    return user;
+  },
+});
+
 // FIRST METHOD TO ENCRYPT THE PASSWORD with bcrypjs
 
 // // Encrypting Password before Saving the User
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    next();
+    return next();
   }
 
   this.password = await bcrypt.hash(this.password, 10);

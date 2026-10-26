@@ -7,6 +7,7 @@ const catchAsyncError = require("../middlewares/catchAsyncError");
 const { json } = require("body-parser");
 
 const sendToken = require("../utils/jwtToken");
+const authCookie = require("../utils/authCookie");
 const error = require("../middlewares/error");
 const sendEmail = require("../utils/sendEmail");
 
@@ -19,7 +20,6 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
     crop: "scale",
   });
   const { name, email, password } = req.body;
-  console.log(result);
   const user = await User.create({
     name,
     email,
@@ -40,7 +40,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
 
   //   checks if email and password entered by user is exists in database
   if (!email || !password) {
-    return next(new ErrorHandler("Please enter email and password"), 400);
+    return next(new ErrorHandler("Please enter email and password", 400));
   }
 
   //   finding user in data base
@@ -54,7 +54,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   const passwordIsMatched = await user.comparePassword(password);
 
   if (!passwordIsMatched) {
-    return next(new ErrorHandler("Invalid password and email"), 401);
+    return next(new ErrorHandler("Invalid email and Password", 401));
   }
 
   sendToken(user, 200, res);
@@ -95,7 +95,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     user.resetPasswordExpire = undefined;
     await user.save({ validateBeforeSave: false });
 
-    return next(new ErrorHandler(error.message, 500));
+    return next(new ErrorHandler("Unable to send recovery email. Please try again", 500));
   }
 });
 
@@ -150,7 +150,7 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
   const isMatched = await user.comparePassword(req.body.oldPassword);
 
   if (!isMatched) {
-    return next(new ErrorHandler("Old password is incorrect"), 400);
+    return next(new ErrorHandler("Old password is incorrect", 400));
   }
 
   user.password = req.body.password;
@@ -168,7 +168,7 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
   };
 
   // update Avatare
-  if (req.body.avatar !== "") {
+  if (req.body.avatar) {
     const user = await User.findById(req.user.id);
 
     const image_id = user.avatar.public_id;
@@ -201,7 +201,7 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
 exports.logoutUser = catchAsyncError(async (req, res, next) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
-    httpOnly: true,
+    ...authCookie(),
   });
   res.status(200).json({ status: true, message: "Log Out Successfully" });
 });
