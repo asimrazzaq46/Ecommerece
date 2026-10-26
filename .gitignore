@@ -1,3 +1,9 @@
+# Local assistant instructions
+/AGENTS.md
+
+# Installed dependencies (all project folders)
+node_modules/
+
 # Environment secrets; safe example templates remain trackable
 .env
 .env.*
