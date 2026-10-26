@@ -1,26 +1,21 @@
-const Product = require("../models/product");
-const dotenv = require("dotenv");
-const connectDatabase = require("../config/database");
+const path = require("path");
+const mongoose = require("mongoose");
+require("dotenv").config({ path: path.resolve(__dirname, "../config/config.env") });
+const seedProducts = require("./seedProducts");
 
-const products_data = require("../data/product.json");
-
-// Setting Up config files
-dotenv.config({ path: "server/config/config.env" });
-
-// connect database
-connectDatabase();
-
-const seedProducts = async () => {
+async function main() {
   try {
-    await Product.deleteMany();
-    console.log("products are deleted");
-    await Product.insertMany(products_data);
-    console.log("All products are added");
-    process.exit();
-  } catch (err) {
-    console.log(err.message);
-    process.exit();
+    const args = process.argv.slice(2);
+    if (args.some(arg => arg !== "--dry-run")) throw new Error("Usage: npm run seeder -- [--dry-run]");
+    if (!process.env.DB_LOCAL_URL) throw new Error("DB_LOCAL_URL is required");
+    await mongoose.connect(process.env.DB_LOCAL_URL, { useNewUrlParser: true, useUnifiedTopology: true, serverSelectionTimeoutMS: 5000 });
+    const result = await seedProducts({ userId: process.env.SEED_USER_ID, dryRun: args.includes("--dry-run") });
+    console.log("Product seed:", JSON.stringify(result));
+  } catch (error) {
+    console.error("Product seed failed:", error.name === "MongoNetworkError" || error.name === "MongooseServerSelectionError" ? "Cannot connect to MongoDB. Check DB_LOCAL_URL and mongod." : error.message);
+    process.exitCode = 1;
+  } finally {
+    await mongoose.disconnect();
   }
-};
-
-seedProducts();
+}
+if (require.main === module) main();

@@ -1,70 +1,128 @@
 [
   {
-    "name": "sandisk",
-    "price": "1223",
-    "description": "it's a san disk image copied from google hahahah",
-    "rating": "4.1",
-    "images": [
-      {
-        "public_id": "products/tzfrsdsads",
-        "url": "https://shop.westerndigital.com/content/dam/store/en-us/assets/products/memory-cards/extreme-pro-uhs-i-sd/gallery/extreme-pro-uhs-i-sd-64gb-front.png"
-      }
-    ],
-    "catagory": "Electronics",
-    "seller": "amazon",
-    "stock": "3",
-    "NumOfReviews": "121",
-    "Reviews": []
-  },
-  {
-    "name": "Apple Macbook",
-    "price": "2223",
-    "description": "new macbook pro 15 inch with retina display",
-    "rating": "4.5",
-    "images": [
-      {
-        "public_id": "products/tzfwresdsrytaads",
-        "url": "https://images-na.ssl-images-amazon.com/images/I/91OspXmLfDL._AC_SL1500_.jpg"
-      }
-    ],
+    "seedKey": "work-laptop",
+    "name": "Everyday Work Laptop",
+    "price": 899,
+    "description": "A slim laptop for study, documents and everyday browsing. A clean workspace companion with a full keyboard and portable design. Demo catalog product; photo is illustrative and price is sample data.",
     "catagory": "Laptops",
-    "seller": "ebay",
-    "stock": "13",
-    "NumOfReviews": "221",
-    "Reviews": []
-  },
-  {
-    "name": "sony dslr",
-    "price": "1293",
-    "description": "the photos you want to show to the world",
-    "rating": "4.2",
+    "seller": "ShopIT Demo Store",
+    "stock": 12,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
     "images": [
       {
-        "public_id": "products/tzzxcvbnbsads",
-        "url": "https://www.tuttofoto.com/_img/_imgArt/1409__1.jpg"
+        "public_id": "seed/work-laptop",
+        "provider": "external",
+        "url": "https://images.pexels.com/photos/6968093/pexels-photo-6968093.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "source": "https://www.pexels.com/photo/photo-of-laptop-on-white-surface-6968093/",
+        "credit": "Mikhail Nilov / Pexels (https://www.pexels.com/license/)"
       }
-    ],
+    ]
+  },
+  {
+    "seedKey": "wireless-headphones",
+    "name": "Black Wireless Headphones",
+    "price": 79.99,
+    "description": "Over-ear headphones with cushioned ear cups and a simple black finish. Suitable for music and everyday listening at home or on the move. Demo catalog product; photo is illustrative and price is sample data.",
+    "catagory": "Headphones",
+    "seller": "ShopIT Demo Store",
+    "stock": 30,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/wireless-headphones",
+        "provider": "external",
+        "url": "https://images.pexels.com/photos/33034333/pexels-photo-33034333.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "source": "https://www.pexels.com/photo/black-over-ear-wireless-bluetooth-headphones-33034333/",
+        "credit": "Andrey Matveev / Pexels (https://www.pexels.com/license/)"
+      }
+    ]
+  },
+  {
+    "seedKey": "film-camera",
+    "name": "Classic Film Camera",
+    "price": 249,
+    "description": "A vintage-style film camera for exploring analog photography. A hands-on companion for thoughtful portraits, street scenes and travel memories. Demo catalog product; photo is illustrative and price is sample data.",
     "catagory": "Cameras",
-    "seller": "cammmm",
-    "stock": "31",
-    "NumOfReviews": "191",
-    "Reviews": []
-  },
-  {
-    "name": "Apple",
-    "price": "2",
-    "description": "Eat Fresh & Healthy",
-    "rating": "4.7",
+    "seller": "ShopIT Demo Store",
+    "stock": 8,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
     "images": [
       {
-        "public_id": "products/uyghtsdsrytaads",
-        "url": "https://images-na.ssl-images-amazon.com/images/I/91OspXmLfDL._AC_SL1500_.jpg"
+        "public_id": "seed/film-camera",
+        "provider": "external",
+        "url": "https://images.pexels.com/photos/16892382/pexels-photo-16892382.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "source": "https://www.pexels.com/photo/camera-on-black-background-16892382/",
+        "credit": "Ali Karimi / Pexels (https://www.pexels.com/license/)"
       }
-    ],
-    "catagory": "Foods",
-    "seller": "shops",
-    "stock": "131",
-    "NumOfReviews": "11",
-    "Reviews": []
+    ]
+  },
+  {
+    "seedKey": "white-mug",
+    "name": "White Ceramic Mug",
+    "price": 14.99,
+    "description": "A simple white ceramic mug with an easy-grip handle. Its understated finish fits a home kitchen, office desk or relaxed tea break. Demo catalog product; photo is illustrative and price is sample data.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 60,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/white-mug",
+        "provider": "external",
+        "url": "https://images.pexels.com/photos/11075707/pexels-photo-11075707.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "source": "https://www.pexels.com/photo/a-white-ceramic-mug-on-a-white-surface-11075707/",
+        "credit": "Bec R. / Pexels (https://www.pexels.com/license/)"
+      }
+    ]
+  },
+  {
+    "seedKey": "grey-sneakers",
+    "name": "Grey Everyday Sneakers",
+    "price": 59.99,
+    "description": "Grey lace-up sneakers with a casual profile for everyday outfits. A versatile neutral colour for commuting, weekends and relaxed walks. Demo catalog product; photo is illustrative and price is sample data.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/grey-sneakers",
+        "provider": "external",
+        "url": "https://images.pexels.com/photos/8373048/pexels-photo-8373048.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "source": "https://www.pexels.com/photo/running-shoes-on-the-ground-8373048/",
+        "credit": "Sneep Crew / Pexels (https://www.pexels.com/license/)"
+      }
+    ]
+  },
+  {
+    "seedKey": "city-backpack",
+    "name": "Black City Backpack",
+    "price": 49.99,
+    "description": "A black everyday backpack for carrying essentials around town. A compact companion for work, study and short trips. Accessories shown are illustrative. Demo catalog product; photo is illustrative and price is sample data.",
+    "catagory": "Outdoor",
+    "seller": "ShopIT Demo Store",
+    "stock": 18,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/city-backpack",
+        "provider": "external",
+        "url": "https://images.pexels.com/photos/18999339/pexels-photo-18999339.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "source": "https://www.pexels.com/photo/black-backpack-on-the-sidewalk-18999339/",
+        "credit": "Matheus Bertelli / Pexels (https://www.pexels.com/license/)"
+      }
+    ]
   }
 ]

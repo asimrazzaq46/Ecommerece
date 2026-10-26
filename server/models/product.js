@@ -12,7 +12,7 @@ const productSchema = mongoose.Schema({
   price: {
     type: Number,
     required: [true, "Please enter product price"],
-    maxlength: [5, "product cannit exceed 5 characters"],
+    min: [0, "Price cannot be negative"],
     default: 0.0,
   },
   description: {
@@ -29,6 +29,9 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
       },
+      provider: { type: String, enum: ["cloudinary", "external"], default: "cloudinary" },
+      source: String,
+      credit: String,
       url: {
         type: String,
         required: true,
@@ -64,7 +67,8 @@ const productSchema = mongoose.Schema({
   stock: {
     type: Number,
     required: [true, "please write the stock for this product"],
-    maxlength: [5, "product cannot exceed 5 characters"],
+    min: [0, "Stock cannot be negative"],
+    validate: { validator: Number.isSafeInteger, message: "Stock must be a whole number" },
     default: 0,
   },
   NumOfReviews: {
@@ -75,7 +79,7 @@ const productSchema = mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.ObjectId,
-        ref: "user",
+        ref: "Users",
         required: true,
       },
       name: {
@@ -94,12 +98,12 @@ const productSchema = mongoose.Schema({
   ],
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: "user",
+    ref: "Users",
     required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 

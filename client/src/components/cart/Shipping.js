@@ -8,15 +8,14 @@ import CheckoutSteps from "./CheckoutSteps";
 
 const Shipping = ({ history }) => {
   const { shippingInfo } = useSelector((state) => state.cart);
-  const { order = {} } = useSelector((state) => state.orderDetails);
 
   //ALL STATES COMES HERE
 
-  const [address, setAddress] = useState(shippingInfo.address);
-  const [city, setCity] = useState(shippingInfo.city);
-  const [postalCode, setPostalCode] = useState(shippingInfo.postalCode);
-  const [phoneNo, setPhoneNo] = useState(shippingInfo.phoneNo);
-  const [country, setCountry] = useState(shippingInfo.country);
+  const [address, setAddress] = useState(shippingInfo.address || "");
+  const [city, setCity] = useState(shippingInfo.city || "");
+  const [postalCode, setPostalCode] = useState(shippingInfo.postalCode || "");
+  const [phoneNo, setPhoneNo] = useState(shippingInfo.phoneNo || "");
+  const [country, setCountry] = useState(shippingInfo.country || "");
 
   const dispatch = useDispatch();
 
@@ -63,7 +62,7 @@ const Shipping = ({ history }) => {
             <div className="form-group">
               <label htmlFor="phone_field">Phone No</label>
               <input
-                type="phone"
+                type="tel"
                 id="phone_field"
                 className="form-control"
                 value={phoneNo}

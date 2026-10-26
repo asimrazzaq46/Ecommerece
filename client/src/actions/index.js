@@ -114,33 +114,27 @@ import {
 
 ////////////////////////////////  PRODUCTS ACTION ///////////////////////////////////////////////////
 
+const errorMessage = error => error.response?.data?.Message || error.response?.data?.message || error.message || "Request failed. Please try again.";
+
 // get all product on the Home screen
 export const getProducts =
-  (keyword = "", currentPage = 1, price, category, rating = 0) =>
+  (keyword = "", currentPage = 1, price = [0, 3000], category, rating = 0) =>
   async (dispatch) => {
     try {
       dispatch({
         type: ALL_PRODUCT_REQUEST,
       });
 
-      console.log(`requesting for products`);
-
-      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}
-                  &price[gte]=${price[0]}&rating[gte]=${rating}`;
-
-      if (category) {
-        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}
-                &price[gte]=${price[0]}&catagory=${category}&rating[gte]=${rating}`;
-      }
-
-      const { data } = await axios.get(link); // REQUEST TO THE SERVER
+      const params = new URLSearchParams({ keyword, page: currentPage, "price[lte]": price[1], "price[gte]": price[0], "rating[gte]": rating });
+      if (category) params.set("catagory", category);
+      const { data } = await axios.get(`/api/v1/products?${params}`); // REQUEST TO THE SERVER
 
       dispatch({ type: ALL_PRODUCT_SUCCESS, payload: data });
-      console.log(`dispatched for products`);
+
     } catch (error) {
       dispatch({
         type: ALL_PRODUCT_FAIL,
-        payload: error.response.data.Message,
+        payload: errorMessage(error),
       });
     }
   };
@@ -157,7 +151,7 @@ export const getProductDetail = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -178,11 +172,7 @@ export const newReview = (reviewData) => async (dispatch) => {
       type: NEW_REVIEW_REQUEST,
     });
 
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
 
     const { data } = await axios.put(`/api/v1/review`, reviewData, config);
 
@@ -190,7 +180,7 @@ export const newReview = (reviewData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: NEW_REVIEW_FAIL,
-      payload: error.response.data.message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -206,11 +196,7 @@ export const newReview = (reviewData) => async (dispatch) => {
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
     const { data } = await axios.post(
       `/api/v1/login`,
       { email, password },
@@ -220,7 +206,7 @@ export const login = (email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -240,7 +226,7 @@ export const register = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_USER_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -256,7 +242,7 @@ export const loadUser = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -270,7 +256,7 @@ export const logout = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOGOUT_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -296,7 +282,7 @@ export const updateProfile = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_PROFILE_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -306,11 +292,7 @@ export const updateProfile = (userData) => async (dispatch) => {
 export const updatePassword = (passwords) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PASSWORD_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
     const { data } = await axios.put(
       `/api/v1/password/update`,
       passwords,
@@ -320,7 +302,7 @@ export const updatePassword = (passwords) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_PASSWORD_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -330,17 +312,13 @@ export const updatePassword = (passwords) => async (dispatch) => {
 export const forgotPassword = (email) => async (dispatch) => {
   try {
     dispatch({ type: FORGOT_PASSWORD_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
     const { data } = await axios.post(`/api/v1/password/forgot`, email, config);
     dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message });
   } catch (error) {
     dispatch({
       type: FORGOT_PASSWORD_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -350,11 +328,7 @@ export const forgotPassword = (email) => async (dispatch) => {
 export const resetPassword = (token, passwords) => async (dispatch) => {
   try {
     dispatch({ type: NEW_PASSWORD_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
     const { data } = await axios.put(
       `/api/v1/password/reset/${token}`,
       passwords,
@@ -364,7 +338,7 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: NEW_PASSWORD_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -428,11 +402,7 @@ export const saveShippingInfo = (data) => async (dispatch) => {
 export const createOrder = (order) => async (dispatch, getstate) => {
   try {
     dispatch({ type: CREATE_ORDER_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
 
     const { data } = await axios.post(`/api/v1/order/new`, order, config);
     dispatch({
@@ -459,7 +429,7 @@ export const myAllOrders = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: MY_ORDERS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -480,7 +450,7 @@ export const getOrderDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -503,7 +473,7 @@ export const getAdminProducts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ADMIN_PRODUCT_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -516,11 +486,7 @@ export const newProduct = (productData) => async (dispatch) => {
       type: NEW_PRODUCT_REQUEST,
     });
 
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
 
     const { data } = await axios.post(
       `/api/v1/admin/products/new`,
@@ -532,7 +498,7 @@ export const newProduct = (productData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: NEW_PRODUCT_FAIL,
-      payload: error.response.data.message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -551,7 +517,7 @@ export const deleteProduct = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_PRODUCT_FAIL,
-      payload: error.response.data.message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -564,11 +530,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
       type: UPDATE_PRODUCT_REQUEST,
     });
 
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
 
     const { data } = await axios.put(
       `/api/v1/admin/product/${id}`,
@@ -580,7 +542,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_PRODUCT_FAIL,
-      payload: error.response.data.message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -600,7 +562,7 @@ export const allOrders = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_ORDERS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -610,11 +572,7 @@ export const allOrders = () => async (dispatch) => {
 export const updateOrder = (id, orderData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_ORDER_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
 
     const { data } = await axios.put(
       `/api/v1/admin/order/${id}`,
@@ -626,7 +584,7 @@ export const updateOrder = (id, orderData) => async (dispatch) => {
       payload: data.success,
     });
   } catch (error) {
-    dispatch({ type: UPDATE_ORDER_FAIL, payload: error.response.data.Message });
+    dispatch({ type: UPDATE_ORDER_FAIL, payload: errorMessage(error) });
   }
 };
 
@@ -640,7 +598,7 @@ export const deleteOrder = (id) => async (dispatch) => {
 
     dispatch({ type: DELETE_ORDER_SUCCESS, payload: data.success });
   } catch (error) {
-    dispatch({ type: DELETE_ORDER_FAIL, payload: error.response.data.Message });
+    dispatch({ type: DELETE_ORDER_FAIL, payload: errorMessage(error) });
   }
 };
 
@@ -656,7 +614,7 @@ export const allUsers = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_USERS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -666,11 +624,7 @@ export const allUsers = () => async (dispatch) => {
 export const updateUser = (id, userData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_USER_REQUEST });
-    const config = {
-      headers: {
-        "content-Type": "application/json",
-      },
-    };
+    const config = {};
     const { data } = await axios.put(
       `/api/v1/admin/user/${id}`,
       userData,
@@ -680,7 +634,7 @@ export const updateUser = (id, userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_USER_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -696,7 +650,7 @@ export const getUserDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -712,7 +666,7 @@ export const deleteUser = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_USER_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -728,7 +682,7 @@ export const getProductReviews = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GET_REVIEWS_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };
@@ -746,7 +700,7 @@ export const deleteReview = (id, productId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_REVIEW_FAIL,
-      payload: error.response.data.Message,
+      payload: errorMessage(error),
     });
   }
 };

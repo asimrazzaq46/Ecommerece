@@ -162,38 +162,24 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 // Update user profile => api/v1/me/update
 
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
-  const newUserData = {
-    name: req.body.name,
-    email: req.body.email,
-  };
-
-  // update Avatare
+  const newUserData = { name: req.body.name, email: req.body.email };
+  let oldAvatar;
   if (req.body.avatar) {
-    const user = await User.findById(req.user.id);
-
-    const image_id = user.avatar.public_id;
-    const res = await cloudinary.v2.uploader.destroy(image_id);
-
-    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: "avatars",
-      width: 150,
-      crop: "scale",
-    });
-
-    newUserData.avatar = {
-      public_id: result.public_id,
-      url: result.secure_url,
-    };
+    const existing = await User.findById(req.user.id);
+    if (!existing) return next(new ErrorHandler("User not found", 404));
+    oldAvatar = existing.avatar;
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, { folder: "avatars", width: 150, crop: "scale" });
+    newUserData.avatar = { public_id: result.public_id, url: result.secure_url };
   }
-  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-
-  res.status(200).json({
-    success: true,
-  });
+  try {
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, { new: true, runValidators: true, useFindAndModify: false });
+    if (!user) throw new ErrorHandler("User not found", 404);
+  } catch (error) {
+    if (newUserData.avatar) await Promise.allSettled([Promise.resolve().then(() => cloudinary.v2.uploader.destroy(newUserData.avatar.public_id))]);
+    throw error;
+  }
+  if (oldAvatar && oldAvatar.public_id) await Promise.allSettled([Promise.resolve().then(() => cloudinary.v2.uploader.destroy(oldAvatar.public_id))]);
+  res.status(200).json({ success: true });
 });
 
 // logout the use => api/v1/logout

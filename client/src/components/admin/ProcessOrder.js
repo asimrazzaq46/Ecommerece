@@ -31,6 +31,8 @@ const ProcessOrder = ({ match }) => {
 
   const orderId = match.params.id;
 
+  useEffect(() => { setStatus(orderStatus || "Processing"); }, [orderStatus, orderId]);
+
   const shippingDetails =
     shippingInfo &&
     `${shippingInfo.address},${shippingInfo.city},${shippingInfo.postalCode},${shippingInfo.country}`;
@@ -132,7 +134,7 @@ const ProcessOrder = ({ match }) => {
                           </div>
 
                           <div className="col-5 col-lg-5">
-                            <Link to={`/products/${item.product}`}>
+                            <Link to={`/product/${item.product}`}>
                               {item.name}
                             </Link>
                           </div>

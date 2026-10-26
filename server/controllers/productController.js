@@ -15,6 +15,9 @@ exports.newProduct = catchAsyncError(async (req, res, next) => {
     images = req.body.images;
   }
 
+  if (!Array.isArray(images) || !images.length || images.some(image => typeof image !== "string")) {
+    return next(new ErrorHandler("Please provide product images", 400));
+  }
   let imagesLinks = [];
 
   for (let i = 0; i < images.length; i++) {
@@ -50,13 +53,11 @@ exports.getProducts = catchAsyncError(async (req, res, next) => {
     .search()
     .filter();
 
-  let products = await apiFeatures.query;
-
-  let filteredProductsCount = products.length;
+  const filteredProductsCount = await Product.countDocuments(apiFeatures.query.getFilter());
 
   apiFeatures.pagination(resultPerPage);
 
-  products = await apiFeatures.query;
+  const products = await apiFeatures.query;
 
   res.status(200).json({
     success: true,
@@ -98,13 +99,9 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
   }
 
   if (images !== undefined) {
-    // Deleting images assosiated with the product
-    for (let i = 0; i < product.images.length; i++) {
-      const result = await cloudinary.v2.uploader.destroy(
-        product.images[i].public_id
-      );
+    if (!Array.isArray(images) || !images.length || images.some(image => typeof image !== "string")) {
+      return next(new ErrorHandler("Please provide product images", 400));
     }
-
     let imagesLinks = [];
 
     for (let i = 0; i < images.length; i++) {
@@ -120,16 +117,17 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
     req.body.images = imagesLinks;
   }
 
+  const oldImages = product.images;
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
   });
 
-  res.status(200).json({
-    success: true,
-    product,
-  });
+  if (images !== undefined) {
+    await Promise.allSettled(oldImages.filter(image => image.provider !== "external").map(image => cloudinary.v2.uploader.destroy(image.public_id)));
+  }
+  res.status(200).json({ success: true, product });
 });
 
 // Delete the product => /api/v1/admin/product/:id
@@ -142,9 +140,9 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
   }
   // Deleting images assosiated with the product
   for (let i = 0; i < product.images.length; i++) {
-    const result = await cloudinary.v2.uploader.destroy(
-      product.images[i].public_id
-    );
+    if (product.images[i].provider !== "external") {
+      await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+    }
   }
   await product.remove();
 

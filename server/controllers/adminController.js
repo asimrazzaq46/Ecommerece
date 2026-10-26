@@ -30,8 +30,7 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorHandler(`User does not found with id: ${req.params.id}`),
-      404
+      new ErrorHandler(`User does not found with id: ${req.params.id}`, 404)
     );
   }
   res.status(200).json({
@@ -48,13 +47,14 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
     email: req.body.email,
     role: req.body.role,
   };
-  // update Avatare: TODO
+
 
   const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
   });
+  if (!user) return next(new ErrorHandler("User not found", 404));
 
   res.status(200).json({
     success: true,
@@ -68,8 +68,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorHandler(`User does not found with id: ${req.params.id}`),
-      404
+      new ErrorHandler(`User does not found with id: ${req.params.id}`, 404)
     );
   }
   //REMOVE AVATAR FROM CLOUDINARY
@@ -93,7 +92,7 @@ exports.allOrders = catchAsyncError(async (req, res, next) => {
   let totalAmount = 0;
 
   if (!orders) {
-    return next(new ErrorHandler("No Order Found!"), 404);
+    return next(new ErrorHandler("No Order Found!", 404));
   }
 
   orders.forEach((order) => {
@@ -146,7 +145,7 @@ exports.deleteOrder = catchAsyncError(async (req, res, next) => {
   let totalAmount = 0;
 
   if (!order) {
-    return next(new ErrorHandler("No Order Found!"), 404);
+    return next(new ErrorHandler("No Order Found!", 404));
   }
   await order.remove();
   res.status(200).json({

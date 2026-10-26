@@ -15,7 +15,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 
 const Home = ({ match }) => {
   // here come all the states for the homepage
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState({ key: "", value: 1 });
   const [price, setPrice] = useState([1, 3000]);
   const [category, setCategory] = useState("");
   const [rating, setRating] = useState(0);
@@ -41,16 +41,18 @@ const Home = ({ match }) => {
   const dispatch = useDispatch();
   const keyWord = match.params.keyword; // getting the search word from pramas that was in backend with req.params.keyword
 
+  const filterKey = JSON.stringify([keyWord, price, category, rating]);
+  const currentPage = page.key === filterKey ? page.value : 1;
+
   // function for setting currentpage for pagination
   const setCurrentPageNumber = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    setPage({ key: filterKey, value: pageNumber });
   };
 
   // taking out aal the data from reducers or from the state
   const {
     loading,
     products,
-    productCount,
     resultPerPage,
     filteredProductsCount,
     error,
@@ -60,16 +62,11 @@ const Home = ({ match }) => {
   // passing dependencies like alerting the user with an error or keyword for search currentpage for page
   // filtering price with price and category
   useEffect(() => {
-    if (error) {
-      return alert.error(error);
-    }
     dispatch(getProducts(keyWord, currentPage, price, category, rating));
-  }, [dispatch, alert, error, keyWord, currentPage, price, category, rating]);
+  }, [dispatch, keyWord, currentPage, price, category, rating]);
 
-  let count = productCount;
-  if (keyWord) {
-    count = filteredProductsCount;
-  }
+  useEffect(() => { if (error) alert.error(error); }, [alert, error]);
+  const count = filteredProductsCount || 0;
 
   // Rendering the home page with products
   return (
@@ -80,6 +77,8 @@ const Home = ({ match }) => {
         <Fragment>
           <MetaDAta title={"Buy best product online"} />
           <h1 id="products_heading">Latest Products</h1>
+          {error && <div role="alert">{error} <button onClick={() => dispatch(getProducts(keyWord, currentPage, price, category, rating))}>Retry</button></div>}
+          {!error && products?.length === 0 && <p>No products match your filters.</p>}
           <section id="products" className="container mt-5">
             <div className="row">
               {/* if there is any search item than we will show the filters otherwise we only going to render the products */}
@@ -87,6 +86,7 @@ const Home = ({ match }) => {
                 <Fragment>
                   <div className="col-6 col-md-3 mt-5 mb-5">
                     <div className="px-5">
+                      <button type="button" className="btn btn-link mb-4" onClick={() => { setPrice([1, 3000]); setCategory(""); setRating(0); }}>Clear filters</button>
                       {/* Filter by price */}
                       <Range
                         marks={{
@@ -116,9 +116,9 @@ const Home = ({ match }) => {
                                 listStyleType: "none",
                               }}
                               key={category}
-                              onClick={() => setCategory(category)}
+
                             >
-                              {category}
+                              <button type="button" className="btn btn-link p-0" onClick={() => setCategory(category)}>{category}</button>
                             </li>
                           ))}
                         </ul>
@@ -136,14 +136,16 @@ const Home = ({ match }) => {
                                 listStyleType: "none",
                               }}
                               key={star}
-                              onClick={() => setRating(star)}
+
                             >
+                              <button type="button" className="btn p-0" aria-label={`${star} stars and above`} onClick={() => setRating(star)}>
                               <div className="rating-outer">
                                 <div
                                   className="rating-inner"
                                   style={{ width: `${star * 20}%` }}
                                 ></div>
                               </div>
+                              </button>
                             </li>
                           ))}
                         </ul>
@@ -174,7 +176,7 @@ const Home = ({ match }) => {
               <Pagination
                 activePage={currentPage}
                 itemsCountPerPage={resultPerPage}
-                totalItemsCount={productCount}
+                totalItemsCount={count}
                 onChange={setCurrentPageNumber}
                 nextPageText={"next"}
                 prevPageText={"prev"}
