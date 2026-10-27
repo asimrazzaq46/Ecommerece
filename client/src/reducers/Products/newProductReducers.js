@@ -5,7 +5,7 @@ import {
   NEW_PRODUCT_FAIL,
 } from "../../constants/productConstants";
 
-const newProductReducer = (state = { product: {} }, action) => {
+const newProductReducer = (state = {}, action) => {
   switch (action.type) {
     case NEW_PRODUCT_REQUEST:
       return {
@@ -16,7 +16,6 @@ const newProductReducer = (state = { product: {} }, action) => {
       return {
         loading: false,
         success: action.payload.success,
-        product: action.payload.product,
       };
     case NEW_PRODUCT_RESET:
       return {

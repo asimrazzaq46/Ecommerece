@@ -10,8 +10,10 @@
     "seeder": "node server/utils/seeder.js",
     "test": "node scripts/test.js",
     "test:server": "node client/node_modules/jest/bin/jest.js --config server/jest.config.js --runInBand",
-    "test:client": "npm --prefix client test -- --watchAll=false --runInBand",
-    "test:database": "node scripts/test-database.js"
+    "test:client": "npm --prefix client test -- --runInBand",
+    "test:database": "node scripts/test-database.js",
+    "test:e2e": "node scripts/test-e2e.js",
+    "test:e2e:serve": "node scripts/test-e2e.js --serve"
   },
   "author": "Asim Razzaq",
   "license": "ISC",
@@ -32,6 +34,6 @@
     "nodemon": "3.1.14"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.11.0"
   }
 }

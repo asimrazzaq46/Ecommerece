@@ -1,12 +1,11 @@
 import axios from "axios";
-import { applyMiddleware, combineReducers, createStore } from "redux";
-import thunk from "redux-thunk";
+import { configureStore } from "@reduxjs/toolkit";
 import { createOrder } from "./index";
 import orderReducer from "../reducers/Orders/OrderReducers";
 
 jest.mock("axios");
 
-const makeStore = () => createStore(combineReducers({ newOrder: orderReducer }), applyMiddleware(thunk));
+const makeStore = () => configureStore({ reducer: { newOrder: orderReducer } });
 
 test("order request transitions loading to successful order", async () => {
   let finish;

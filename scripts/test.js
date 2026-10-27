@@ -5,7 +5,7 @@ const root = path.resolve(__dirname, "..");
 // Run both suites even when the first reports regressions.
 const suites = [
   ["server", root, "client/node_modules/jest/bin/jest.js", ["--config", "server/jest.config.js", "--runInBand"]],
-  ["client", path.join(root, "client"), "node_modules/react-scripts/bin/react-scripts.js", ["test", "--watchAll=false", "--runInBand"]],
+  ["client", path.join(root, "client"), "node_modules/jest/bin/jest.js", ["--runInBand"]],
 ];
 
 let failed = false;
