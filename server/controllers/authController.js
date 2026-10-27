@@ -4,7 +4,6 @@ const cloudinary = require("cloudinary");
 const User = require("../models/user");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
-const { json } = require("body-parser");
 
 const sendToken = require("../utils/jwtToken");
 const authCookie = require("../utils/authCookie");
@@ -172,7 +171,7 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
     newUserData.avatar = { public_id: result.public_id, url: result.secure_url };
   }
   try {
-    const user = await User.findByIdAndUpdate(req.user.id, newUserData, { new: true, runValidators: true, useFindAndModify: false });
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, { new: true, runValidators: true });
     if (!user) throw new ErrorHandler("User not found", 404);
   } catch (error) {
     if (newUserData.avatar) await Promise.allSettled([Promise.resolve().then(() => cloudinary.v2.uploader.destroy(newUserData.avatar.public_id))]);

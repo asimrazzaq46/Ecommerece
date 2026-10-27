@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
+mongoose.set("strictQuery", false);
+
 const connectDatabase = () => {
   return mongoose.connect(process.env.DB_LOCAL_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
+    serverSelectionTimeoutMS: 5000,
   });
 };
 

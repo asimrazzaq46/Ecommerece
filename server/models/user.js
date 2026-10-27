@@ -3,7 +3,6 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-// const bcrypt = require("bcrypt-node");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -58,37 +57,13 @@ userSchema.set("toJSON", {
 // FIRST METHOD TO ENCRYPT THE PASSWORD with bcrypjs
 
 // // Encrypting Password before Saving the User
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
-    return next();
+    return;
   }
 
   this.password = await bcrypt.hash(this.password, 10);
 });
-
-// SECOND METHOD FOR ENCRYPTING PASSWORD with bcryp-node
-
-// userSchema.pre("save", function (next) {
-//   const user = this;
-
-//   //   HERE WE ARE GENERATING A SALT, PASSING A CALLBACK BECAUSE IT
-//   //   TAKES LITTLE BIT TIME TO GENERATE A SALT
-//   bcrypt.genSalt(10, (err, salt) => {
-//     if (err) {
-//       return next(err);
-//     }
-
-//     // HERE WE ARE HASHING(ENCRYPT) OUR PASSWORD, PASSING A CALLBACK BECAUSE IT
-//     // TAKES LITTLE BIT TIME TO HASHING OUR PASSWORD
-//     bcrypt.hash(user.password, salt, null, function (err, hash) {
-//       if (err) {
-//         return next(err);
-//       }
-//       user.password = hash;
-//       next();
-//     });
-//   });
-// });
 
 // COMPARE THE PASSSWORDS PROVIDED BY THE USER AND INSIDE THE DATABASE
 

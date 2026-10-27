@@ -55,7 +55,7 @@ test("shipping then delivery deducts stock only once", async () => {
   const order = { orderStatus: "Processing", orderItems: [{ product: "product-a", quantity: 2 }], save: jest.fn().mockResolvedValue(undefined) };
   order.paymentInfo = { status: "succeeded" };
   jest.spyOn(Orders, "findById").mockReturnValue({ session: jest.fn().mockResolvedValue(order) });
-  jest.spyOn(Product, "updateOne").mockImplementation(async (filter, update) => { product.stock += update.$inc.stock; return { nModified: 1 }; });
+  jest.spyOn(Product, "updateOne").mockImplementation(async (filter, update) => { product.stock += update.$inc.stock; return { modifiedCount: 1 }; });
   const next = jest.fn();
   for (const status of ["Shipped", "Delivered"]) {
     await updateOrder({ params: { id: "order-a" }, body: { status } }, response(), next);
@@ -68,7 +68,7 @@ test("order update waits for stock persistence before reporting success", async 
   let finish;
   const pending = new Promise(resolve => { finish = resolve; });
   const product = { stock: 10, save: jest.fn(() => pending) };
-  jest.spyOn(Product, "updateOne").mockImplementation(async () => { await pending; return { nModified: 1 }; });
+  jest.spyOn(Product, "updateOne").mockImplementation(async () => { await pending; return { modifiedCount: 1 }; });
   jest.spyOn(Orders, "findById").mockReturnValue({ session: jest.fn().mockResolvedValue({ orderStatus: "Processing", paymentInfo: { status: "succeeded" }, orderItems: [{ product: "p", quantity: 1 }], save: jest.fn().mockResolvedValue() }) });
   const res = response();
   const update = updateOrder({ params: { id: "o" }, body: { status: "Shipped" } }, res, jest.fn());

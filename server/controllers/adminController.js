@@ -52,7 +52,6 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,
-    useFindAndModify: false,
   });
   if (!user) return next(new ErrorHandler("User not found", 404));
 
@@ -76,7 +75,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
   const image_id = user.avatar.public_id;
   await cloudinary.v2.uploader.destroy(image_id);
 
-  await user.remove();
+  await user.deleteOne();
 
   res.status(200).json({
     success: true,
@@ -127,7 +126,7 @@ exports.updateOrder = catchAsyncError(async (req, res) => {
         if (!Number.isSafeInteger(item.quantity) || item.quantity < 1) throw new ErrorHandler("Invalid order quantity", 400);
         const result = await Product.updateOne({ _id: item.product, stock: { $gte: item.quantity } },
           { $inc: { stock: -item.quantity } }, { session });
-        if (result.nModified !== 1) throw new ErrorHandler("Product is missing or stock is insufficient", 409);
+        if (result.modifiedCount !== 1) throw new ErrorHandler("Product is missing or stock is insufficient", 409);
       }
     }
     order.stockDeducted = true;
@@ -147,7 +146,7 @@ exports.deleteOrder = catchAsyncError(async (req, res, next) => {
   if (!order) {
     return next(new ErrorHandler("No Order Found!", 404));
   }
-  await order.remove();
+  await order.deleteOne();
   res.status(200).json({
     success: true,
   });

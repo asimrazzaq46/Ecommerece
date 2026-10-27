@@ -25,7 +25,7 @@ beforeEach(() => {
   stripe().paymentIntents.retrieve.mockResolvedValue(payment);
   jest.spyOn(Checkout, "findById").mockReturnValue({ session: jest.fn().mockResolvedValue(checkout) });
   jest.spyOn(Orders, "findById").mockReturnValue({ session: jest.fn().mockResolvedValue(null) });
-  jest.spyOn(Product, "updateOne").mockResolvedValue({ nModified: 1 });
+  jest.spyOn(Product, "updateOne").mockResolvedValue({ modifiedCount: 1 });
   jest.spyOn(Orders, "create").mockImplementation(async docs => docs);
 });
 
@@ -89,7 +89,7 @@ test("deleting an order cannot make its payment reusable", async () => {
 });
 
 test("stock race fails transaction and never reports an order", async () => {
-  Product.updateOne.mockResolvedValue({ nModified: 0 });
+  Product.updateOne.mockResolvedValue({ modifiedCount: 0 });
   await expect(completeOrder("pi_test", userId)).rejects.toMatchObject({ statusCode: 409 });
   expect(Orders.create).not.toHaveBeenCalled();
   expect(checkout.save).not.toHaveBeenCalled();
@@ -134,7 +134,7 @@ test("repeated checkout requests reuse the same payment and trusted amount", asy
     await processPayment(req, res, next);
     expect(next).not.toHaveBeenCalled();
     expect(stripe().paymentIntents.create).toHaveBeenCalledTimes(1);
-    expect(stripe().paymentIntents.create).toHaveBeenCalledWith(expect.objectContaining({ amount: 23500, currency: "usd", metadata: { userId, checkoutId: stored._id } }), { idempotencyKey: `checkout-${stored._id}` });
+    expect(stripe().paymentIntents.create).toHaveBeenCalledWith(expect.objectContaining({ amount: 23500, currency: "usd", payment_method_types: ["card"], capture_method: "automatic", metadata: { userId, checkoutId: stored._id } }), { idempotencyKey: `checkout-${stored._id}` });
     expect(res.json.mock.calls[1][0]).toMatchObject({ totalPrice: 235, paymentIntentId: "pi_test" });
     req.body = { ...req.body, orderItems: [{ product: productId, quantity: 1 }] };
     await processPayment(req, res, next);

@@ -1,42 +1,37 @@
+if (process.argv.includes("--production")) process.env.NODE_ENV = "production";
 const app = require("./app");
 const connectDatabase = require("./config/database");
-const cloudinary = require("cloudinary");
+const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 
-const dotenv = require("dotenv");
-
-// Handled Uncaught Exceptions
-process.on("uncaughtException", (err) => {
-  console.log(`ERROR: ${err.stack}`);
-  console.log("Shutting down due to Uncaught Exceptions");
-  process.exit(1);
-});
-
-// Setting Up config files
-dotenv.config({ path: "server/config/config.env" });
-
-// connecting to database
-connectDatabase();
-
-// Setting up CLOUDINARY
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(
-    `Server Started on Port: ${process.env.PORT} in ${process.env.NODE_ENV} mode.`
-  );
-});
-
-// Handled Unhandled Promise Rejections
-process.on("unhandledRejection", (err) => {
-  console.log(`ERROR: ${err.message}`);
-  console.log(
-    `Shutting down the server due to unhandled promise rejections...`
-  );
-  server.close(() => {
-    process.exit(1);
+let server;
+async function startServer() {
+  await connectDatabase();
+  server = app.listen(process.env.PORT || 3002, () => {
+    console.log("Server started on port " + server.address().port + " in " + (process.env.NODE_ENV || "development") + " mode.");
   });
-});
+  return server;
+}
+
+function shutdown(error) {
+  console.error("Server stopped:", error.name || "Error");
+  if (String(process.env.NODE_ENV).toLowerCase() === "development") console.error(error.message);
+  const timer = setTimeout(() => process.exit(1), 5000);
+  timer.unref();
+  const close = () => mongoose.disconnect().finally(() => process.exit(1));
+  if (server) server.close(close);
+  else close();
+}
+
+if (require.main === module) {
+  process.on("uncaughtException", shutdown);
+  process.on("unhandledRejection", shutdown);
+  startServer().catch(shutdown);
+}
+module.exports = startServer;

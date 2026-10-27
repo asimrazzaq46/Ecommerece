@@ -27,7 +27,7 @@ module.exports = async (paymentId, userId) => {
         { _id: item.product, stock: { $gte: item.quantity } },
         { $inc: { stock: -item.quantity } }, { session }
       );
-      if (result.nModified !== 1) {
+      if (result.modifiedCount !== 1) {
         throw new ErrorHandler("Payment received, but stock is unavailable. Contact support with your payment reference; do not pay again", 409);
       }
     }

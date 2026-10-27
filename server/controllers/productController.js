@@ -121,7 +121,6 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
-    useFindAndModify: false,
   });
 
   if (images !== undefined) {
@@ -144,7 +143,7 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
       await cloudinary.v2.uploader.destroy(product.images[i].public_id);
     }
   }
-  await product.remove();
+  await product.deleteOne();
 
   res.status(200).json({
     success: true,

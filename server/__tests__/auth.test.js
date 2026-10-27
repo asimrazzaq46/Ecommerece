@@ -98,9 +98,7 @@ test("saving a recovery token does not hash an unchanged password again", async 
   const hash = jest.spyOn(bcrypt, "hash").mockResolvedValue("unexpected-rehash");
   const user = User.hydrate({ _id: "507f1f77bcf86cd799439011", password: "existing-hash" });
   user.resetPasswordToken = "recovery-hash";
-  jest.spyOn(User.collection, "updateOne").mockImplementation((filter, update, options, callback) => {
-    callback(null, { n: 1, nModified: 1, ok: 1 });
-  });
+  jest.spyOn(User.collection, "updateOne").mockResolvedValue({ matchedCount: 1, modifiedCount: 1, acknowledged: true });
   await user.save({ validateBeforeSave: false });
   expect(hash).not.toHaveBeenCalled();
   expect(user.password).toBe("existing-hash");

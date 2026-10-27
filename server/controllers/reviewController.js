@@ -87,8 +87,7 @@ exports.deleteProductReview = catchAsyncError(async (req, res, next) => {
     {
       new: true,
       runValidators: true,
-      useFindAndModify: false,
-    }
+      }
   );
 
   res.status(200).json({

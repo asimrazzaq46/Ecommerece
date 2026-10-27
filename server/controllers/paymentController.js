@@ -21,7 +21,7 @@ exports.processPayment = catchAsyncError(async (req, res) => {
     try {
       checkout = await Checkout.findOneAndUpdate({ _id: checkoutId }, {
         $setOnInsert: { user: userId, requestHash, quote, createdAt: new Date() },
-      }, { upsert: true, new: true, setDefaultsOnInsert: true, useFindAndModify: false });
+      }, { upsert: true, new: true, setDefaultsOnInsert: true });
     } catch (err) {
       if (err.code !== 11000) throw err;
       checkout = await Checkout.findById(checkoutId);
@@ -40,6 +40,8 @@ exports.processPayment = catchAsyncError(async (req, res) => {
     }
     payment = await stripe().paymentIntents.create({
       amount: Math.round(checkout.quote.totalPrice * 100), currency: "usd",
+      payment_method_types: ["card"],
+      capture_method: "automatic",
       metadata: { userId, checkoutId },
     }, { idempotencyKey: `checkout-${checkoutId}` });
     checkout.paymentIntentId = payment.id;

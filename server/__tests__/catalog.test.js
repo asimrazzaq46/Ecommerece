@@ -47,13 +47,13 @@ test("updating a review converts a string rating before averaging", async () => 
 });
 
 test("external seed images are not deleted through Cloudinary", async () => {
-  const remove = jest.fn();
-  jest.spyOn(Product, "findById").mockResolvedValue({ images: [{ provider: "external", public_id: "seed/test" }], remove });
+  const deleteOne = jest.fn();
+  jest.spyOn(Product, "findById").mockResolvedValue({ images: [{ provider: "external", public_id: "seed/test" }], deleteOne });
   const next = jest.fn();
   await products.deleteProduct({ params: { id: "p" } }, response(), next);
   expect(next).not.toHaveBeenCalled();
   expect(cloudinary.v2.uploader.destroy).not.toHaveBeenCalled();
-  expect(remove).toHaveBeenCalled();
+  expect(deleteOne).toHaveBeenCalled();
 });
 
 test("failed replacement upload preserves old product images", async () => {
