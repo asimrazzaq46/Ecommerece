@@ -19,6 +19,9 @@ exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
   if (!req.user) {
     return next(new ErrorHandler("Account no longer exists. Please log in again", 401));
   }
+  if ((decoded.sessionVersion || 0) !== (req.user.sessionVersion || 0)) {
+    return next(new ErrorHandler("Session revoked. Please log in again", 401));
+  }
   next();
 });
 

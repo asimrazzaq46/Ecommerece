@@ -27,3 +27,5 @@ jest.mock("stripe", () => jest.fn(() => ({
     retrieve: jest.fn(() => { throw new Error("Mock payment retrieval explicitly"); }),
   },
 })));
+
+jest.mock("../middlewares/requestSecurity", () => ({headers:(req,res,next)=>next(),origin:(req,res,next)=>next(),limit:(req,res,next)=>next()}));

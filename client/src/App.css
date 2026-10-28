@@ -26,7 +26,7 @@ body {
   border-radius: 5px;
 }
 
-nav {
+nav.navbar {
   background-color: #232f3e;
   padding: 1rem 1rem;
 }
@@ -46,7 +46,7 @@ nav {
 }
 
 #login_btn,
-#view_btn {
+.view-product {
   background-color: #febd69;
   padding: 0.4rem 1.8rem;
   font-family: calibri;
@@ -100,7 +100,7 @@ nav {
   font-size: 1.4rem;
 }
 
-#view_btn {
+.view-product {
   background-color: #fa9c23;
   color: white;
 }
@@ -115,7 +115,7 @@ nav {
   color: #fdcc0d;
 }
 
-#no_of_reviews {
+.no_of_reviews {
   font-size: 0.85rem;
   color: grey;
   margin-left: 0.5rem;
@@ -632,3 +632,26 @@ dialog::backdrop { background: #0008; }
 
 dialog:not([open]) { display: none; }
 #product_image img { max-height: 440px; object-fit: contain; }
+
+/* Shared accessible controls */
+.pagination-controls { background: #fff; color: #243247; gap: 1rem; padding: 1rem; flex-wrap: wrap; border: 1px solid #cbd5e1; border-radius: .5rem; }
+.pagination-controls .btn { color: #243247; border: 1px solid #64748b; background: #fff; min-height: 44px; }
+.pagination-controls .btn:hover:not(:disabled) { background: #e8eef5; }
+.pagination-controls .btn:disabled { opacity: 1; color: #5e6875; background: #eef1f5; border-color: #cbd5e1; cursor: not-allowed; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #155eef !important; outline-offset: 3px; }
+.btn, button, .page-link { min-height: 44px; }
+.view-product, #login_btn, #register_button, #shipping_btn, #checkout_btn, #pay_btn, #review_btn { color: #17212f; }
+.skip-link { position: absolute; left: 1rem; top: -100px; z-index: 10000; background: white; color: #17212f; padding: .75rem; }
+.skip-link:focus { top: 1rem; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+.card-title a:hover { color: #935300; }
+.no_of_reviews { color: #595959; }
+#cart_btn, #shipping_btn, #confirm_btn, #review_btn, #login_button, #register_button, .checkout-progress .step.active-step { color: #17212f; }
+
+.checkout-step-list { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; padding: 0; }
+.checkout-step-link, .checkout-step-disabled { display: inline-block; padding: .75rem 1rem; border-radius: .25rem; min-height: 44px; }
+.checkout-step-link { background: #fa9c23; color: #17212f; }
+.checkout-step-disabled { background: #eee; color: #595959; }
+.checkout-step-list [aria-current="step"] { outline: 2px solid #243247; outline-offset: 2px; border-radius: .25rem; }
+.update-btn, .update-btn:hover, #edit_profile, #delete_btn { color: #17212f; }

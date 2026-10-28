@@ -70,7 +70,7 @@ async function run() {
   const base = `http://127.0.0.1:${server.address().port}/api/v1`;
   let cookie;
   async function request(route, method = "GET", body) {
-    const response = await fetch(base + route, { method, headers: { "Content-Type": "application/json", ...(cookie ? { Cookie: cookie } : {}) }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(5000) });
+    const response = await fetch(base + route, { method, headers: { "Content-Type": "application/json", "X-ShopIT-Request": "1", ...(cookie ? { Cookie: cookie } : {}) }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(5000) });
     const data = await response.json();
     assert.equal(response.status, 200, `${method} ${route}: ${data.Message || response.status}`);
     return { response, data };
@@ -79,7 +79,8 @@ async function run() {
   cookie = login.response.headers.get("set-cookie").split(";")[0];
   assert(!login.data.user.password);
   const page = (await request("/products?page=1")).data;
-  assert.equal(page.count, 3);
+  assert.equal(page.count, Math.min(page.resultPerPage, catalog.length));
+  assert.equal(page.products.length, page.count);
   assert.equal(page.filteredProductsCount, catalog.length);
   const filtered = (await request("/products?catagory=Laptops&price[lte]=1000")).data;
   assert(filtered.count > 0);
@@ -92,6 +93,18 @@ async function run() {
   assert.equal((await Product.findById(product._id)).price, 25);
   await request(`/admin/product/${product._id}`, "DELETE");
   assert.equal(await Product.findById(product._id), null);
+  const oldCookie = cookie;
+  const changedPassword = await request("/password/update", "PUT", {oldPassword:"fixture-password",password:"new-fixture-password"});
+  assert.equal((await fetch(base+"/me",{headers:{Cookie:oldCookie}})).status,401,"password change must revoke old sessions");
+  cookie = changedPassword.response.headers.get("set-cookie").split(";")[0];
+  await request("/me");
+  await request("/logout");
+  assert.equal((await fetch(base+"/me",{headers:{Cookie:cookie}})).status,401,"logout must revoke the token server-side");
+  const limiter = require("../server/middlewares/requestSecurity").limit;
+  const outcomes = await Promise.all(Array.from({length:31},()=>new Promise(resolve=>limiter({method:"POST",path:"/login",ip:"isolated-rate-limit-test"},{setHeader(){}},error=>resolve(error?.statusCode||200)))));
+  assert.equal(outcomes.filter(status=>status===200).length,30);
+  assert.equal(outcomes.filter(status=>status===429).length,1);
+  console.log("Session revocation and concurrent shared rate limits: PASS");
   console.log("Database integration passed: authentication, password hooks, seed reruns, stock writes, population, catalog queries, reviews and product CRUD.");
 }
 

@@ -188,6 +188,11 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
 // logout the use => api/v1/logout
 
 exports.logoutUser = catchAsyncError(async (req, res, next) => {
+  if (req.cookies?.token) {
+    let decoded;
+    try { decoded = require("jsonwebtoken").verify(req.cookies.token, process.env.JWT_SECRET, {algorithms:["HS256"]}); } catch {}
+    if (decoded?.id) await User.updateOne({_id:decoded.id}, {$inc:{sessionVersion:1}});
+  }
   res.cookie("token", null, {
     expires: new Date(Date.now()),
     ...authCookie(),

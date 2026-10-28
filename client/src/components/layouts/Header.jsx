@@ -22,11 +22,11 @@ const Header = () => {
 
   return (
     <Fragment>
-      <nav className="navbar row">
+      <nav aria-label="Main navigation" className="navbar row">
         <div className="col-12 col-md-3">
           <div className="navbar-brand">
             <Link to="/">
-              <img src="/images/logo.png" alt="logo-SshopIt" />
+              <img src="/images/logo.png" alt="ShopIT home" />
             </Link>
           </div>
         </div>
@@ -57,6 +57,7 @@ const Header = () => {
                 id="dropDownMenuButton"
                 aria-haspopup="true"
                 aria-expanded={menuOpen}
+                onKeyDown={event => { if (event.key === "Escape") setMenuOpen(false); }}
               >
                 <figure className="avatar avatar-nav">
                   <img

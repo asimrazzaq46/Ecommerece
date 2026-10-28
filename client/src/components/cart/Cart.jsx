@@ -89,6 +89,7 @@ const Cart = () => {
                               -
                             </button>
                             <input
+                              aria-label={`Quantity of ${item.name}`}
                               type="number"
                               className="form-control count d-inline"
                               value={item.quantity}

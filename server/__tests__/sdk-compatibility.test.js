@@ -32,11 +32,13 @@ test("Stripe SDK preserves card intent fields, API version and idempotency on th
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   try {
     const stripe = new Stripe("sk_test_local_fixture", { host: "127.0.0.1", port: server.address().port, protocol: "http", apiVersion: "2026-09-30.endive", maxNetworkRetries: 0 });
-    await stripe.paymentIntents.create({ amount: 23500, currency: "usd", payment_method_types: ["card"], capture_method: "automatic", metadata: { userId: "u", checkoutId: "c" } }, { idempotencyKey: "checkout-c" });
+    await stripe.paymentIntents.create({ amount: 23500, currency: "usd", automatic_payment_methods: { enabled: true, allow_redirects: "never" }, capture_method: "automatic", metadata: { userId: "u", checkoutId: "c" } }, { idempotencyKey: "checkout-c" });
     const payment = await stripe.paymentIntents.retrieve("pi_fixture");
     expect(requests[0].headers["stripe-version"]).toBe("2026-09-30.endive");
     expect(requests[0].headers["idempotency-key"]).toBe("checkout-c");
-    expect(requests[0].body.get("payment_method_types[0]")).toBe("card");
+    expect(requests[0].body.has("payment_method_types[0]")).toBe(false);
+    expect(requests[0].body.get("automatic_payment_methods[enabled]")).toBe("true");
+    expect(requests[0].body.get("automatic_payment_methods[allow_redirects]")).toBe("never");
     expect(requests[0].body.get("capture_method")).toBe("automatic");
     expect(requests[0].body.get("metadata[userId]")).toBe("u");
     expect(requests[1].path).toBe("/v1/payment_intents/pi_fixture");

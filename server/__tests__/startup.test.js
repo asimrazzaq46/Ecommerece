@@ -21,3 +21,6 @@ test("database startup failure never opens the HTTP listener", async () => {
   await expect(startServer()).rejects.toThrow("Database unavailable");
   expect(app.listen).not.toHaveBeenCalled();
 });
+
+beforeEach(() => { process.env.NODE_ENV = "development"; });
+afterEach(() => { process.env.NODE_ENV = "PRODUCTION"; });

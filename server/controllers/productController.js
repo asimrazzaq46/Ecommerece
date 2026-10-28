@@ -15,7 +15,11 @@ exports.newProduct = catchAsyncError(async (req, res, next) => {
     images = req.body.images;
   }
 
-  if (!Array.isArray(images) || !images.length || images.some(image => typeof image !== "string")) {
+  if (
+    !Array.isArray(images) ||
+    !images.length ||
+    images.some((image) => typeof image !== "string")
+  ) {
     return next(new ErrorHandler("Please provide product images", 400));
   }
   let imagesLinks = [];
@@ -45,7 +49,7 @@ exports.newProduct = catchAsyncError(async (req, res, next) => {
 // get all products from the database => /api/v1/products
 
 exports.getProducts = catchAsyncError(async (req, res, next) => {
-  const resultPerPage = 3;
+  const resultPerPage = 12;
 
   const productCount = await Product.countDocuments();
 
@@ -53,7 +57,9 @@ exports.getProducts = catchAsyncError(async (req, res, next) => {
     .search()
     .filter();
 
-  const filteredProductsCount = await Product.countDocuments(apiFeatures.query.getFilter());
+  const filteredProductsCount = await Product.countDocuments(
+    apiFeatures.query.getFilter(),
+  );
 
   apiFeatures.pagination(resultPerPage);
 
@@ -99,7 +105,11 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
   }
 
   if (images !== undefined) {
-    if (!Array.isArray(images) || !images.length || images.some(image => typeof image !== "string")) {
+    if (
+      !Array.isArray(images) ||
+      !images.length ||
+      images.some((image) => typeof image !== "string")
+    ) {
       return next(new ErrorHandler("Please provide product images", 400));
     }
     let imagesLinks = [];
@@ -124,7 +134,11 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
   });
 
   if (images !== undefined) {
-    await Promise.allSettled(oldImages.filter(image => image.provider !== "external").map(image => cloudinary.v2.uploader.destroy(image.public_id)));
+    await Promise.allSettled(
+      oldImages
+        .filter((image) => image.provider !== "external")
+        .map((image) => cloudinary.v2.uploader.destroy(image.public_id)),
+    );
   }
   res.status(200).json({ success: true, product });
 });

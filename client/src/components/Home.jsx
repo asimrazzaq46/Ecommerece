@@ -136,7 +136,7 @@ const Home = () => {
                     {/* filter by categories */}
                     <hr className="my-5" />
                     <div className="mt-5">
-                      <h4 className="mb-3">Categories</h4>
+                      <h2 className="h4 mb-3">Categories</h2>
                       <ul className="pl-0">
                         {categories.map((category) => (
                           <li
@@ -162,7 +162,7 @@ const Home = () => {
                     <hr className="my-3" />
 
                     <div className="mt-5">
-                      <h4 className="mb-3">Ratings</h4>
+                      <h2 className="h4 mb-3">Ratings</h2>
                       <ul className="pl-0">
                         {[5, 4, 3, 2, 1].map((star) => (
                           <li

@@ -12,7 +12,13 @@ cloudinary.config({
 
 let server;
 async function startServer() {
+  require("./utils/validateEnvironment")();
   await connectDatabase();
+  if (String(process.env.NODE_ENV).toLowerCase() === "production") {
+    await require("./utils/transaction").requireTransactions();
+    const info = await mongoose.connection.db.admin().command({buildInfo:1});
+    if (info.versionArray[0] < 7) throw new Error("Production requires a supported MongoDB server version (7 or newer)");
+  }
   server = app.listen(process.env.PORT || 3002, () => {
     console.log("Server started on port " + server.address().port + " in " + (process.env.NODE_ENV || "development") + " mode.");
   });

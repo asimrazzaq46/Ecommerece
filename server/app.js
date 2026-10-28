@@ -11,9 +11,13 @@ dotenv.config({
   path: require("path").resolve(__dirname, "config/config.env"),
   quiet: true,
 });
+const requestSecurity = require("./middlewares/requestSecurity");
+app.use(requestSecurity.headers);
+app.post("/api/v1/stripe/webhook", express.raw({type:"application/json",limit:"1mb"}), require("./controllers/stripeWebhook"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use("/api/v1", requestSecurity.origin, requestSecurity.limit);
 app.use(
   fileupload({
     limits: { fileSize: 5 * 1024 * 1024, fieldSize: 7 * 1024 * 1024 },

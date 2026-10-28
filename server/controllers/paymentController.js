@@ -40,7 +40,7 @@ exports.processPayment = catchAsyncError(async (req, res) => {
     }
     payment = await stripe().paymentIntents.create({
       amount: Math.round(checkout.quote.totalPrice * 100), currency: "usd",
-      payment_method_types: ["card"],
+      automatic_payment_methods: { enabled: true, allow_redirects: "never" },
       capture_method: "automatic",
       metadata: { userId, checkoutId },
     }, { idempotencyKey: `checkout-${checkoutId}` });

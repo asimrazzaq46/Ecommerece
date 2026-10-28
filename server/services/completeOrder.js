@@ -21,6 +21,7 @@ module.exports = async (paymentId, userId) => {
     }
     const existing = await Orders.findById(checkoutId).session(session);
     if (existing) return existing;
+    if (checkout.refundPending) throw new ErrorHandler("This payment is being refunded because the order could not be fulfilled", 409);
     if (checkout.completed) throw new ErrorHandler("This payment already completed an order", 409);
     for (const item of checkout.quote.orderItems) {
       const result = await Product.updateOne(
@@ -28,7 +29,9 @@ module.exports = async (paymentId, userId) => {
         { $inc: { stock: -item.quantity } }, { session }
       );
       if (result.modifiedCount !== 1) {
-        throw new ErrorHandler("Payment received, but stock is unavailable. Contact support with your payment reference; do not pay again", 409);
+        const error = new ErrorHandler("Payment received, but stock is unavailable. Refund reconciliation is required; do not pay again", 409);
+        error.code = "STOCK_UNAVAILABLE";
+        throw error;
       }
     }
     const [order] = await Orders.create([{

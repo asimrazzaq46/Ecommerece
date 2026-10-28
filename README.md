@@ -2,7 +2,7 @@
 
 ## Local setup
 
-Use Node 24.11 or newer and a running local MongoDB server.
+Use Node 24.11 or newer and MongoDB configured as a replica set (or Atlas). Checkout uses multi-document transactions; standalone mongod cannot run checkout.
 
 1. Run `npm ci` and `npm --prefix client ci`.
 2. Copy `server/config/config.env.example` to `server/config/config.env` and supply your own credentials. The real file is ignored by Git.
@@ -33,3 +33,29 @@ The complete nine-step plan is not yet finished:
 - Automated payment checks cover mocked success/failure and order safeguards. Real Stripe test-mode success/decline/retry checks and real SMTP delivery remain unverified.
 - Full mobile, keyboard/focus and all admin browser workflows still need a systematic verification pass.
 - No node_modules files are tracked. Git commits and synchronization are handled by the owner. Provider credential rotation and deployment readiness are not certified by these checks.
+
+## Local MongoDB replica set
+
+The existing local database was converted in place to the single-node development replica set `shopit-rs`. A cold backup is at `C:\data\db-before-shopit-rs-20261028-143209`. Existing data remains in `C:\data\db`.
+
+For subsequent starts, run this in PowerShell (do not start a second process while MongoDB is already running):
+
+```powershell
+& "C:\Program Files\MongoDB\Server\5.0\bin\mongod.exe" --dbpath "C:\data\db" --replSet shopit-rs --bind_ip 127.0.0.1 --port 27017
+```
+
+Replica-set initialization is already complete and must not be repeated. Use `mongodb://127.0.0.1:27017/shopIt?replicaSet=shopit-rs` for this existing database, including in Compass. Start MongoDB before the API. A single node enables development transactions but provides no failover redundancy. MongoDB 5.0 remains installed; this configuration change is not a database-version upgrade.
+
+## Production blockers identified in targeted review
+
+This is not a completed penetration test or a production certification. Before deployment:
+
+- Add distributed abuse/rate limits to authentication, password recovery, uploads and checkout creation.
+- Revoke existing JWT sessions on password reset/change and provide meaningful server-side logout/revocation.
+- Implement signature-verified Stripe webhooks and idempotent reconciliation when a browser closes after payment. Handle paid-but-out-of-stock failures with a reservation or refund/reconciliation policy.
+- Upgrade the local MongoDB 5.0 deployment through a supported migration path; use supported Atlas or a properly secured production replica set with database users, TLS, network restrictions and tested backups. The loopback-only development node has no authentication or failover.
+- Add and verify deployment security headers/CSP and explicit CSRF/origin protection for cookie-authenticated mutations. SameSite=Lax is already present but is not a complete deployment review.
+- Enforce production environment validation and HTTPS. Development responses contain stack traces; production mode suppresses them and enables Secure cookies.
+- Verify provider credential rotation after historical exposure, and replace broad Cloudinary Master Admin access with permissions sufficient for required operations.
+
+Stripe creation now uses automatic_payment_methods with allow_redirects=never for the existing card form. Actual uncharged test-mode creation/retrieval response and cancellation passed; full browser card success/decline/3DS verification is still required.

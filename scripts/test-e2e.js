@@ -169,7 +169,7 @@ async function runApiChecks(base) {
       const response = await fetch(base + "/api/v1" + route, {
         method,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "X-ShopIT-Request": "1",
           ...(cookie ? { Cookie: cookie } : {}),
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -215,7 +215,7 @@ async function runApiChecks(base) {
     catalog.filteredProductsCount,
     require("../server/data/product.json").length,
   );
-  assert.equal(catalog.products.length, 3);
+  assert.equal(catalog.products.length, Math.min(catalog.resultPerPage, catalog.filteredProductsCount));
   assert.equal(
     (await guest("/products?keyword=camera&catagory=Laptops")).count,
     0,

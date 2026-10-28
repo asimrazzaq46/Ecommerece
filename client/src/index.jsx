@@ -1,3 +1,5 @@
+import axios from "axios";
+axios.defaults.headers.common["X-ShopIT-Request"] = "1";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";

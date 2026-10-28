@@ -11,9 +11,10 @@ export default function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className="d-flex align-items-center justify-content-center my-4"
+      className="pagination-controls d-flex align-items-center justify-content-center my-4"
     >
       <button
+        type="button"
         className="btn btn-outline-secondary"
         disabled={disabled || activePage <= 1}
         onClick={() => onChange(activePage - 1)}
@@ -24,8 +25,9 @@ export default function Pagination({
         Page {activePage} of {pages}
       </span>
       <button
+        type="button"
         className="btn btn-outline-secondary"
-        disabled={activePage >= pages}
+        disabled={disabled || activePage >= pages}
         onClick={() => onChange(activePage + 1)}
       >
         Next

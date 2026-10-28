@@ -42,6 +42,7 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  sessionVersion: { type: Number, default: 0 },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
@@ -49,6 +50,7 @@ const userSchema = mongoose.Schema({
 userSchema.set("toJSON", {
   transform(doc, user) {
     delete user.password;
+    delete user.sessionVersion;
     delete user.resetPasswordToken;
     delete user.resetPasswordExpire;
     return user;
@@ -63,6 +65,7 @@ userSchema.pre("save", async function () {
     return;
   }
 
+  if (!this.isNew) this.sessionVersion = (this.sessionVersion || 0) + 1;
   this.password = await bcrypt.hash(this.password, 10);
 });
 
@@ -76,7 +79,7 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 
 userSchema.methods.getJwtToken = function () {
   // this id we are going to use for decode the token and find the user by his id ==> ../middlewares/auth.js
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this._id, sessionVersion: this.sessionVersion || 0 }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_TIME,
   });
 };

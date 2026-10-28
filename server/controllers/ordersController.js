@@ -7,7 +7,7 @@ const { findById } = require("../models/order");
 // create a new order => api/v1/order/new
 
 exports.newOrder = catchAsyncError(async (req, res) => {
-  const completeOrder = require("../services/completeOrder");
+  const completeOrder = require("../services/reconcilePayment");
   const order = await completeOrder(req.body.paymentInfo && req.body.paymentInfo.id, req.user._id);
   res.status(200).json({ success: true, order });
 });
