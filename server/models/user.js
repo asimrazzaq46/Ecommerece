@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema({
     select: false,
   },
   avatar: {
+    provider: {type: String, enum: ["cloudinary", "default"], default: "cloudinary"},
     public_id: {
       type: String,
       required: true,

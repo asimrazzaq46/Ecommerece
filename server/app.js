@@ -7,12 +7,19 @@ const errorMiddleware = require("./middlewares/error");
 
 const app = express();
 // Setting Up config files
-dotenv.config({ path: require("path").resolve(__dirname, "config/config.env"), quiet: true });
+dotenv.config({
+  path: require("path").resolve(__dirname, "config/config.env"),
+  quiet: true,
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(fileupload());
-
+app.use(
+  fileupload({
+    limits: { fileSize: 5 * 1024 * 1024, fieldSize: 7 * 1024 * 1024 },
+    abortOnLimit: true,
+  }),
+);
 // import all routes
 const products = require("./routes/products");
 const auth = require("./routes/auth");

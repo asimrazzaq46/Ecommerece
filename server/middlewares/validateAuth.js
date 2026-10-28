@@ -9,7 +9,7 @@ const avatar = value => typeof value === "string" && value.length <= 7 * 1024 * 
   /^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+/]+={0,2}$/i.test(value);
 
 const rules = {
-  register: { name, email, password, avatar },
+  register: { name, email, password, avatar: value => value === undefined || value === "" || avatar(value) },
   login: { email, password: text },
   forgot: { email },
   reset: { password, confirmPassword: password },

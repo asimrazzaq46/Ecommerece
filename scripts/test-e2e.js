@@ -105,14 +105,12 @@ async function startDatabase() {
       await sleep(200);
     }
   }
-  await mongoose.connection.db
-    .admin()
-    .command({
-      replSetInitiate: {
-        _id: "shopitE2E",
-        members: [{ _id: 0, host: `127.0.0.1:${port}` }],
-      },
-    });
+  await mongoose.connection.db.admin().command({
+    replSetInitiate: {
+      _id: "shopitE2E",
+      members: [{ _id: 0, host: `127.0.0.1:${port}` }],
+    },
+  });
   for (let attempt = 0; attempt < 60; attempt++) {
     if (
       (await mongoose.connection.db.admin().command({ hello: 1 }))
@@ -213,7 +211,10 @@ async function runApiChecks(base) {
     body: { email: "other@example.test", password },
   });
   const catalog = await guest("/products");
-  assert.equal(catalog.filteredProductsCount, 6);
+  assert.equal(
+    catalog.filteredProductsCount,
+    require("../server/data/product.json").length,
+  );
   assert.equal(catalog.products.length, 3);
   assert.equal(
     (await guest("/products?keyword=camera&catagory=Laptops")).count,
@@ -304,12 +305,30 @@ async function runApiChecks(base) {
       name: "New Buyer",
       email: "registered@example.test",
       password,
-      avatar: "data:image/png;base64,aGVsbG8=",
+      avatar:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=",
       role: "admin",
     },
   });
   assert.equal(registration.user.role, "user");
   assert(!registration.user.password);
+  assert.equal(registration.user.avatar.provider, "cloudinary");
+  const form = new FormData();
+  form.set("name", "Multipart Buyer");
+  form.set("email", "multipart@example.test");
+  form.set("password", password);
+  const bytes = Buffer.concat([
+    Buffer.from("89504e470d0a1a0a", "hex"),
+    Buffer.alloc(1100000),
+  ]);
+  form.set("avatar", "data:image/png;base64," + bytes.toString("base64"));
+  const multipart = await fetch(base + "/api/v1/register", {
+    method: "POST",
+    body: form,
+  });
+  assert.equal(multipart.status, 200);
+  const multipartUser = (await multipart.json()).user;
+  assert.equal(multipartUser.avatar.provider, "cloudinary");
   await guest("/password/forgot", {
     method: "POST",
     body: { email: "registered@example.test" },

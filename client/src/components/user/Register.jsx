@@ -19,11 +19,11 @@ const Register = () => {
 
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setAvatarPreview] = useState(
-    "/images/default_avatar.jpg"
+    "/images/default_avatar.jpg",
   );
 
   const { isAuthenticated, loading, error } = useSelector(
-    (state) => state.registerUser
+    (state) => state.registerUser,
   );
 
   const { name, email, password } = user;
@@ -42,6 +42,15 @@ const Register = () => {
 
   const onChange = (e) => {
     if (e.target.name === "avatar") {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (
+        !/^image\/(png|jpeg|gif|webp)$/.test(file.type) ||
+        file.size > 5 * 1024 * 1024
+      ) {
+        alert.error("Choose a PNG, JPEG, GIF or WebP image under 5 MB");
+        return;
+      }
       const reader = new FileReader();
 
       reader.onload = () => {
@@ -51,7 +60,7 @@ const Register = () => {
         }
       };
 
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     } else {
       setUser({ ...user, [e.target.name]: e.target.value });
     }
@@ -82,7 +91,9 @@ const Register = () => {
             <div className="form-group">
               <label htmlFor="name_field">Name</label>
               <input
-                type="name"
+                type="text"
+                required
+                maxLength={30}
                 id="name_field"
                 className="form-control"
                 name="name"
@@ -95,6 +106,7 @@ const Register = () => {
               <label htmlFor="email_field">Email</label>
               <input
                 type="email"
+                required
                 id="email_field"
                 className="form-control"
                 name="email"
@@ -107,6 +119,8 @@ const Register = () => {
               <label htmlFor="password_field">Password</label>
               <input
                 type="password"
+                required
+                minLength={6}
                 id="password_field"
                 className="form-control"
                 name="password"
@@ -116,7 +130,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="avatar_upload">Avatar</label>
+              <label htmlFor="customFile">Avatar (optional, max 5 MB)</label>
               <div className="d-flex align-items-center">
                 <div>
                   <figure className="avatar mr-3 item-rtl">
@@ -133,7 +147,7 @@ const Register = () => {
                     name="avatar"
                     className="custom-file-input"
                     id="customFile"
-                    accept="images/*"
+                    accept="image/png,image/jpeg,image/gif,image/webp"
                     onChange={onChange}
                   />
                   <label className="custom-file-label" htmlFor="customFile">

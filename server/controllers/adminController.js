@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const cloudinary = require("cloudinary");
+const { removeAvatar } = require("../utils/avatarStorage");
 
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
@@ -72,8 +72,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
   }
   //REMOVE AVATAR FROM CLOUDINARY
 
-  const image_id = user.avatar.public_id;
-  await cloudinary.v2.uploader.destroy(image_id);
+  await removeAvatar(user.avatar);
 
   await user.deleteOne();
 

@@ -111,7 +111,7 @@ test("registration cannot assign admin privileges", async () => {
   cloudinary.v2.uploader.upload.mockResolvedValue({ public_id: "test-avatar", secure_url: "https://example.test/avatar.png" });
   const create = jest.spyOn(User, "create").mockImplementation(async data => new User(data));
   const result = await request("POST", "/api/v1/register", undefined, {
-    name: "Buyer", email: "buyer@example.test", password: "password", avatar: "data:image/png;base64,YQ==", role: "admin",
+    name: "Buyer", email: "buyer@example.test", password: "password", avatar: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=", role: "admin",
   });
   expect(result.status).toBe(200);
   expect(create.mock.calls[0][0]).not.toHaveProperty("role");

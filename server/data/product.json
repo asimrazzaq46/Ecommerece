@@ -124,5 +124,1398 @@
         "credit": "Matheus Bertelli / Pexels (https://www.pexels.com/license/)"
       }
     ]
+  },
+  {
+    "seedKey": "demo-dummyjson-78",
+    "name": "Apple MacBook Pro 14 Inch Space Grey",
+    "price": 1999.99,
+    "description": "A portable computer for everyday documents, study and entertainment. Apple MacBook Pro 14 Inch Space Grey is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Laptops",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-78-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/1.webp",
+        "source": "https://dummyjson.com/products/78",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-78-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/2.webp",
+        "source": "https://dummyjson.com/products/78",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-79",
+    "name": "Asus Zenbook Pro Dual Screen Laptop",
+    "price": 1799.99,
+    "description": "A portable computer for everyday documents, study and entertainment. Asus Zenbook Pro Dual Screen Laptop is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Laptops",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-79-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/1.webp",
+        "source": "https://dummyjson.com/products/79",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-79-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/2.webp",
+        "source": "https://dummyjson.com/products/79",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-80",
+    "name": "Huawei Matebook X Pro",
+    "price": 1399.99,
+    "description": "A portable computer for everyday documents, study and entertainment. Huawei Matebook X Pro is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Laptops",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-80-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/1.webp",
+        "source": "https://dummyjson.com/products/80",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-80-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/2.webp",
+        "source": "https://dummyjson.com/products/80",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-81",
+    "name": "Lenovo Yoga 920",
+    "price": 1099.99,
+    "description": "A portable computer for everyday documents, study and entertainment. Lenovo Yoga 920 is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Laptops",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-81-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/1.webp",
+        "source": "https://dummyjson.com/products/81",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-81-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/2.webp",
+        "source": "https://dummyjson.com/products/81",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-82",
+    "name": "New DELL XPS 13 9300 Laptop",
+    "price": 1499.99,
+    "description": "A portable computer for everyday documents, study and entertainment. New DELL XPS 13 9300 Laptop is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Laptops",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-82-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/1.webp",
+        "source": "https://dummyjson.com/products/82",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-82-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/2.webp",
+        "source": "https://dummyjson.com/products/82",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-121",
+    "name": "iPhone 5s",
+    "price": 199.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. iPhone 5s is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-121-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/1.webp",
+        "source": "https://dummyjson.com/products/121",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-121-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/2.webp",
+        "source": "https://dummyjson.com/products/121",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-122",
+    "name": "iPhone 6",
+    "price": 299.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. iPhone 6 is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-122-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/1.webp",
+        "source": "https://dummyjson.com/products/122",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-122-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/2.webp",
+        "source": "https://dummyjson.com/products/122",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-123",
+    "name": "iPhone 13 Pro",
+    "price": 1099.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. iPhone 13 Pro is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-123-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/1.webp",
+        "source": "https://dummyjson.com/products/123",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-123-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/2.webp",
+        "source": "https://dummyjson.com/products/123",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-124",
+    "name": "iPhone X",
+    "price": 899.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. iPhone X is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-124-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/1.webp",
+        "source": "https://dummyjson.com/products/124",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-124-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/2.webp",
+        "source": "https://dummyjson.com/products/124",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-125",
+    "name": "Oppo A57",
+    "price": 249.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. Oppo A57 is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-125-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/1.webp",
+        "source": "https://dummyjson.com/products/125",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-125-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/2.webp",
+        "source": "https://dummyjson.com/products/125",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-126",
+    "name": "Oppo F19 Pro Plus",
+    "price": 399.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. Oppo F19 Pro Plus is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-126-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/oppo-f19-pro-plus/1.webp",
+        "source": "https://dummyjson.com/products/126",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-126-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/oppo-f19-pro-plus/2.webp",
+        "source": "https://dummyjson.com/products/126",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-127",
+    "name": "Oppo K1",
+    "price": 299.99,
+    "description": "A smartphone option for calls, messaging and everyday mobile use. Oppo K1 is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Phones",
+    "seller": "ShopIT Demo Store",
+    "stock": 52,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-127-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/1.webp",
+        "source": "https://dummyjson.com/products/127",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-127-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/2.webp",
+        "source": "https://dummyjson.com/products/127",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-1",
+    "name": "Essence Mascara Lash Princess",
+    "price": 9.99,
+    "description": "An everyday personal-care item for a simple beauty routine. Essence Mascara Lash Princess is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Beauty/Health",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-1-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
+        "source": "https://dummyjson.com/products/1",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-2",
+    "name": "Eyeshadow Palette with Mirror",
+    "price": 19.99,
+    "description": "An everyday personal-care item for a simple beauty routine. Eyeshadow Palette with Mirror is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Beauty/Health",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-2-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
+        "source": "https://dummyjson.com/products/2",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-3",
+    "name": "Powder Canister",
+    "price": 14.99,
+    "description": "An everyday personal-care item for a simple beauty routine. Powder Canister is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Beauty/Health",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-3-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp",
+        "source": "https://dummyjson.com/products/3",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-4",
+    "name": "Red Lipstick",
+    "price": 12.99,
+    "description": "An everyday personal-care item for a simple beauty routine. Red Lipstick is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Beauty/Health",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-4-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp",
+        "source": "https://dummyjson.com/products/4",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-5",
+    "name": "Red Nail Polish",
+    "price": 8.99,
+    "description": "An everyday personal-care item for a simple beauty routine. Red Nail Polish is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Beauty/Health",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-5-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp",
+        "source": "https://dummyjson.com/products/5",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-118",
+    "name": "Attitude Super Leaves Hand Soap",
+    "price": 8.99,
+    "description": "An everyday personal-care item for a simple beauty routine. Attitude Super Leaves Hand Soap is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Beauty/Health",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-118-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/1.webp",
+        "source": "https://dummyjson.com/products/118",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-118-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/2.webp",
+        "source": "https://dummyjson.com/products/118",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-11",
+    "name": "Annibale Colombo Bed",
+    "price": 1899.99,
+    "description": "A practical addition to everyday living spaces. Annibale Colombo Bed is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-11-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/1.webp",
+        "source": "https://dummyjson.com/products/11",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-11-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/2.webp",
+        "source": "https://dummyjson.com/products/11",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-12",
+    "name": "Annibale Colombo Sofa",
+    "price": 2499.99,
+    "description": "A practical addition to everyday living spaces. Annibale Colombo Sofa is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-12-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/1.webp",
+        "source": "https://dummyjson.com/products/12",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-12-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/2.webp",
+        "source": "https://dummyjson.com/products/12",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-13",
+    "name": "Bedside Table African Cherry",
+    "price": 299.99,
+    "description": "A practical addition to everyday living spaces. Bedside Table African Cherry is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-13-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/1.webp",
+        "source": "https://dummyjson.com/products/13",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-13-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/2.webp",
+        "source": "https://dummyjson.com/products/13",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-14",
+    "name": "Knoll Saarinen Executive Conference Chair",
+    "price": 499.99,
+    "description": "A practical addition to everyday living spaces. Knoll Saarinen Executive Conference Chair is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-14-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/1.webp",
+        "source": "https://dummyjson.com/products/14",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-14-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/2.webp",
+        "source": "https://dummyjson.com/products/14",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-15",
+    "name": "Wooden Bathroom Sink With Mirror",
+    "price": 799.99,
+    "description": "A practical addition to everyday living spaces. Wooden Bathroom Sink With Mirror is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-15-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp",
+        "source": "https://dummyjson.com/products/15",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-15-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/2.webp",
+        "source": "https://dummyjson.com/products/15",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-43",
+    "name": "Decoration Swing",
+    "price": 59.99,
+    "description": "A practical addition to everyday living spaces. Decoration Swing is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-43-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/1.webp",
+        "source": "https://dummyjson.com/products/43",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-43-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/2.webp",
+        "source": "https://dummyjson.com/products/43",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-44",
+    "name": "Family Tree Photo Frame",
+    "price": 29.99,
+    "description": "A practical addition to everyday living spaces. Family Tree Photo Frame is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Home",
+    "seller": "ShopIT Demo Store",
+    "stock": 52,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-44-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/1.webp",
+        "source": "https://dummyjson.com/products/44",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-83",
+    "name": "Blue & Black Check Shirt",
+    "price": 29.99,
+    "description": "An everyday wardrobe option for comfortable casual styling. Blue & Black Check Shirt is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-83-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/1.webp",
+        "source": "https://dummyjson.com/products/83",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-83-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/2.webp",
+        "source": "https://dummyjson.com/products/83",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-84",
+    "name": "Gigabyte Aorus Men Tshirt",
+    "price": 24.99,
+    "description": "An everyday wardrobe option for comfortable casual styling. Gigabyte Aorus Men Tshirt is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-84-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/1.webp",
+        "source": "https://dummyjson.com/products/84",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-84-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/2.webp",
+        "source": "https://dummyjson.com/products/84",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-85",
+    "name": "Man Plaid Shirt",
+    "price": 34.99,
+    "description": "An everyday wardrobe option for comfortable casual styling. Man Plaid Shirt is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-85-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/1.webp",
+        "source": "https://dummyjson.com/products/85",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-85-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/2.webp",
+        "source": "https://dummyjson.com/products/85",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-88",
+    "name": "Nike Air Jordan 1 Red And Black",
+    "price": 149.99,
+    "description": "An everyday wardrobe option for comfortable casual styling. Nike Air Jordan 1 Red And Black is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-88-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/1.webp",
+        "source": "https://dummyjson.com/products/88",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-88-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/2.webp",
+        "source": "https://dummyjson.com/products/88",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-89",
+    "name": "Nike Baseball Cleats",
+    "price": 79.99,
+    "description": "An everyday wardrobe option for comfortable casual styling. Nike Baseball Cleats is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-89-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/1.webp",
+        "source": "https://dummyjson.com/products/89",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-89-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/2.webp",
+        "source": "https://dummyjson.com/products/89",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-90",
+    "name": "Puma Future Rider Trainers",
+    "price": 89.99,
+    "description": "An everyday wardrobe option for comfortable casual styling. Puma Future Rider Trainers is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Clothes/shoes",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-90-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/1.webp",
+        "source": "https://dummyjson.com/products/90",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-90-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/2.webp",
+        "source": "https://dummyjson.com/products/90",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-93",
+    "name": "Brown Leather Belt Watch",
+    "price": 89.99,
+    "description": "A useful accessory for daily wear or a personal device. Brown Leather Belt Watch is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Accessories",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-93-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/1.webp",
+        "source": "https://dummyjson.com/products/93",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-93-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/2.webp",
+        "source": "https://dummyjson.com/products/93",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-94",
+    "name": "Longines Master Collection",
+    "price": 1499.99,
+    "description": "A useful accessory for daily wear or a personal device. Longines Master Collection is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Accessories",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-94-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/1.webp",
+        "source": "https://dummyjson.com/products/94",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-94-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/2.webp",
+        "source": "https://dummyjson.com/products/94",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-95",
+    "name": "Rolex Cellini Date Black Dial",
+    "price": 2999.99,
+    "description": "A useful accessory for daily wear or a personal device. Rolex Cellini Date Black Dial is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Accessories",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-95-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/1.webp",
+        "source": "https://dummyjson.com/products/95",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-95-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/2.webp",
+        "source": "https://dummyjson.com/products/95",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-99",
+    "name": "Amazon Echo Plus",
+    "price": 99.99,
+    "description": "A useful accessory for daily wear or a personal device. Amazon Echo Plus is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Accessories",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-99-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/1.webp",
+        "source": "https://dummyjson.com/products/99",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-99-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/2.webp",
+        "source": "https://dummyjson.com/products/99",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-100",
+    "name": "Apple Airpods",
+    "price": 129.99,
+    "description": "A useful accessory for daily wear or a personal device. Apple Airpods is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Accessories",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-100-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/1.webp",
+        "source": "https://dummyjson.com/products/100",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-100-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/2.webp",
+        "source": "https://dummyjson.com/products/100",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-101",
+    "name": "Apple AirPods Max Silver",
+    "price": 549.99,
+    "description": "A useful accessory for daily wear or a personal device. Apple AirPods Max Silver is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Accessories",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-101-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/1.webp",
+        "source": "https://dummyjson.com/products/101",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-137",
+    "name": "American Football",
+    "price": 19.99,
+    "description": "Equipment for recreational activity and everyday practice. American Football is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Sports",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-137-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/american-football/1.webp",
+        "source": "https://dummyjson.com/products/137",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-138",
+    "name": "Baseball Ball",
+    "price": 8.99,
+    "description": "Equipment for recreational activity and everyday practice. Baseball Ball is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Sports",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-138-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-ball/1.webp",
+        "source": "https://dummyjson.com/products/138",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-139",
+    "name": "Baseball Glove",
+    "price": 24.99,
+    "description": "Equipment for recreational activity and everyday practice. Baseball Glove is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Sports",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-139-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/1.webp",
+        "source": "https://dummyjson.com/products/139",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-139-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/2.webp",
+        "source": "https://dummyjson.com/products/139",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-140",
+    "name": "Basketball",
+    "price": 14.99,
+    "description": "Equipment for recreational activity and everyday practice. Basketball is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Sports",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-140-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/basketball/1.webp",
+        "source": "https://dummyjson.com/products/140",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-141",
+    "name": "Basketball Rim",
+    "price": 39.99,
+    "description": "Equipment for recreational activity and everyday practice. Basketball Rim is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Sports",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-141-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/basketball-rim/1.webp",
+        "source": "https://dummyjson.com/products/141",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-142",
+    "name": "Cricket Ball",
+    "price": 12.99,
+    "description": "Equipment for recreational activity and everyday practice. Cricket Ball is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Sports",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-142-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-ball/1.webp",
+        "source": "https://dummyjson.com/products/142",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-16",
+    "name": "Apple",
+    "price": 1.99,
+    "description": "A grocery item for everyday meals and pantry planning. Apple is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Foods",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-16-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/apple/1.webp",
+        "source": "https://dummyjson.com/products/16",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-17",
+    "name": "Beef Steak",
+    "price": 12.99,
+    "description": "A grocery item for everyday meals and pantry planning. Beef Steak is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Foods",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-17-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/beef-steak/1.webp",
+        "source": "https://dummyjson.com/products/17",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-18",
+    "name": "Cat Food",
+    "price": 8.99,
+    "description": "A grocery item for everyday meals and pantry planning. Cat Food is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Foods",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-18-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/cat-food/1.webp",
+        "source": "https://dummyjson.com/products/18",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-19",
+    "name": "Chicken Meat",
+    "price": 9.99,
+    "description": "A grocery item for everyday meals and pantry planning. Chicken Meat is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Foods",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-19-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/1.webp",
+        "source": "https://dummyjson.com/products/19",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-19-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/2.webp",
+        "source": "https://dummyjson.com/products/19",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-20",
+    "name": "Cooking Oil",
+    "price": 4.99,
+    "description": "A grocery item for everyday meals and pantry planning. Cooking Oil is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Foods",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-20-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/1.webp",
+        "source": "https://dummyjson.com/products/20",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-21",
+    "name": "Cucumber",
+    "price": 1.49,
+    "description": "A grocery item for everyday meals and pantry planning. Cucumber is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Foods",
+    "seller": "ShopIT Demo Store",
+    "stock": 45,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-21-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/groceries/cucumber/1.webp",
+        "source": "https://dummyjson.com/products/21",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-172",
+    "name": "Blue Women's Handbag",
+    "price": 49.99,
+    "description": "A carry bag for daily essentials, errands and short outings. Blue Women's Handbag is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Outdoor",
+    "seller": "ShopIT Demo Store",
+    "stock": 10,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-172-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/1.webp",
+        "source": "https://dummyjson.com/products/172",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-172-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/2.webp",
+        "source": "https://dummyjson.com/products/172",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-173",
+    "name": "Heshe Women's Leather Bag",
+    "price": 129.99,
+    "description": "A carry bag for daily essentials, errands and short outings. Heshe Women's Leather Bag is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Outdoor",
+    "seller": "ShopIT Demo Store",
+    "stock": 17,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-173-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/1.webp",
+        "source": "https://dummyjson.com/products/173",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-173-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/2.webp",
+        "source": "https://dummyjson.com/products/173",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-174",
+    "name": "Prada Women Bag",
+    "price": 599.99,
+    "description": "A carry bag for daily essentials, errands and short outings. Prada Women Bag is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Outdoor",
+    "seller": "ShopIT Demo Store",
+    "stock": 24,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-174-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/1.webp",
+        "source": "https://dummyjson.com/products/174",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-174-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/2.webp",
+        "source": "https://dummyjson.com/products/174",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-175",
+    "name": "White Faux Leather Backpack",
+    "price": 39.99,
+    "description": "A carry bag for daily essentials, errands and short outings. White Faux Leather Backpack is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Outdoor",
+    "seller": "ShopIT Demo Store",
+    "stock": 31,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-175-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/1.webp",
+        "source": "https://dummyjson.com/products/175",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-175-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/2.webp",
+        "source": "https://dummyjson.com/products/175",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
+  },
+  {
+    "seedKey": "demo-dummyjson-176",
+    "name": "Women Handbag Black",
+    "price": 59.99,
+    "description": "A carry bag for daily essentials, errands and short outings. Women Handbag Black is included as sample inventory to compare products and test category and price filters. Portfolio demo only; images and listed prices are illustrative.",
+    "catagory": "Outdoor",
+    "seller": "ShopIT Demo Store",
+    "stock": 38,
+    "rating": 0,
+    "NumOfReviews": 0,
+    "Reviews": [],
+    "images": [
+      {
+        "public_id": "seed/demo-dummyjson-176-0",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/1.webp",
+        "source": "https://dummyjson.com/products/176",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      },
+      {
+        "public_id": "seed/demo-dummyjson-176-1",
+        "provider": "external",
+        "url": "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/2.webp",
+        "source": "https://dummyjson.com/products/176",
+        "credit": "DummyJSON demo product catalog (https://dummyjson.com/docs/products)"
+      }
+    ]
   }
 ]

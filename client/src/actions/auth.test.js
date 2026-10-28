@@ -20,3 +20,15 @@ test("session network failures remain visible", async () => {
   await store.dispatch(loadUser());
   expect(store.getState().auth.error).toBe("Network unavailable");
 });
+
+test("successful registration authenticates the main application and logout resets registration", async () => {
+  const { register, logout } = require("./index");
+  const user = {_id:"buyer",name:"Buyer",role:"user"};
+  axios.post.mockResolvedValue({data:{user}});
+  const store=makeStore(); await store.dispatch(register(new FormData()));
+  expect(store.getState().auth).toMatchObject({isAuthenticated:true,user});
+  expect(store.getState().registerUser.isAuthenticated).toBe(true);
+  axios.get.mockResolvedValue({data:{success:true}}); await store.dispatch(logout());
+  expect(store.getState().auth.isAuthenticated).toBe(false);
+  expect(store.getState().registerUser).toEqual({});
+});

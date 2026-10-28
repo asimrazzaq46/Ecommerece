@@ -1,3 +1,4 @@
+const catalog = require("../data/product.json");
 const Product = require("../models/product");
 const User = require("../models/user");
 const ApiFeatures = require("../utils/apiFeatures");
@@ -70,8 +71,8 @@ test("failed replacement upload preserves old product images", async () => {
 test("seed validates all products, uses stable IDs and never overwrites existing fields", async () => {
   const owner = "62333d079888d7c380167fe9";
   jest.spyOn(User, "findOne").mockResolvedValue({ _id: owner });
-  const bulk = jest.spyOn(Product, "bulkWrite").mockResolvedValue({ upsertedCount: 6 });
-  expect(await seedProducts({ userId: owner, dryRun: true })).toEqual({ validated: 6, inserted: 0, dryRun: true });
+  const bulk = jest.spyOn(Product, "bulkWrite").mockResolvedValue({ upsertedCount: catalog.length });
+  expect(await seedProducts({ userId: owner, dryRun: true })).toEqual({ validated: catalog.length, inserted: 0, dryRun: true });
   expect(bulk).not.toHaveBeenCalled();
   await seedProducts({ userId: owner });
   await seedProducts({ userId: owner });
@@ -98,7 +99,7 @@ test("failed avatar upload leaves the old avatar intact", async () => {
   cloudinary.v2.uploader.upload.mockRejectedValue(new Error("Upload failed"));
   const update = jest.spyOn(User, "findByIdAndUpdate");
   const next = jest.fn();
-  await require("../controllers/authController").updateProfile({ user: { id: "u" }, body: { avatar: "new" } }, response(), next);
+  await require("../controllers/authController").updateProfile({ user: { id: "u" }, body: { avatar: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=" } }, response(), next);
   expect(next).toHaveBeenCalled();
   expect(update).not.toHaveBeenCalled();
   expect(cloudinary.v2.uploader.destroy).not.toHaveBeenCalled();
@@ -110,7 +111,7 @@ test("failed profile save cleans up only the replacement avatar", async () => {
   cloudinary.v2.uploader.destroy.mockResolvedValue({ result: "ok" });
   jest.spyOn(User, "findByIdAndUpdate").mockRejectedValue(new Error("Save failed"));
   const next = jest.fn();
-  await require("../controllers/authController").updateProfile({ user: { id: "u" }, body: { avatar: "new" } }, response(), next);
+  await require("../controllers/authController").updateProfile({ user: { id: "u" }, body: { avatar: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=" } }, response(), next);
   expect(next).toHaveBeenCalled();
   expect(cloudinary.v2.uploader.destroy).toHaveBeenCalledTimes(1);
   expect(cloudinary.v2.uploader.destroy).toHaveBeenCalledWith("new");

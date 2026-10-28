@@ -1,4 +1,6 @@
 import {
+  CLEAR_ERRORS,
+  LOGOUT_SUCCESS,
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAIL,
@@ -27,6 +29,10 @@ const RegisterUserReducer = (state = {}, action) => {
         error: action.payload,
       };
 
+    case CLEAR_ERRORS:
+      return {...state, error: null};
+    case LOGOUT_SUCCESS:
+      return {};
     default:
       return state;
   }

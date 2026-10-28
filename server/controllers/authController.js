@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const cloudinary = require("cloudinary");
+const { saveAvatar, removeAvatar } = require("../utils/avatarStorage");
 
 const User = require("../models/user");
 const ErrorHandler = require("../utils/errorHandler");
@@ -13,21 +13,15 @@ const sendEmail = require("../utils/sendEmail");
 // Register User => api/v1/register
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-  const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: "avatars",
-    width: 150,
-    crop: "scale",
-  });
+  const avatar = await saveAvatar(req.body.avatar);
   const { name, email, password } = req.body;
-  const user = await User.create({
-    name,
-    email,
-    password,
-    avatar: {
-      public_id: result.public_id,
-      url: result.secure_url,
-    },
-  });
+  let user;
+  try {
+    user = await User.create({ name, email, password, avatar });
+  } catch (error) {
+    await Promise.allSettled([removeAvatar(avatar)]);
+    throw error;
+  }
 
   sendToken(user, 200, res);
 });
@@ -94,7 +88,9 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     user.resetPasswordExpire = undefined;
     await user.save({ validateBeforeSave: false });
 
-    return next(new ErrorHandler("Unable to send recovery email. Please try again", 500));
+    return next(
+      new ErrorHandler("Unable to send recovery email. Please try again", 500),
+    );
   }
 });
 
@@ -116,8 +112,8 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
     return next(
       new ErrorHandler(
         "The Password token is invalid or has been expired.",
-        400
-      )
+        400,
+      ),
     );
   }
 
@@ -167,17 +163,25 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
     const existing = await User.findById(req.user.id);
     if (!existing) return next(new ErrorHandler("User not found", 404));
     oldAvatar = existing.avatar;
-    const result = await cloudinary.v2.uploader.upload(req.body.avatar, { folder: "avatars", width: 150, crop: "scale" });
-    newUserData.avatar = { public_id: result.public_id, url: result.secure_url };
+    newUserData.avatar = await saveAvatar(req.body.avatar);
   }
   try {
-    const user = await User.findByIdAndUpdate(req.user.id, newUserData, { new: true, runValidators: true });
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+      new: true,
+      runValidators: true,
+    });
     if (!user) throw new ErrorHandler("User not found", 404);
   } catch (error) {
-    if (newUserData.avatar) await Promise.allSettled([Promise.resolve().then(() => cloudinary.v2.uploader.destroy(newUserData.avatar.public_id))]);
+    if (newUserData.avatar)
+      await Promise.allSettled([
+        Promise.resolve().then(() => removeAvatar(newUserData.avatar)),
+      ]);
     throw error;
   }
-  if (oldAvatar && oldAvatar.public_id) await Promise.allSettled([Promise.resolve().then(() => cloudinary.v2.uploader.destroy(oldAvatar.public_id))]);
+  if (oldAvatar && oldAvatar.public_id)
+    await Promise.allSettled([
+      Promise.resolve().then(() => removeAvatar(oldAvatar)),
+    ]);
   res.status(200).json({ success: true });
 });
 
