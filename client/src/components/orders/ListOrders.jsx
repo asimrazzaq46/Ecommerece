@@ -69,9 +69,12 @@ const ListOrders = () => {
     return data;
   };
 
+  // UPDATED: fetch once; error in the same effect caused an endless refetch loop
   useEffect(() => {
     dispatch(myAllOrders());
+  }, [dispatch]);
 
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearError());

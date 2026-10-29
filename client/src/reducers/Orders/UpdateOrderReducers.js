@@ -48,6 +48,7 @@ const updateOrderReducer = (state = {}, action) => {
     case DELETE_ORDER_FAIL:
       return {
         ...state,
+        loading: false, // UPDATED: re-enable the form after a failure
         error: action.payload,
       };
     default:

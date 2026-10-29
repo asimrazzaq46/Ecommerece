@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../queries/products";
 import Home from "./Home";
-jest.mock("react-router-dom", () => ({ useParams: jest.fn() }));
+jest.mock("react-router-dom", () => ({ useParams: jest.fn(), useSearchParams: () => [new URLSearchParams(), jest.fn()], useNavigate: () => jest.fn(), Link: ({ children }) => children }));
 jest.mock("../queries/products", () => ({ useProducts: jest.fn(), messageFor: e => e.message }));
 jest.mock("./layouts/MetaDAta", () => () => null);
 jest.mock("./products/products", () => () => <div>Product</div>);

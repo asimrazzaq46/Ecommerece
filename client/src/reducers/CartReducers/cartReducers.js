@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ADD_TO_CART, REMOVE_ITEM_CART } from "../../constants/cartConstants";
 import { SAVE_SHIPPING_INFO } from "../../constants/shippingConstants";
+import { LOGOUT_SUCCESS } from "../../constants/authConstants";
 const cart = createSlice({
   name: "cart",
   initialState: { cartItems: [], shippingInfo: {} },
@@ -21,7 +22,9 @@ const cart = createSlice({
       })
       .addCase(SAVE_SHIPPING_INFO, (state, { payload }) => {
         state.shippingInfo = payload;
-      });
+      })
+      // UPDATED: logout clears the cart (localStorage is cleared in the action)
+      .addCase(LOGOUT_SUCCESS, () => ({ cartItems: [], shippingInfo: {} }));
   },
 });
 export default cart.reducer;

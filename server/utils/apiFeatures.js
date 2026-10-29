@@ -1,4 +1,6 @@
 const ErrorHandler = require("./errorHandler");
+// UPDATED: whitelisted catalog sort orders (?sort=), newest first by default
+const SORTS = { newest: {createdAt: -1, _id: -1}, price_asc: {price: 1, _id: -1}, price_desc: {price: -1, _id: -1}, rating: {rating: -1, _id: -1} };
 class ApiFeatures {
   constructor(query, querystr) { this.query = query; this.querystr = querystr; }
   search() {
@@ -37,7 +39,9 @@ class ApiFeatures {
     const raw = this.querystr.page;
     const page = raw === undefined ? 1 : Number(raw);
     if ((raw !== undefined && typeof raw !== "string") || !Number.isSafeInteger(page) || page < 1 || !Number.isSafeInteger((page - 1) * resultPerPage)) throw new ErrorHandler("Invalid page number", 400);
-    this.query = this.query.sort({createdAt: -1, _id: -1}).limit(resultPerPage).skip(resultPerPage * (page - 1));
+    const sort = this.querystr.sort === undefined ? "newest" : this.querystr.sort;
+    if (typeof sort !== "string" || !Object.hasOwn(SORTS, sort)) throw new ErrorHandler("Invalid sort order", 400);
+    this.query = this.query.sort(SORTS[sort]).limit(resultPerPage).skip(resultPerPage * (page - 1));
     return this;
   }
 }

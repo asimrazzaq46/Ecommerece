@@ -189,7 +189,11 @@ export const logout = () => async (dispatch) => {
   try {
     await axios.get(`/api/v1/logout`);
     queryClient.clear();
+    // UPDATED: the next user on this browser must not inherit the cart or address
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("shippingInfo");
     dispatch({ type: LOGOUT_SUCCESS });
+    return true;
   } catch (error) {
     dispatch({
       type: LOGOUT_FAIL,
@@ -336,7 +340,7 @@ export const saveShippingInfo = (data) => async (dispatch) => {
 
 ////////////////////////////////  NEW ORDER ACTION //////////////////////////////
 
-export const createOrder = (order) => async (dispatch, getstate) => {
+export const createOrder = (order) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_ORDER_REQUEST });
     const config = {};
@@ -383,7 +387,6 @@ export const getOrderDetails = (id) => async (dispatch) => {
       type: ORDER_DETAILS_SUCCESS,
       payload: data.order,
     });
-    console.log(data);
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
@@ -536,7 +539,6 @@ export const allUsers = () => async (dispatch) => {
 
     const { data } = await axios.get(`/api/v1/admin/users`);
     dispatch({ type: ALL_USERS_SUCCESS, payload: data.users });
-    console.log(data);
   } catch (error) {
     dispatch({
       type: ALL_USERS_FAIL,

@@ -8,6 +8,7 @@
     "dev": "nodemon server/server.js",
     "prod": "node server/server.js --production",
     "seeder": "node server/utils/seeder.js",
+    "create-admin": "node server/utils/createAdmin.js",
     "test": "node scripts/test.js",
     "test:server": "node client/node_modules/jest/bin/jest.js --config server/jest.config.js --runInBand",
     "test:client": "npm --prefix client test -- --runInBand",

@@ -10,7 +10,7 @@ import {
   LOGOUT_FAIL,
   CLEAR_ERRORS,
 } from "../../constants/authConstants";
-const authReducer = (state = { user: {} }, action) => {
+const authReducer = (state = { user: null }, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
     case LOAD_USER_REQUEST:
@@ -38,7 +38,7 @@ const authReducer = (state = { user: {} }, action) => {
     case LOGOUT_FAIL:
       return {
         ...state,
-        errro: action.payload,
+        error: action.payload,
       };
 
     case LOGIN_FAIL:

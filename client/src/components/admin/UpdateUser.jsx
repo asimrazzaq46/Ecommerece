@@ -17,7 +17,7 @@ const UpdateUser = () => {
   const [role, setRole] = useState("");
 
   const { error, loading, isUpdated } = useSelector((state) => state.user);
-  const { user } = useSelector((state) => state.userDetails);
+  const { user, error: detailsError } = useSelector((state) => state.userDetails);
 
   const userId = params.id;
 
@@ -34,17 +34,22 @@ const UpdateUser = () => {
     dispatch(updateUser(user._id, formData));
   };
 
+  // UPDATED: always load fresh details; the old check showed stale values after an edit
   useEffect(() => {
-    if (user && user._id !== userId) {
-      dispatch(getUserDetails(userId));
-    } else {
+    dispatch(getUserDetails(userId));
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (user && user._id === userId) {
       setName(user.name);
       setEmail(user.email);
       setRole(user.role);
     }
+  }, [user, userId]);
 
-    if (error) {
-      alert.error(error);
+  useEffect(() => {
+    if (error || detailsError) {
+      alert.error(error || detailsError);
       dispatch(clearError());
     }
     if (isUpdated) {
@@ -56,7 +61,7 @@ const UpdateUser = () => {
         type: UPDATE_USER_RESET,
       });
     }
-  }, [dispatch, alert, error, isUpdated, user, userId, navigate]);
+  }, [dispatch, alert, error, detailsError, isUpdated, navigate]);
 
   return (
     <Fragment>

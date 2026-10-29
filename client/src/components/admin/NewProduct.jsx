@@ -14,7 +14,7 @@ const NewProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
-  const [catagory, setCatagory] = useState("");
+  const [catagory, setCatagory] = useState("Electronics"); // UPDATED: match the first visible option
   const [stock, setStock] = useState(0);
   const [seller, setSeller] = useState("");
   const [images, setImages] = useState([]);

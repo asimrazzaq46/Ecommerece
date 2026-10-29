@@ -11,6 +11,7 @@ import { DELETE_REVIEW_RESET } from "../../constants/productConstants";
 
 const ProductReviews = () => {
   const [productId, setProductId] = useState("");
+  const [searchedId, setSearchedId] = useState(""); // UPDATED: fetch on submit, not per keystroke
   const alert = useAlert();
   const dispatch = useDispatch();
 
@@ -74,11 +75,12 @@ const ProductReviews = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    setSearchedId(productId);
     dispatch(getProductReviews(productId));
   };
 
   const deleteReviewHandler = (id) => {
-    dispatch(deleteReview(id, productId));
+    dispatch(deleteReview(id, searchedId));
   };
 
   useEffect(() => {
@@ -92,16 +94,13 @@ const ProductReviews = () => {
       dispatch(clearError());
     }
 
-    if (productId !== "") {
-      dispatch(getProductReviews(productId));
-    }
-
     if (isDeleted) {
       alert.success("Review Deleted Successfully");
+      dispatch(getProductReviews(searchedId));
 
       dispatch({ type: DELETE_REVIEW_RESET });
     }
-  }, [dispatch, alert, error, deleteError, isDeleted, productId]);
+  }, [dispatch, alert, error, deleteError, isDeleted, searchedId]);
 
   return (
     <Fragment>

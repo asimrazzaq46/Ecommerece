@@ -5,6 +5,14 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const ApiFeature = require("../utils/apiFeatures");
 
+// UPDATED: only these fields are writable; user, rating and Reviews stay server-controlled.
+const editable = (body) =>
+  Object.fromEntries(
+    ["name", "price", "description", "catagory", "seller", "stock"]
+      .filter((key) => body[key] !== undefined)
+      .map((key) => [key, body[key]]),
+  );
+
 // create new product => /api/v1/admin/products/new
 
 exports.newProduct = catchAsyncError(async (req, res, next) => {
@@ -34,12 +42,12 @@ exports.newProduct = catchAsyncError(async (req, res, next) => {
     });
   }
 
-  req.body.images = imagesLinks;
-
-  // taking the id from user model and assigning to user in product model
-  req.body.user = req.user.id;
-
-  const product = await Product.create(req.body);
+  const product = await Product.create({
+    ...editable(req.body),
+    images: imagesLinks,
+    // taking the id from user model and assigning to user in product model
+    user: req.user.id,
+  });
   res.status(201).json({
     success: true,
     product,
@@ -104,6 +112,7 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
     images = req.body.images;
   }
 
+  const update = editable(req.body);
   if (images !== undefined) {
     if (
       !Array.isArray(images) ||
@@ -124,11 +133,11 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
       });
     }
 
-    req.body.images = imagesLinks;
+    update.images = imagesLinks;
   }
 
   const oldImages = product.images;
-  product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+  product = await Product.findByIdAndUpdate(req.params.id, update, {
     new: true,
     runValidators: true,
   });

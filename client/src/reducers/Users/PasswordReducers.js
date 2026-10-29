@@ -27,9 +27,12 @@ const passwordReducer = (state = {}, action) => {
       };
 
     case UPDATE_PASSWORD_RESET:
+      // UPDATED: also reset forgot/reset results so they don't replay on the next visit
       return {
         ...state,
         isUpdated: false,
+        success: false,
+        message: null,
       };
 
     case UPDATE_PASSWORD_FAIL:
@@ -58,6 +61,7 @@ const passwordReducer = (state = {}, action) => {
     case NEW_PASSWORD_SUCCESS:
       return {
         ...state,
+        loading: false,
         success: action.payload,
       };
     case FORGOT_PASSWORD_FAIL:

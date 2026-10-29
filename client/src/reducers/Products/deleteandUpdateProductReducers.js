@@ -48,6 +48,7 @@ const deleteAndUpdateProductReducer = (state = {}, action) => {
     case UPDATE_PRODUCT_FAIL:
       return {
         ...state,
+        loading: false, // UPDATED: re-enable the form after a failure
         error: action.payload,
       };
     default:

@@ -90,9 +90,12 @@ const OrdersList = () => {
     dispatch(deleteOrder(id));
   };
 
+  // UPDATED: refetch only on mount and after a delete, not on every error change
   useEffect(() => {
-    dispatch(allOrders());
+    if (!isDeleted) dispatch(allOrders());
+  }, [dispatch, isDeleted]);
 
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearError());

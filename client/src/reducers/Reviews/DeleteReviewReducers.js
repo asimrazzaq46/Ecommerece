@@ -29,6 +29,7 @@ const deleteReviewReducer = (state = {}, action) => {
     case DELETE_REVIEW_FAIL:
       return {
         ...state,
+        loading: false, // UPDATED: re-enable the form after a failure
         error: action.payload,
       };
     default:

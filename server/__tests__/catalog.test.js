@@ -18,8 +18,14 @@ test("search treats regex characters as literal text and only accepts catalog fi
   expect(features.query.options.skip).toBe(3);
 });
 
-test.each([{ page: "-1" }, { page: "1.5" }, { price: { gte: "NaN" } }, { price: { $ne: "0" } }, { keyword: {} }, { catagory: {} }])("rejects invalid catalog query %j", query => {
+test.each([{ page: "-1" }, { page: "1.5" }, { price: { gte: "NaN" } }, { price: { $ne: "0" } }, { keyword: {} }, { catagory: {} }, { sort: "name" }, { sort: ["price_asc"] }])("rejects invalid catalog query %j", query => {
   expect(() => new ApiFeatures(Product.find(), query).search().filter().pagination(3)).toThrow();
+});
+
+test("catalog sorts by a whitelisted order and defaults to newest", () => {
+  const sortOf = query => new ApiFeatures(Product.find(), query).search().filter().pagination(3).query.options.sort;
+  expect(sortOf({})).toEqual({ createdAt: -1, _id: -1 });
+  expect(sortOf({ sort: "price_asc" })).toEqual({ price: 1, _id: -1 });
 });
 
 test.each([0, 6, "NaN", {}, 2.5])("rejects invalid review rating %j before querying", async rating => {

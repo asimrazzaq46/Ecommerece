@@ -8,6 +8,7 @@ const myOrderReducer = (state = { orders: [] }, action) => {
   switch (action.type) {
     case MY_ORDERS_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case MY_ORDERS_SUCCESS:
@@ -17,6 +18,7 @@ const myOrderReducer = (state = { orders: [] }, action) => {
       };
     case MY_ORDERS_FAIL:
       return {
+        ...state, // UPDATED: keep orders so the page does not crash on failure
         loading: false,
         error: action.payload,
       };

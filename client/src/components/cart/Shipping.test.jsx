@@ -24,14 +24,12 @@ test("shipping requires an explicit country and preserves international postal c
   for (const [label, value] of [
     ["Address", "1 Test Street"],
     ["City", "London"],
-    ["Phone No", "123456789"],
-    ["Postal Code", "SW1A 1AA"],
+    ["Phone number", "123456789"],
+    ["Postal code", "SW1A 1AA"],
     ["Country", "United Kingdom"],
   ])
     fireEvent.change(screen.getByLabelText(label), { target: { value } });
-  fireEvent.submit(
-    screen.getByRole("button", { name: "CONTINUE" }).closest("form"),
-  );
+  fireEvent.click(screen.getByRole("button", { name: "Continue to review" }));
   expect(navigate).toHaveBeenCalledWith("/confirm");
   expect(store.getState().cart.shippingInfo).toMatchObject({
     postalCode: "SW1A 1AA",
@@ -40,4 +38,21 @@ test("shipping requires an explicit country and preserves international postal c
   expect(JSON.parse(localStorage.getItem("shippingInfo")).postalCode).toBe(
     "SW1A 1AA",
   );
+});
+
+test("shipping shows translated field errors instead of navigating", () => {
+  const navigate = jest.fn();
+  useNavigate.mockReturnValue(navigate);
+  render(
+    <Provider store={makeStore()}>
+      <MemoryRouter>
+        <Shipping />
+      </MemoryRouter>
+    </Provider>,
+  );
+  fireEvent.change(screen.getByLabelText("Phone number"), { target: { value: "abc" } });
+  fireEvent.click(screen.getByRole("button", { name: "Continue to review" }));
+  expect(screen.getByText("Please select a country.")).toBeInTheDocument();
+  expect(screen.getByText("Please enter a valid phone number.")).toBeInTheDocument();
+  expect(navigate).not.toHaveBeenCalled();
 });

@@ -1,16 +1,11 @@
-const crypto = require("crypto");
 const { removeAvatar } = require("../utils/avatarStorage");
 
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 
-const sendToken = require("../utils/jwtToken");
-const error = require("../middlewares/error");
-
 const User = require("../models/user");
 const Product = require("../models/product");
 const Orders = require("../models/order");
-const order = require("../models/order");
 
 // Get All user => /api/v1/admin/users
 
@@ -47,7 +42,10 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
     email: req.body.email,
     role: req.body.role,
   };
-
+  // UPDATED: an admin cannot demote themselves, so the last admin can never be removed.
+  if (String(req.params.id) === String(req.user._id) && newUserData.role !== "admin") {
+    return next(new ErrorHandler("You cannot remove your own admin role", 400));
+  }
 
   const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
@@ -63,6 +61,10 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
 // Delete User  => /api/v1/admin/user/:id
 
 exports.deleteUser = catchAsyncError(async (req, res, next) => {
+  // UPDATED: self-deletion would also allow deleting the last admin.
+  if (String(req.params.id) === String(req.user._id)) {
+    return next(new ErrorHandler("You cannot delete your own account", 400));
+  }
   const user = await User.findById(req.params.id);
 
   if (!user) {

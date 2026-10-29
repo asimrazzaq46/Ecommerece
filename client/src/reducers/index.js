@@ -1,4 +1,5 @@
-import { combineReducers } from "redux";
+import { combineReducers } from "@reduxjs/toolkit";
+import { CLEAR_ERRORS } from "../constants/authConstants";
 
 import AuthReducer from "./AuthUsers/AuthReducer";
 import RegisterUserReducer from "./AuthUsers/RegisterUserReducer";
@@ -17,7 +18,7 @@ import UserDetailsReducers from "./Users/UserDetailsReducers";
 import GetReviewReducers from "./Reviews/GetReviewReducers";
 import DeleteReviewReducers from "./Reviews/DeleteReviewReducers";
 
-const reducers = combineReducers({
+const combined = combineReducers({
   newProduct: newProductReducers,
   product: deleteandUpdateProductReducers,
   auth: AuthReducer,
@@ -35,5 +36,17 @@ const reducers = combineReducers({
   allOrders: allOrderReducers,
   order: updateOrderReducers,
 });
+
+// UPDATED: clearError() now clears the error of every slice, not only auth/register.
+const reducers = (state, action) => {
+  const next = combined(state, action);
+  if (action.type !== CLEAR_ERRORS) return next;
+  return Object.fromEntries(
+    Object.entries(next).map(([key, slice]) => [
+      key,
+      slice && slice.error ? { ...slice, error: null } : slice,
+    ]),
+  );
+};
 
 export default reducers;

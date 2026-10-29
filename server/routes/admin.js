@@ -17,7 +17,9 @@ const {
 } = require("../controllers/adminController");
 
 //PRODUCTS
-router.route("/admin/products").get(isAuthenticatedUser, authorizeRole("admin"), getAdminProducts);
+router
+  .route("/admin/products")
+  .get(isAuthenticatedUser, authorizeRole("admin"), getAdminProducts);
 
 router
   .route("/admin/users")
@@ -27,7 +29,12 @@ router
   .route("/admin/user/:id")
   .get(isAuthenticatedUser, authorizeRole("admin"), getUserDetails)
 
-  .put(isAuthenticatedUser, authorizeRole("admin"), validateAuth("admin"), updateUser)
+  .put(
+    isAuthenticatedUser,
+    authorizeRole("admin"),
+    validateAuth("admin"),
+    updateUser,
+  )
 
   .delete(isAuthenticatedUser, authorizeRole("admin"), deleteUser);
 

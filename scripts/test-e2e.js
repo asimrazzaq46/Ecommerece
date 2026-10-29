@@ -60,7 +60,7 @@ async function startDatabase() {
   const binary =
     process.env.MONGOD_PATH ||
     (process.platform === "win32"
-      ? "C:/Program Files/MongoDB/Server/5.0/bin/mongod.exe"
+      ? "C:/Program Files/MongoDB/Server/8.2/bin/mongod.exe" // UPDATED: 5.0 is no longer installed
       : "mongod");
   const dbPath = path.join(temporary, "db");
   fs.mkdirSync(dbPath);

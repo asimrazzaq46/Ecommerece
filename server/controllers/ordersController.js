@@ -1,8 +1,6 @@
 const Orders = require("../models/order");
-const Product = require("../models/product");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
-const { findById } = require("../models/order");
 
 // create a new order => api/v1/order/new
 

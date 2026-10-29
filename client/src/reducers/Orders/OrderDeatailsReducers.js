@@ -8,6 +8,7 @@ const orderDetailReducers = (state = { order: {} }, action) => {
   switch (action.type) {
     case ORDER_DETAILS_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case ORDER_DETAILS_SUCCESS:
@@ -17,6 +18,7 @@ const orderDetailReducers = (state = { order: {} }, action) => {
       };
     case ORDER_DETAILS_FAIL:
       return {
+        ...state, // UPDATED: keep orders so the page does not crash on failure
         loading: false,
         error: action.payload,
       };

@@ -19,8 +19,6 @@ const OrderDetails = () => {
     error,
     order = {},
   } = useSelector((state) => state.orderDetails);
-  console.log(order);
-  console.log(order.orderItems);
   const {
     shippingInfo,
     orderItems,
@@ -37,14 +35,17 @@ const OrderDetails = () => {
   const isPaid =
     paymentInfo && paymentInfo.status === "succeeded" ? true : false;
 
+  // UPDATED: fetch once per id; error in the same effect caused an endless refetch loop
   useEffect(() => {
     dispatch(getOrderDetails(params.id));
+  }, [dispatch, params.id]);
 
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearError());
     }
-  }, [dispatch, alert, error, params.id]);
+  }, [dispatch, alert, error]);
 
   return (
     <Fragment>
@@ -83,7 +84,7 @@ const OrderDetails = () => {
               <h4 className="my-4">Order Status:</h4>
               <p
                 className={
-                  orderStatus && String(orderStatus).includes("delivered")
+                  orderStatus && orderStatus === "Delivered"
                     ? "greenColor"
                     : "redColor"
                 }

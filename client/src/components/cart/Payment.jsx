@@ -1,6 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import React, { Fragment, useState, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { useAlert } from "../ui/Alerts";
 import axios from "axios";
 
@@ -13,21 +14,28 @@ import {
 } from "@stripe/react-stripe-js";
 
 import MetaDAta from "../layouts/MetaDAta";
+import { formatPrice } from "../../i18n";
 import CheckoutSteps from "./CheckoutSteps";
-import { createOrder, removeItemFromCart } from "../../actions";
+import OrderSummary from "./OrderSummary";
+import { clearError, createOrder, removeItemFromCart } from "../../actions";
+// UPDATED: Stripe fields styled to match the Veyra inputs
 const options = {
   style: {
     base: {
-      fontSize: "16px",
+      fontSize: "15px",
+      color: "#1a1c1b",
+      fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "::placeholder": { color: "#73787a" },
     },
     invalid: {
-      color: "#9e2146",
+      color: "#ba1a1a",
     },
   },
 };
 
 const Payment = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const alert = useAlert();
   const stripe = useStripe();
@@ -38,6 +46,10 @@ const Payment = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const orderError = useSelector((state) => state.newOrder.error);
   const [busy, setBusy] = useState(false);
+  // UPDATED: don't show an order error left over from a previous checkout
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
   const submitting = useRef(false);
   const [message, setMessage] = useState("");
   const readSession = key => {
@@ -67,7 +79,7 @@ const Payment = () => {
         sessionStorage.setItem("pendingCheckout", JSON.stringify(attempt));
       }
       if (!attempt.paid) {
-        if (!stripe || !element) throw new Error("Payment form is still loading. Please try again");
+        if (!stripe || !element) throw new Error(t("checkout.payment.stillLoading"));
         const { data } = await axios.post("/api/v1/payment/process", attempt);
         attempt.paymentId = data.paymentIntentId;
         const changed = Number(data.totalPrice) !== Number(total);
@@ -75,7 +87,7 @@ const Payment = () => {
         sessionStorage.setItem("pendingCheckout", JSON.stringify(attempt));
         setTotal(data.totalPrice);
         if (changed && data.status !== "succeeded") {
-          setMessage("The latest order total is shown below. Review it and press Pay to continue.");
+          setMessage(t("checkout.payment.totalChanged"));
           return;
         }
         if (data.status !== "succeeded") {
@@ -86,7 +98,7 @@ const Payment = () => {
             },
           });
           if (result.error) throw new Error(result.error.message);
-          if (result.paymentIntent.status !== "succeeded") throw new Error("Payment is still pending. Retry to check its status; do not start another checkout.");
+          if (result.paymentIntent.status !== "succeeded") throw new Error(t("checkout.payment.pending"));
           attempt.paymentId = result.paymentIntent.id;
         }
         attempt.paid = true;
@@ -94,19 +106,16 @@ const Payment = () => {
       }
       const saved = await dispatch(createOrder({ paymentInfo: { id: attempt.paymentId } }));
       if (!saved) {
-        setMessage("Payment received but order confirmation is pending. Retry confirmation without paying again. Reference: " + attempt.paymentId);
+        setMessage(t("checkout.payment.savedPending", { ref: attempt.paymentId }));
         return;
       }
-      for (const item of attempt.orderItems) {
-        if (cartItems.some(current => current.product === item.product && current.quantity === item.quantity)) {
-          dispatch(removeItemFromCart(item.product));
-        }
-      }
+      // Fix: clear every ordered product; the old exact-quantity match left items behind.
+      attempt.orderItems.forEach(item => dispatch(removeItemFromCart(item.product)));
       sessionStorage.removeItem("pendingCheckout");
       sessionStorage.removeItem("orderInfo");
       navigate("/success");
     } catch (err) {
-      const text = (err.response && err.response.data && err.response.data.Message) || err.message || "Unable to complete checkout";
+      const text = (err.response && err.response.data && err.response.data.Message) || err.message || t("checkout.payment.failed");
       setMessage(text);
       alert.error(text);
     } finally {
@@ -116,56 +125,118 @@ const Payment = () => {
   };
 
   if (!recoverable && (!orderInfo || !cartItems.length)) {
-    return <div role="alert">Please confirm your cart before making a payment. <button onClick={() => navigate("/confirm")}>Return to checkout</button></div>;
+    return (
+      <div className="vx-page vx-checkout">
+        <div className="vx-container">
+          <div className="vx-card vx-state vx-checkout-state" role="alert">
+            <span className="vx-state-icon"><i className="fa fa-info" aria-hidden="true" /></span>
+            <p>{t("checkout.payment.noSession")}</p>
+            <button className="vx-btn vx-btn--primary" onClick={() => navigate("/confirm")}>{t("checkout.payment.returnToCheckout")}</button>
+          </div>
+        </div>
+      </div>
+    );
   }
+
+  // UPDATED: summary shows the items being paid for; the total is the server-confirmed amount once known
+  const summaryItems = recoverable ? pending.orderItems : cartItems;
+  const info = orderInfo || {};
+  const address = recoverable ? pending.shippingInfo : shippingInfo;
+  const paidAlready = recoverable && pending.paid;
 
   return (
     <Fragment>
-      <MetaDAta title={"Payment"} />
-
-      <CheckoutSteps shipping ConfirmOrder payment />
-
-      <div className="row wrapper">
-        <div className="col-10 col-lg-5">
-          <form className="shadow-lg" onSubmit={submitHandler}>
-            <h1 className="mb-4">Card Info</h1>
-            {message && <p role="alert">{message}</p>}
-            {orderError && <p role="alert">{orderError}</p>}
-            {recoverable && <p>Continue your saved checkout. A completed payment will not be charged again.</p>}
-            <div className="form-group">
-              <label htmlFor="card_num_field">Card Number</label>
-              <CardNumberElement
-                type="text"
-                id="card_num_field"
-                className="form-control"
-                options={options}
-              />
+      <MetaDAta title={t("checkout.payment.pageTitle")} />
+      {/* UPDATED: Veyra payment step (Stitch "checkout payment" design) */}
+      <div className="vx-page vx-checkout">
+        <CheckoutSteps shipping ConfirmOrder payment />
+        <div className="vx-container vx-checkout-grid vx-checkout-grid--pay">
+          <div className="vx-checkout-main">
+            <div className="vx-checkout-head vx-checkout-head--row">
+              <div>
+                <span className="vx-eyebrow-dot">{t("checkout.payment.eyebrow")}</span>
+                <h1 className="vx-title-xl">{t("checkout.payment.title")}</h1>
+              </div>
+              <span className="vx-label"><i className="fa fa-lock" aria-hidden="true" /> {t("checkout.payment.poweredBy")}</span>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="card_exp_field">Card Expiry</label>
-              <CardExpiryElement
-                type="text"
-                id="card_exp_field"
-                className="form-control"
-                options={options}
-              />
-            </div>
+            {address && address.address && (
+              <section className="vx-card vx-checkout-card vx-recap">
+                <div className="vx-card-title-row">
+                  <span className="vx-label"><i className="fa fa-truck" aria-hidden="true" /> {t("checkout.payment.deliverTo")}</span>
+                  {!paidAlready && <Link to="/shipping" className="vx-edit-link">{t("checkout.payment.modify")}</Link>}
+                </div>
+                <div className="vx-recap-box">
+                  <p className="vx-title-sm">{user && user.name}</p>
+                  <p className="vx-muted">{address.address}, {address.postalCode} {address.city}, {address.country} • {address.phoneNo}</p>
+                </div>
+              </section>
+            )}
 
-            <div className="form-group">
-              <label htmlFor="card_cvc_field">Card CVC</label>
-              <CardCvcElement
-                type="text"
-                id="card_cvc_field"
-                className="form-control"
-                options={options}
-              />
-            </div>
+            <form className="vx-card vx-checkout-card vx-form" onSubmit={submitHandler}>
+              <div className="vx-card-title-row">
+                <h2 className="vx-title-sm">{t("checkout.payment.cardTitle")}</h2>
+                <span className="vx-card-brands" aria-hidden="true">
+                  <span>Visa</span><span>MC</span><span>Amex</span>
+                </span>
+              </div>
+              {message && <p role="alert" className="vx-form-alert">{message}</p>}
+              {orderError && <p role="alert" className="vx-form-alert">{orderError}</p>}
+              {recoverable && <p className="vx-form-info">{t("checkout.payment.recoverable")}</p>}
+              <div className="vx-field">
+                <label htmlFor="card_num_field" className="vx-field-label">{t("checkout.payment.cardNumber")}</label>
+                <CardNumberElement
+                  type="text"
+                  id="card_num_field"
+                  className="vx-control vx-stripe-field"
+                  options={options}
+                />
+              </div>
 
-            <button id="pay_btn" type="submit" disabled={busy || (!stripe && !(recoverable && pending.paid))} className="btn btn-block py-3">
-              {busy ? "Processing..." : recoverable && pending.paid ? "Retry order confirmation" : `Pay - ${total || "0.00"}`}
-            </button>
-          </form>
+              <div className="vx-form-row">
+                <div className="vx-field">
+                  <label htmlFor="card_exp_field" className="vx-field-label">{t("checkout.payment.expiry")}</label>
+                  <CardExpiryElement
+                    type="text"
+                    id="card_exp_field"
+                    className="vx-control vx-stripe-field"
+                    options={options}
+                  />
+                </div>
+
+                <div className="vx-field">
+                  <label htmlFor="card_cvc_field" className="vx-field-label">{t("checkout.payment.cvc")}</label>
+                  <CardCvcElement
+                    type="text"
+                    id="card_cvc_field"
+                    className="vx-control vx-stripe-field"
+                    options={options}
+                  />
+                  <p className="vx-field-hint">{t("checkout.payment.cvcHint")}</p>
+                </div>
+              </div>
+
+              <div className="vx-secure-note">
+                <span className="vx-secure-icon"><i className="fa fa-shield" aria-hidden="true" /></span>
+                <div>
+                  <p className="vx-secure-title">{t("checkout.payment.secureTitle")}</p>
+                  <p>{t("checkout.payment.secureText")}</p>
+                </div>
+              </div>
+
+              <button id="pay_btn" type="submit" disabled={busy || (!stripe && !paidAlready)} className="vx-btn vx-btn--primary vx-btn--caps vx-pay-btn">
+                <i className="fa fa-lock" aria-hidden="true" />
+                {busy ? t("checkout.payment.processing") : paidAlready ? t("checkout.payment.retryConfirm") : t("checkout.payment.pay", { total: formatPrice(total || 0) })}
+              </button>
+            </form>
+          </div>
+
+          <OrderSummary
+            items={summaryItems}
+            editable={!paidAlready}
+            totals={{ itemsPrice: info.itemsPrice, shippingPrice: info.shippingPrice, taxPrice: info.taxPrice, totalPrice: total }}
+            note={t("checkout.summary.serverTotal")}
+          />
         </div>
       </div>
     </Fragment>

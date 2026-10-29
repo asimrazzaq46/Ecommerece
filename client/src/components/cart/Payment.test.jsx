@@ -16,7 +16,7 @@ jest.mock("@stripe/react-stripe-js", () => ({
   CardNumberElement: () => null, CardExpiryElement: () => null, CardCvcElement: () => null,
 }));
 
-jest.mock("react-router-dom", () => ({ useNavigate: jest.fn() }));
+jest.mock("react-router-dom", () => ({ useNavigate: jest.fn(), Link: ({ children }) => children }));
 
 function checkout(history) {
   require("react-router-dom").useNavigate.mockReturnValue(history.push);

@@ -48,7 +48,7 @@ function open(user) {
 }
 test("guest sees bounded quantities, image navigation and no review submission button", async () => {
   open(null);
-  await screen.findByText("Camera");
+  await screen.findByRole("heading", { name: "Camera" });
   expect(
     screen.getByRole("button", { name: "Decrease quantity" }),
   ).toBeDisabled();
@@ -60,7 +60,7 @@ test("guest sees bounded quantities, image navigation and no review submission b
   fireEvent.click(screen.getByRole("button", { name: "Next image" }));
   expect(screen.getByAltText("Camera")).toHaveAttribute("src", "/two.jpg");
   expect(
-    screen.queryByRole("button", { name: "Submit Your Review" }),
+    screen.queryByRole("button", { name: "Write a review" }),
   ).not.toBeInTheDocument();
 });
 test("signed-in review submission keeps server errors visible and retries successfully", async () => {
@@ -71,7 +71,7 @@ test("signed-in review submission keeps server errors visible and retries succes
     .mockResolvedValueOnce({ data: { success: true } });
   open({ _id: "buyer" });
   fireEvent.click(
-    await screen.findByRole("button", { name: "Submit Your Review" }),
+    await screen.findByRole("button", { name: "Write a review" }),
   );
   fireEvent.change(screen.getByLabelText("Comment"), {
     target: { value: "Useful camera" },

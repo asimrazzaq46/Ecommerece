@@ -26,9 +26,10 @@ export function useProducts({
   price = [1, 3000],
   category = "",
   rating = 0,
+  sort = "newest",
 }) {
   return useQuery({
-    queryKey: ["products", "list", { keyword, page, price, category, rating }],
+    queryKey: ["products", "list", { keyword, page, price, category, rating, sort }],
     placeholderData: keepPreviousData,
     queryFn: async ({ signal }) => {
       const params = new URLSearchParams({
@@ -39,6 +40,7 @@ export function useProducts({
         "rating[gte]": rating,
       });
       if (category) params.set("catagory", category);
+      if (sort !== "newest") params.set("sort", sort); // UPDATED: server-side sort
       return (await axios.get(`/api/v1/products?${params}`, { signal })).data;
     },
   });

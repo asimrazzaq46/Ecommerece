@@ -16,18 +16,28 @@ async function startServer() {
   await connectDatabase();
   if (String(process.env.NODE_ENV).toLowerCase() === "production") {
     await require("./utils/transaction").requireTransactions();
-    const info = await mongoose.connection.db.admin().command({buildInfo:1});
-    if (info.versionArray[0] < 7) throw new Error("Production requires a supported MongoDB server version (7 or newer)");
+    const info = await mongoose.connection.db.admin().command({ buildInfo: 1 });
+    if (info.versionArray[0] < 7)
+      throw new Error(
+        "Production requires a supported MongoDB server version (7 or newer)",
+      );
   }
   server = app.listen(process.env.PORT || 3002, () => {
-    console.log("Server started on port " + server.address().port + " in " + (process.env.NODE_ENV || "development") + " mode.");
+    console.log(
+      "Server started on port " +
+        server.address().port +
+        " in " +
+        (process.env.NODE_ENV || "development") +
+        " mode.",
+    );
   });
   return server;
 }
 
 function shutdown(error) {
   console.error("Server stopped:", error.name || "Error");
-  if (String(process.env.NODE_ENV).toLowerCase() === "development") console.error(error.message);
+  if (String(process.env.NODE_ENV).toLowerCase() === "development")
+    console.error(error.message);
   const timer = setTimeout(() => process.exit(1), 5000);
   timer.unref();
   const close = () => mongoose.disconnect().finally(() => process.exit(1));

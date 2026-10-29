@@ -36,6 +36,13 @@ const UpdateProfile = () => {
   };
 
   const onChange = (e) => {
+    // UPDATED: same guard as Register; cancelling the picker used to throw
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!/^image\/(png|jpeg|gif|webp)$/.test(file.type) || file.size > 5 * 1024 * 1024) {
+      alert.error("Choose a PNG, JPEG, GIF or WebP image under 5 MB");
+      return;
+    }
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -45,14 +52,14 @@ const UpdateProfile = () => {
       }
     };
 
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(file);
   };
 
   useEffect(() => {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      setAvatarPreview(user.avatar.url);
+      setAvatarPreview(user.avatar?.url || "/images/default_avatar.jpg");
     }
 
     if (error) {
@@ -124,7 +131,7 @@ const UpdateProfile = () => {
                     name="avatar"
                     className="custom-file-input"
                     id="customFile"
-                    accept="image/*"
+                    accept="image/png,image/jpeg,image/gif,image/webp"
                     onChange={onChange}
                   />
                   <label className="custom-file-label" htmlFor="customFile">

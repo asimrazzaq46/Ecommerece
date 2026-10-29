@@ -7,7 +7,6 @@ const catchAsyncError = require("../middlewares/catchAsyncError");
 
 const sendToken = require("../utils/jwtToken");
 const authCookie = require("../utils/authCookie");
-const error = require("../middlewares/error");
 const sendEmail = require("../utils/sendEmail");
 
 // Register User => api/v1/register
