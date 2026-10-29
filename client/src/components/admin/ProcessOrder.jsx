@@ -1,188 +1,212 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import React, { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAlert } from "../ui/Alerts";
 
 import { updateOrder, getOrderDetails, clearError } from "../../actions";
+import { formatPrice, translateServerError } from "../../i18n";
 import MetaDAta from "../layouts/MetaDAta";
 import Loader from "../layouts/Loader";
-import Sidebar from "./Sidebar";
-
+import AdminLayout from "./AdminLayout";
+import AdminHead from "./AdminHead";
+import { shortId } from "./OrdersList";
 import { UPDATE_ORDER_RESET } from "../../constants/orderConstants";
+import "../orders/Orders.css"; // status + payment pills
+import "./ProductAdmin.css";
 
+// Mirrors the server rules (adminController.updateOrder): orders only move forward.
+const NEXT = { Processing: ["Processing", "Shipped", "Delivered"], Shipped: ["Shipped", "Delivered"], Delivered: ["Delivered"] };
+
+// UPDATED: Veyra "process order" (Stitch design): status pipeline, items, customer, address, payment, history.
 const ProcessOrder = () => {
   const params = useParams();
-
+  const { t, i18n } = useTranslation();
   const [status, setStatus] = useState("");
 
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  const { loading, order = {} } = useSelector((state) => state.orderDetails);
-
-  const {
-    shippingInfo,
-    orderItems,
-    paymentInfo,
-    user,
-    totalPrice,
-    orderStatus,
-  } = order;
-
-  const { error: updateError, isUpdated } = useSelector((state) => state.order);
-
+  const { loading, error, order = {} } = useSelector((state) => state.orderDetails);
+  const { error: updateError, isUpdated, loading: saving } = useSelector((state) => state.order);
   const orderId = params.id;
+  const loaded = order._id === orderId;
+  const { shippingInfo, orderItems = [], paymentInfo, user, orderStatus } = loaded ? order : {};
+  const isPaid = Boolean(paymentInfo && paymentInfo.status === "succeeded");
+  const options = NEXT[orderStatus] || [];
+  const locked = !isPaid || orderStatus === "Delivered";
 
   useEffect(() => { setStatus(orderStatus || "Processing"); }, [orderStatus, orderId]);
 
-  const shippingDetails =
-    shippingInfo &&
-    `${shippingInfo.address},${shippingInfo.city},${shippingInfo.postalCode},${shippingInfo.country}`;
-
-  const isPaid =
-    paymentInfo && paymentInfo.status === "succeeded" ? true : false;
-
-  const updateOrderHandler = (id) => {
-    const formData = new FormData();
-    formData.set("status", status);
-
-    dispatch(updateOrder(id, formData));
-  };
-
   useEffect(() => {
     dispatch(getOrderDetails(orderId));
+  }, [dispatch, orderId]);
 
+  useEffect(() => {
     if (updateError) {
-      alert.error(updateError);
+      alert.error(translateServerError(t, updateError));
       dispatch(clearError());
     }
-
     if (isUpdated) {
-      alert.success("Order updated Successfully");
+      alert.success(t("adminOrders.process.updated"));
       dispatch({ type: UPDATE_ORDER_RESET });
+      dispatch(getOrderDetails(orderId));
     }
-  }, [dispatch, alert, updateError, orderId, isUpdated]);
+  }, [dispatch, alert, updateError, isUpdated, orderId, t]);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(translateServerError(t, error));
+      dispatch(clearError());
+    }
+  }, [dispatch, alert, error, t]);
+
+  const stamp = (value) => new Date(value).toLocaleString(i18n.language, { dateStyle: "medium", timeStyle: "short" });
+
+  if (loading && !loaded) return <Loader />;
+  if (!loaded)
+    return (
+      <AdminLayout title={t("adminOrders.process.pageTitle")}>
+        <div className="vx-card vx-state" role="alert">
+          <span className="vx-state-icon"><i className="fa fa-exclamation-triangle" aria-hidden="true" /></span>
+          <p>{t("adminOrders.process.loadError")}</p>
+          <button type="button" className="vx-btn vx-btn--primary" onClick={() => dispatch(getOrderDetails(orderId))}>{t("adminOrders.process.retry")}</button>{" "}
+          <Link to="/admin/orders" className="vx-btn vx-btn--soft">{t("adminOrders.process.back")}</Link>
+        </div>
+      </AdminLayout>
+    );
+
+  const events = [
+    { key: "tPlaced", at: order.createdAt },
+    isPaid && { key: "tPaid", at: order.paidAt },
+    (orderStatus === "Shipped" || orderStatus === "Delivered") && { key: "tShipped" },
+    orderStatus === "Delivered" && { key: "tDelivered", at: order.deliveredAt },
+  ].filter(Boolean);
 
   return (
     <Fragment>
-      <MetaDAta title={`Process Order # ${order && order._id}`} />
-      <div className="row">
-        <div className="col-12 col-md-2">
-          <Sidebar />
-        </div>
+      <MetaDAta title={t("adminOrders.process.pageTitle")} />
+      <AdminLayout title={t("adminOrders.process.pageTitle")}>
+        <AdminHead
+          crumbs={[{ label: t("adminOrders.process.crumbOrders"), to: "/admin/orders" }, { label: `#${shortId(order._id)}` }]}
+          title={t("adminOrders.process.title", { id: shortId(order._id) })}
+          subtitle={t("adminOrders.process.placedOn", { date: stamp(order.createdAt) })}
+        >
+          <div className="vx-pm-actions">
+            <span className={`vx-status is-${String(orderStatus).toLowerCase()}`}>{t(`orders.statuses.${orderStatus}`, orderStatus)}</span>
+            <button type="button" className="vx-btn vx-btn--soft" onClick={() => window.print()}>
+              <i className="fa fa-print" aria-hidden="true" /> {t("adminOrders.process.print")}
+            </button>
+          </div>
+        </AdminHead>
 
-        <div className="col-12 col-md-10">
-          <Fragment>
-            {loading ? (
-              <Loader />
-            ) : (
-              <div className="row d-flex justify-content-around">
-                <div className="col-12 col-lg-7 order-details">
-                  <h2 className="my-5">Order # {order._id}</h2>
-
-                  <h4 className="mb-4">Shipping Info</h4>
-                  <p>
-                    <b>Name:</b> {user && user.name}
-                  </p>
-                  <p>
-                    <b>Phone:</b> {shippingInfo && shippingInfo.phoneNo}
-                  </p>
-                  <p className="mb-4">
-                    <b>Address:</b>
-                    {shippingDetails}
-                  </p>
-                  <p>
-                    <b>Amount:</b> ${totalPrice}
-                  </p>
-
-                  <hr />
-
-                  <h4 className="my-4">Payment</h4>
-                  <p className={isPaid ? "greenColor" : "redColor"}>
-                    <b>{isPaid ? "PAID" : "NOT PAID"}</b>
-                  </p>
-
-                  <h4 className="my-4">Stripe ID</h4>
-                  <p>
-                    <b>{paymentInfo && paymentInfo.id}</b>
-                  </p>
-
-                  <h4 className="my-4">Order Status:</h4>
-                  <p
-                    className={
-                      order.orderStatus &&
-                      String(order.orderStatus).includes("Delivered")
-                        ? "greenColor"
-                        : "redColor"
-                    }
-                  >
-                    <b>{orderStatus}</b>
-                  </p>
-
-                  <h4 className="my-4">Order Items:</h4>
-
-                  <hr />
-                  <div className="cart-item my-1">
-                    {orderItems &&
-                      orderItems.map((item) => (
-                        <div key={item.product} className="row my-5">
-                          <div className="col-4 col-lg-2">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              height="45"
-                              width="65"
-                            />
-                          </div>
-
-                          <div className="col-5 col-lg-5">
-                            <Link to={`/product/${item.product}`}>
-                              {item.name}
-                            </Link>
-                          </div>
-
-                          <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                            <p>${item.price}</p>
-                          </div>
-
-                          <div className="col-4 col-lg-3 mt-4 mt-lg-0">
-                            <p>{item.quantity} Piece(s)</p>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                  <hr />
+        <div className="vx-po">
+          <div className="vx-po-main">
+            <section className="vx-card vx-pf-card">
+              <span className="vx-eyebrow">{t("adminOrders.process.pipelineEyebrow")}</span>
+              <h2 className="vx-title-md">{t("adminOrders.process.pipelineTitle")}</h2>
+              <p className="vx-muted">{t("adminOrders.process.pipelineText")}</p>
+              <div className="vx-po-status">
+                <div className="vx-field">
+                  <label htmlFor="status_field" className="vx-field-label">{t("adminOrders.process.action")}</label>
+                  <select id="status_field" className="vx-control" value={status} disabled={locked} onChange={(e) => setStatus(e.target.value)}>
+                    {options.map((s) => <option key={s} value={s}>{t(`orders.statuses.${s}`)}</option>)}
+                  </select>
                 </div>
-
-                <div className="col-12 col-lg-3 mt-5">
-                  <h4 className="my-4">Status</h4>
-
-                  <div className="form-group">
-                    <select
-                      className="form-control"
-                      name="status"
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                    >
-                      <option value="Processing">Processing</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                    </select>
-                  </div>
-
-                  <button
-                    className="btn btn-primary btn-block"
-                    onClick={() => updateOrderHandler(order._id)}
-                  >
-                    Update Status
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="vx-btn vx-btn--primary vx-btn--caps"
+                  disabled={locked || saving || status === orderStatus}
+                  onClick={() => { const formData = new FormData(); formData.set("status", status); dispatch(updateOrder(order._id, formData)); }}
+                >
+                  <i className="fa fa-check" aria-hidden="true" /> {t(saving ? "adminOrders.process.saving" : "adminOrders.process.save")}
+                </button>
               </div>
-            )}
-          </Fragment>
+              {!isPaid && <p className="vx-field-hint">{t("adminOrders.process.notPaidNote")}</p>}
+              {isPaid && orderStatus === "Delivered" && <p className="vx-field-hint">{t("adminOrders.process.finalNote")}</p>}
+            </section>
+
+            <section className="vx-card vx-pm-card">
+              <div className="vx-pf-card">
+                <h2 className="vx-title-md">{t("adminOrders.process.itemsTitle")}</h2>
+                <p className="vx-muted">{t("adminOrders.process.itemsText", { count: orderItems.length })}</p>
+              </div>
+              <div className="vx-table-wrap">
+                <table className="vx-table vx-pm-table">
+                  <thead>
+                    <tr>
+                      <th>{t("adminOrders.process.product")}</th>
+                      <th>{t("adminOrders.process.unit")}</th>
+                      <th>{t("adminOrders.process.qty")}</th>
+                      <th>{t("adminOrders.process.lineTotal")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderItems.map((item) => (
+                      <tr key={item.product}>
+                        <td>
+                          <span className="vx-pm-product">
+                            <img src={item.image} alt="" />
+                            <Link to={`/product/${item.product}`} className="vx-cell-main vx-pm-name">{item.name}</Link>
+                          </span>
+                        </td>
+                        <td>{formatPrice(item.price)}</td>
+                        <td>{item.quantity}</td>
+                        <td className="vx-cell-main">{formatPrice(item.price * item.quantity)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <aside className="vx-po-side">
+            <section className="vx-card vx-pf-card">
+              <h2 className="vx-title-sm">{t("adminOrders.process.customerTitle")}</h2>
+              <p className="vx-po-line"><strong>{user?.name || t("adminOrders.list.unknownCustomer")}</strong></p>
+              {user?.email && <p className="vx-muted">{user.email}</p>}
+            </section>
+
+            <section className="vx-card vx-pf-card">
+              <h2 className="vx-title-sm">{t("adminOrders.process.addressTitle")}</h2>
+              {shippingInfo && (
+                <p className="vx-muted vx-po-line">
+                  {shippingInfo.address}
+                  <br />
+                  {shippingInfo.postalCode} {shippingInfo.city}, {shippingInfo.country}
+                  <br />
+                  {shippingInfo.phoneNo}
+                </p>
+              )}
+            </section>
+
+            <section className="vx-card vx-pf-card">
+              <h2 className="vx-title-sm">{t("adminOrders.process.paymentTitle")}</h2>
+              <dl className="vx-detail-facts">
+                <div><dt>{t("adminOrders.process.paymentStatus")}</dt><dd><span className={`vx-pay-pill${isPaid ? "" : " is-unpaid"}`}>{t(isPaid ? "orders.paid" : "orders.notPaid")}</span></dd></div>
+                {paymentInfo && paymentInfo.id && <div><dt>{t("adminOrders.process.paymentId")}</dt><dd className="vx-mono vx-po-break">{paymentInfo.id}</dd></div>}
+                <div><dt>{t("adminOrders.process.subtotal")}</dt><dd>{formatPrice(order.itemsPrice)}</dd></div>
+                <div><dt>{t("adminOrders.process.shipping")}</dt><dd>{Number(order.shippingPrice) === 0 ? t("adminOrders.process.free") : formatPrice(order.shippingPrice)}</dd></div>
+                <div><dt>{t("adminOrders.process.tax")}</dt><dd>{formatPrice(order.taxPrice)}</dd></div>
+                <div className="vx-po-total"><dt>{t("adminOrders.process.grandTotal")}</dt><dd>{formatPrice(order.totalPrice)}</dd></div>
+              </dl>
+            </section>
+
+            <section className="vx-card vx-pf-card">
+              <h2 className="vx-title-sm">{t("adminOrders.process.timelineTitle")}</h2>
+              <ol className="vx-po-history">
+                {events.map((event) => (
+                  <li key={event.key}>
+                    <strong>{t(`adminOrders.process.${event.key}`)}</strong>
+                    {event.at && <span className="vx-muted">{stamp(event.at)}</span>}
+                  </li>
+                ))}
+              </ol>
+            </section>
+          </aside>
         </div>
-      </div>
+      </AdminLayout>
     </Fragment>
   );
 };

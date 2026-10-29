@@ -67,11 +67,11 @@ import {
 
 // CART CONSTANTS
 
-import { ADD_TO_CART, REMOVE_ITEM_CART } from "../constants/cartConstants";
+import { ADD_TO_CART, REMOVE_ITEM_CART, SET_CART_ITEMS } from "../constants/cartConstants";
 
 // SHIPPING CONSTANTS
 
-import { SAVE_SHIPPING_INFO } from "../constants/shippingConstants";
+import { SAVE_SHIPPING_INFO, SET_SAVED_SHIPPING } from "../constants/shippingConstants";
 
 // ORDER CONSTANTS
 import {
@@ -139,6 +139,7 @@ export const login = (email, password) => async (dispatch) => {
       config
     );
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
+    dispatch(syncAccount()); // UPDATED: merge guest cart + load account cart/address
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
@@ -159,6 +160,7 @@ export const register = (userData) => async (dispatch) => {
     };
     const { data } = await axios.post(`/api/v1/register`, userData, config);
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
+    dispatch(syncAccount()); // UPDATED
   } catch (error) {
     dispatch({
       type: REGISTER_USER_FAIL,
@@ -175,6 +177,7 @@ export const loadUser = () => async (dispatch) => {
 
     const { data } = await axios.get(`/api/v1/me`);
     dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
+    dispatch(syncAccount()); // UPDATED
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,
@@ -189,9 +192,11 @@ export const logout = () => async (dispatch) => {
   try {
     await axios.get(`/api/v1/logout`);
     queryClient.clear();
-    // UPDATED: the next user on this browser must not inherit the cart or address
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("shippingInfo");
+    // UPDATED: the account cart/address stay in MongoDB; the browser starts a fresh, empty guest session
+    localStorage.removeItem(GUEST_CART);
+    localStorage.removeItem(GUEST_SHIPPING);
+    localStorage.removeItem(MERGE_ID);
+    sessionStorage.removeItem("lastOrderId"); // UPDATED
     dispatch({ type: LOGOUT_SUCCESS });
     return true;
   } catch (error) {
@@ -292,7 +297,28 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
 
 ////////////////////////////////  ADD TO CART ACTION //////////////////////////////
 
+// UPDATED: guests keep the cart/address in localStorage; signed-in users use the MongoDB account cart
+// (the browser never stores a signed-in user's cart, so logout leaves nothing private behind).
+const GUEST_CART = "cartItems";
+const GUEST_SHIPPING = "shippingInfo";
+const MERGE_ID = "cartMergeId";
+const signedIn = (getState) => Boolean(getState().auth && getState().auth.user);
+const readLocal = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch {
+    return null;
+  }
+};
+const hasAddress = (info) => Boolean(info && info.address);
+const setCart = (data) => ({ type: SET_CART_ITEMS, payload: data.cartItems });
+
 export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
+  if (signedIn(getState)) {
+    const { data } = await axios.put("/api/v1/cart/items", { productId: id, quantity });
+    dispatch(setCart(data));
+    return;
+  }
   const product = await queryClient.fetchQuery({ ...productOptions(id), staleTime: 0 });
 
   dispatch({
@@ -307,29 +333,93 @@ export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
     },
   });
 
-  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+  localStorage.setItem(GUEST_CART, JSON.stringify(getState().cart.cartItems));
 };
 
 ////////////////////////////////  REMOVE ITEM FROM CART ACTION //////////////////////////////
 
 export const removeItemFromCart = (id) => async (dispatch, getState) => {
+  if (signedIn(getState)) {
+    const { data } = await axios.delete(`/api/v1/cart/items/${id}`);
+    dispatch(setCart(data));
+    return;
+  }
   dispatch({
     type: REMOVE_ITEM_CART,
     payload: id,
   });
 
-  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+  localStorage.setItem(GUEST_CART, JSON.stringify(getState().cart.cartItems));
+};
+
+// UPDATED: re-reads the account cart (e.g. after the server removed purchased items). Never throws.
+export const loadCart = () => async (dispatch) => {
+  try {
+    const { data } = await axios.get("/api/v1/cart");
+    dispatch(setCart(data));
+  } catch {
+    // keep what is shown; the next sync corrects it
+  }
+};
+
+// UPDATED: runs after login/register/loadUser. Merges the guest cart once (the mergeId is kept until
+// the server confirms, so a retry is not applied twice), then loads the account cart and saved address.
+// Concurrent calls (login + loadUser) share one run.
+let accountSync = null;
+export const syncAccount = () => (dispatch) => {
+  if (accountSync) return accountSync;
+  accountSync = (async () => {
+    try {
+      const guest = readLocal(GUEST_CART);
+      const items = (Array.isArray(guest) ? guest : [])
+        .filter((item) => item && typeof item.product === "string" && Number.isSafeInteger(item.quantity) && item.quantity > 0)
+        .map(({ product, quantity }) => ({ product, quantity: Math.min(quantity, 99) }));
+      let response;
+      if (items.length) {
+        let mergeId = localStorage.getItem(MERGE_ID);
+        if (!mergeId) {
+          mergeId = Array.from(window.crypto.getRandomValues(new Uint8Array(12)), (b) => b.toString(16).padStart(2, "0")).join("");
+          localStorage.setItem(MERGE_ID, mergeId);
+        }
+        response = await axios.post("/api/v1/cart/merge", { mergeId, items });
+        localStorage.removeItem(GUEST_CART);
+        localStorage.removeItem(MERGE_ID);
+      } else {
+        response = await axios.get("/api/v1/cart");
+      }
+      dispatch(setCart(response.data));
+
+      const { data } = await axios.get("/api/v1/me/shipping");
+      const guestAddress = readLocal(GUEST_SHIPPING);
+      dispatch({ type: SET_SAVED_SHIPPING, payload: data.shippingInfo || null });
+      // A guest address is shown for review on the Shipping page; it is saved only when the user continues.
+      dispatch({ type: SAVE_SHIPPING_INFO, payload: hasAddress(guestAddress) ? guestAddress : data.shippingInfo || {} });
+      localStorage.removeItem(GUEST_SHIPPING);
+    } catch {
+      // Guest data stays in localStorage and is merged on the next successful sync.
+    } finally {
+      accountSync = null;
+    }
+  })();
+  return accountSync;
 };
 
 ////////////////////////////////  SHIPPING INFO ACTION //////////////////////////////
 
-export const saveShippingInfo = (data) => async (dispatch) => {
+// UPDATED: signed-in users save the address on their account (validated by the server)
+export const saveShippingInfo = (data) => async (dispatch, getState) => {
+  if (signedIn(getState)) {
+    const response = await axios.put("/api/v1/me/shipping", data);
+    dispatch({ type: SET_SAVED_SHIPPING, payload: response.data.shippingInfo });
+    dispatch({ type: SAVE_SHIPPING_INFO, payload: response.data.shippingInfo });
+    return;
+  }
   dispatch({
     type: SAVE_SHIPPING_INFO,
     payload: data,
   });
 
-  localStorage.setItem("shippingInfo", JSON.stringify(data));
+  localStorage.setItem(GUEST_SHIPPING, JSON.stringify(data));
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -640,4 +730,11 @@ export const clearError = () => async (dispatch) => {
   dispatch({
     type: CLEAR_ERRORS,
   });
+};
+
+// UPDATED: removes the saved default address from the account (Profile page)
+export const deleteShippingInfo = () => async (dispatch) => {
+  await axios.delete("/api/v1/me/shipping");
+  dispatch({ type: SET_SAVED_SHIPPING, payload: null });
+  dispatch({ type: SAVE_SHIPPING_INFO, payload: {} });
 };

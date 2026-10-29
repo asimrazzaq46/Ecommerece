@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ADD_TO_CART, REMOVE_ITEM_CART } from "../../constants/cartConstants";
-import { SAVE_SHIPPING_INFO } from "../../constants/shippingConstants";
+import { ADD_TO_CART, REMOVE_ITEM_CART, SET_CART_ITEMS } from "../../constants/cartConstants";
+import { SAVE_SHIPPING_INFO, SET_SAVED_SHIPPING } from "../../constants/shippingConstants";
 import { LOGOUT_SUCCESS } from "../../constants/authConstants";
 const cart = createSlice({
   name: "cart",
-  initialState: { cartItems: [], shippingInfo: {} },
+  initialState: { cartItems: [], shippingInfo: {}, savedShippingInfo: null },
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -23,8 +23,15 @@ const cart = createSlice({
       .addCase(SAVE_SHIPPING_INFO, (state, { payload }) => {
         state.shippingInfo = payload;
       })
-      // UPDATED: logout clears the cart (localStorage is cleared in the action)
-      .addCase(LOGOUT_SUCCESS, () => ({ cartItems: [], shippingInfo: {} }));
+      // UPDATED: server-backed cart and saved address
+      .addCase(SET_CART_ITEMS, (state, { payload }) => {
+        state.cartItems = payload;
+      })
+      .addCase(SET_SAVED_SHIPPING, (state, { payload }) => {
+        state.savedShippingInfo = payload;
+      })
+      // UPDATED: logout empties the browser copy; the account cart stays in MongoDB
+      .addCase(LOGOUT_SUCCESS, () => ({ cartItems: [], shippingInfo: {}, savedShippingInfo: null }));
   },
 });
 export default cart.reducer;

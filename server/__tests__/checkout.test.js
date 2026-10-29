@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Product = require("../models/product");
 const Checkout = require("../models/checkout");
 const Orders = require("../models/order");
+const Cart = require("../models/cart");
 const stripe = require("../utils/stripeClient");
 const { validateCheckout, priceCheckout } = require("../utils/checkout");
 const { processPayment } = require("../controllers/paymentController");
@@ -27,6 +28,7 @@ beforeEach(() => {
   jest.spyOn(Orders, "findById").mockReturnValue({ session: jest.fn().mockResolvedValue(null) });
   jest.spyOn(Product, "updateOne").mockResolvedValue({ modifiedCount: 1 });
   jest.spyOn(Orders, "create").mockImplementation(async docs => docs);
+  jest.spyOn(Cart, "updateOne").mockResolvedValue({ matchedCount: 1 });
 });
 
 test("server prices products and ignores client totals", async () => {
@@ -63,6 +65,15 @@ test("verified payment saves trusted snapshot and deducts stock in one transacti
   expect(checkout.save).toHaveBeenCalledWith({ session });
   expect(checkout.completed).toBe(true);
   expect(session.endSession).toHaveBeenCalled();
+  // UPDATED: purchased quantity leaves the account cart inside the same transaction
+  expect(Cart.updateOne).toHaveBeenCalledWith({ user: userId, "items.product": productId }, { $inc: { "items.$.quantity": -2 } }, { session });
+  expect(Cart.updateOne).toHaveBeenCalledWith({ user: userId }, { $pull: { items: { quantity: { $lte: 0 } } } }, { session });
+});
+
+test("an already created order does not deduct the cart again", async () => {
+  Orders.findById.mockReturnValue({ session: jest.fn().mockResolvedValue({ _id: checkoutId }) });
+  await completeOrder("pi_test", userId);
+  expect(Cart.updateOne).not.toHaveBeenCalled();
 });
 
 test.each([

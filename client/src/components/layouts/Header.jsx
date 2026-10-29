@@ -11,6 +11,10 @@ import Search from "./Search";
 import "./Storefront.css";
 
 // UPDATED: Login/Register/password recovery are full-screen designs without the storefront chrome.
+// UPDATED: admin pages already redesigned with AdminLayout (they bring their own sidebar + top bar)
+export const isAdminLayoutPath = (pathname) =>
+  pathname === "/dashboard" || /^\/admin\/(products|product(\/[^/]+)?|orders|order\/[^/]+|users|user\/[^/]+|reviews)$/.test(pathname);
+
 export const isAuthPath = (pathname) =>
   ["/login", "/register", "/password/forgot"].includes(pathname) || pathname.startsWith("/password/reset/");
 
@@ -32,7 +36,7 @@ const Header = () => {
     else alert.error(t("nav.logoutError"));
   };
 
-  if (isAuthPath(pathname)) return null;
+  if (isAuthPath(pathname) || isAdminLayoutPath(pathname)) return null;
 
   return (
     <header className="vx-header">

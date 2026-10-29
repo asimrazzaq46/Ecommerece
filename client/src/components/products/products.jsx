@@ -6,7 +6,7 @@ import { useAlert } from "../ui/Alerts";
 import Stars from "../ui/Stars";
 import { addItemToCart } from "../../actions";
 import { messageFor } from "../../queries/products";
-import { formatPrice } from "../../i18n";
+import { formatPrice, translateServerError } from "../../i18n";
 
 // UPDATED: Veyra product card (Stitch catalog card) with quick add-to-cart.
 const ProductCard = ({ product }) => {
@@ -28,7 +28,7 @@ const ProductCard = ({ product }) => {
       await dispatch(addItemToCart(product._id, inCart + 1));
       alert.success(t("product.added"));
     } catch (error) {
-      alert.error(messageFor(error));
+      alert.error(translateServerError(t, messageFor(error)));
     } finally {
       setAdding(false);
     }

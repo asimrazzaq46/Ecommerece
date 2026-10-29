@@ -1,143 +1,222 @@
 import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { useAdminProducts, messageFor } from "../../queries/products";
+import { formatPrice } from "../../i18n";
 import MetaDAta from "../layouts/MetaDAta";
-import Loader from "../layouts/Loader";
-import Sidebar from "./Sidebar";
+import AdminLayout from "./AdminLayout";
 
 import { allUsers, allOrders } from "../../actions";
 
+const LOW_STOCK = 5;
+
+// Revenue + order count for the last 6 calendar months (current month included).
+export const monthlyTotals = (orders, now = new Date()) => {
+  const months = Array.from({ length: 6 }, (_, i) => new Date(now.getFullYear(), now.getMonth() - 5 + i, 1));
+  return months.map((start) => {
+    const inMonth = orders.filter((order) => {
+      const date = new Date(order.createdAt);
+      return date.getFullYear() === start.getFullYear() && date.getMonth() === start.getMonth();
+    });
+    return { start, revenue: inMonth.reduce((sum, o) => sum + Number(o.totalPrice || 0), 0), orders: inMonth.length };
+  });
+};
+
+// UPDATED: Veyra admin dashboard (Stitch design) built only from real orders, users and products.
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
 
   const productQuery = useAdminProducts();
   const products = productQuery.data || [];
-  const { users } = useSelector((state) => state.allUsers);
-  const { orders, loading, totalAmount } = useSelector(
-    (state) => state.allOrders
-  );
-
-  let outOfStock = 0;
-
-  products.forEach((product) => {
-    if (product.stock === 0) {
-      outOfStock += 1;
-    }
-  });
+  const { users = [], error: usersError } = useSelector((state) => state.allUsers);
+  const { orders = [], loading, totalAmount = 0, error: ordersError } = useSelector((state) => state.allOrders);
 
   useEffect(() => {
-
     dispatch(allOrders());
     dispatch(allUsers());
   }, [dispatch]);
 
+  const now = new Date();
+  const outOfStock = products.filter((p) => p.stock === 0).length;
+  const lowStock = products.filter((p) => p.stock > 0 && p.stock <= LOW_STOCK).length;
+  const processing = orders.filter((o) => o.orderStatus === "Processing").length;
+  const newUsers = users.filter((u) => {
+    const d = new Date(u.createdAt);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).length;
+  const recent = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
+  const stockList = products.filter((p) => p.stock <= LOW_STOCK).sort((a, b) => a.stock - b.stock).slice(0, 6);
+  const months = monthlyTotals(orders, now);
+  const maxRevenue = Math.max(1, ...months.map((m) => m.revenue));
+  const error = ordersError || usersError || (productQuery.error && messageFor(productQuery.error));
+  const pending = loading || productQuery.isPending;
+  const retry = () => {
+    dispatch(allOrders());
+    dispatch(allUsers());
+    productQuery.refetch();
+  };
+
+  const kpis = [
+    { icon: "fa-money", label: t("admin.dashboard.revenue"), value: formatPrice(totalAmount), note: t("admin.dashboard.revenueNote") },
+    { icon: "fa-shopping-bag", label: t("admin.dashboard.orders"), value: orders.length, note: t("admin.dashboard.processing", { count: processing }) },
+    { icon: "fa-users", label: t("admin.dashboard.customers"), value: users.length, note: t("admin.dashboard.newThisMonth", { count: newUsers }) },
+    {
+      icon: "fa-cube",
+      label: t("admin.dashboard.products"),
+      value: products.length,
+      note: `${t("admin.dashboard.outOfStock", { count: outOfStock })} • ${t("admin.dashboard.lowStock", { count: lowStock })}`,
+      alert: outOfStock > 0,
+    },
+  ];
+
   return (
     <Fragment>
-      <MetaDAta title={"Admin DashBoard"} />
-      <div className="row">
-        <div className="col-12 col-md-2">
-          <Sidebar />
+      <MetaDAta title={t("admin.dashboard.pageTitle")} />
+      <AdminLayout title={t("admin.nav.dashboard")}>
+        <div className="vx-dash-head">
+          <div>
+            <span className="vx-eyebrow-dot">{t("admin.dashboard.eyebrow")}</span>
+            <h1 className="vx-title-xl">{t("admin.dashboard.title")}</h1>
+            <p className="vx-muted">{t("admin.dashboard.subtitle")}</p>
+          </div>
+          <Link to="/admin/product" className="vx-btn vx-btn--primary">
+            <i className="fa fa-plus" aria-hidden="true" /> {t("admin.dashboard.addProduct")}
+          </Link>
         </div>
 
-        <div className="col-12 col-md-10">
-          <h1 className="my-4">Dashboard</h1>
+        {error && (
+          <div className="vx-form-alert vx-dash-alert" role="alert">
+            {t("admin.dashboard.loadError")} ({error}){" "}
+            <button type="button" className="vx-link-btn" onClick={retry}>{t("admin.dashboard.retry")}</button>
+          </div>
+        )}
 
-          {productQuery.error && <div role="alert">{messageFor(productQuery.error)} <button onClick={() => productQuery.refetch()}>Retry</button></div>}
-          {loading || productQuery.isPending ? (
-            <Loader />
+        <div className="vx-kpis">
+          {kpis.map((kpi) => (
+            <div key={kpi.label} className="vx-card vx-kpi">
+              <div className="vx-kpi-top">
+                <span className="vx-kpi-label">{kpi.label}</span>
+                <span className={`vx-kpi-icon${kpi.alert ? " is-alert" : ""}`}><i className={`fa ${kpi.icon}`} aria-hidden="true" /></span>
+              </div>
+              <strong className="vx-kpi-value">{pending ? "…" : kpi.value}</strong>
+              <span className="vx-kpi-note">{kpi.note}</span>
+            </div>
+          ))}
+        </div>
+
+        <section className="vx-card vx-chart-card">
+          <div className="vx-chart-head">
+            <div>
+              <span className="vx-eyebrow-dot">{t("admin.dashboard.chartEyebrow")}</span>
+              <h2 className="vx-title-md">{t("admin.dashboard.chartTitle")}</h2>
+            </div>
+            <div className="vx-chart-legend">
+              <span><i className="vx-legend-bar" /> {t("admin.dashboard.chartRevenue")}</span>
+              <span><i className="vx-legend-dot" /> {t("admin.dashboard.chartOrders")}</span>
+            </div>
+          </div>
+          {months.every((m) => !m.orders) && !pending ? (
+            <p className="vx-chart-empty">{t("admin.dashboard.chartEmpty")}</p>
           ) : (
-            <Fragment>
-              <div className="row pr-4">
-                <div className="col-xl-12 col-sm-12 mb-3">
-                  <div className="card text-white bg-primary o-hidden h-100">
-                    <div className="card-body">
-                      <div className="text-center card-font-size">
-                        Total Amount
-                        <br /> <b>${totalAmount && totalAmount.toFixed(2)}</b>
-                      </div>
-                    </div>
+            <div className="vx-chart" role="img" aria-label={t("admin.dashboard.chartTitle")}>
+              {months.map((m) => (
+                <div key={m.start.toISOString()} className="vx-chart-col">
+                  <span className="vx-chart-value">{formatPrice(m.revenue)}</span>
+                  <div className="vx-chart-track">
+                    <span className="vx-chart-bar" style={{ height: `${(m.revenue / maxRevenue) * 100}%` }} />
                   </div>
+                  <span className="vx-chart-orders"><i className="vx-legend-dot" /> {m.orders}</span>
+                  <span className="vx-chart-month">{m.start.toLocaleDateString(i18n.language, { month: "short" })}</span>
                 </div>
-              </div>
-
-              <div className="row pr-4">
-                <div className="col-xl-3 col-sm-6 mb-3">
-                  <div className="card text-white bg-success o-hidden h-100">
-                    <div className="card-body">
-                      <div className="text-center card-font-size">
-                        Products
-                        <br /> <b>{products && products.length}</b>
-                      </div>
-                    </div>
-                    <Link
-                      className="card-footer text-white clearfix small z-1"
-                      to="/admin/products"
-                    >
-                      <span className="float-left">View Details</span>
-                      <span className="float-right">
-                        <i className="fa fa-angle-right"></i>
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-sm-6 mb-3">
-                  <div className="card text-white bg-danger o-hidden h-100">
-                    <div className="card-body">
-                      <div className="text-center card-font-size">
-                        Orders
-                        <br /> <b>{orders && orders.length}</b>
-                      </div>
-                    </div>
-                    <Link
-                      className="card-footer text-white clearfix small z-1"
-                      to="/admin/orders"
-                    >
-                      <span className="float-left">View Details</span>
-                      <span className="float-right">
-                        <i className="fa fa-angle-right"></i>
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-sm-6 mb-3">
-                  <div className="card text-white bg-info o-hidden h-100">
-                    <div className="card-body">
-                      <div className="text-center card-font-size">
-                        Users
-                        <br /> <b>{users && users.length}</b>
-                      </div>
-                    </div>
-                    <Link
-                      className="card-footer text-white clearfix small z-1"
-                      to="/admin/users"
-                    >
-                      <span className="float-left">View Details</span>
-                      <span className="float-right">
-                        <i className="fa fa-angle-right"></i>
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-sm-6 mb-3">
-                  <div className="card text-white bg-warning o-hidden h-100">
-                    <div className="card-body">
-                      <div className="text-center card-font-size">
-                        Out of Stock
-                        <br /> <b>{outOfStock}</b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Fragment>
+              ))}
+            </div>
           )}
+        </section>
+
+        <div className="vx-dash-grid">
+          <section className="vx-card vx-dash-table">
+            <div className="vx-dash-table-head">
+              <div>
+                <h2 className="vx-title-sm">{t("admin.dashboard.recentTitle")}</h2>
+                <p className="vx-muted">{t("admin.dashboard.recentText")}</p>
+              </div>
+              <Link to="/admin/orders" className="vx-btn vx-btn--soft">{t("admin.dashboard.viewAll")}</Link>
+            </div>
+            {recent.length === 0 ? (
+              <p className="vx-chart-empty">{pending ? "…" : t("admin.dashboard.noOrders")}</p>
+            ) : (
+              <div className="vx-table-wrap">
+                <table className="vx-table">
+                  <thead>
+                    <tr>
+                      <th>{t("admin.dashboard.order")}</th>
+                      <th>{t("admin.dashboard.customer")}</th>
+                      <th>{t("admin.dashboard.items")}</th>
+                      <th>{t("admin.dashboard.amount")}</th>
+                      <th>{t("admin.dashboard.status")}</th>
+                      <th><span className="vx-sr-only">{t("admin.dashboard.open")}</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recent.map((order) => (
+                      <tr key={order._id}>
+                        <td className="vx-mono">#{order._id.slice(-8).toUpperCase()}</td>
+                        <td>
+                          <span className="vx-cell-main">{order.user?.name || "—"}</span>
+                          <span className="vx-cell-sub">{order.user?.email || order.shippingInfo?.city}</span>
+                        </td>
+                        <td>
+                          <span className="vx-thumbs">
+                            {order.orderItems.slice(0, 3).map((item) => (
+                              <img key={item.product} src={item.image} alt="" />
+                            ))}
+                            <span className="vx-cell-sub">{t("admin.dashboard.itemsCount", { count: order.orderItems.reduce((s, i) => s + i.quantity, 0) })}</span>
+                          </span>
+                        </td>
+                        <td className="vx-cell-main">{formatPrice(order.totalPrice)}</td>
+                        <td>
+                          <span className={`vx-status is-${String(order.orderStatus).toLowerCase()}`}>
+                            {t(`admin.dashboard.statuses.${order.orderStatus}`, order.orderStatus)}
+                          </span>
+                        </td>
+                        <td>
+                          <Link to={`/admin/order/${order._id}`} className="vx-edit-link">{t("admin.dashboard.open")}</Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+
+          <section className="vx-card vx-dash-stock">
+            <h2 className="vx-title-sm">{t("admin.dashboard.stockTitle")}</h2>
+            <p className="vx-muted">{t("admin.dashboard.stockText")}</p>
+            {stockList.length === 0 ? (
+              <p className="vx-chart-empty">{pending ? "…" : t("admin.dashboard.noLowStock")}</p>
+            ) : (
+              <ul>
+                {stockList.map((product) => (
+                  <li key={product._id}>
+                    <img src={product.images?.[0]?.url} alt="" />
+                    <span className="vx-stock-info">
+                      <span className="vx-cell-main">{product.name}</span>
+                      <span className={`vx-stock-pill${product.stock === 0 ? " is-out" : ""}`}>
+                        {product.stock === 0 ? t("admin.dashboard.outLabel") : t("admin.dashboard.left", { count: product.stock })}
+                      </span>
+                    </span>
+                    <Link to={`/admin/product/${product._id}`} className="vx-edit-link">{t("admin.dashboard.edit")}</Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
         </div>
-      </div>
+      </AdminLayout>
     </Fragment>
   );
 };

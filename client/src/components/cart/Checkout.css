@@ -154,3 +154,9 @@ select.vx-control { cursor: pointer; }
 @media print {
   .vx-header, .vx-footer, .vx-success-actions { display: none !important; }
 }
+
+/* UPDATED: saved account address offered for review on the Shipping step */
+.vx-saved-address { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; padding: 1rem; border-radius: 0.75rem; background: rgb(252 219 173 / 0.3); font-size: 13px; line-height: 18px; color: var(--v-on-surface-variant); }
+.vx-saved-address > .fa { font-size: 18px; color: var(--v-secondary); }
+.vx-saved-address > div { flex: 1; min-width: 12rem; }
+.vx-saved-address .vx-btn { min-height: 38px; font-size: 13px; background: #fff; }

@@ -122,3 +122,15 @@ test("failed profile save cleans up only the replacement avatar", async () => {
   expect(cloudinary.v2.uploader.destroy).toHaveBeenCalledTimes(1);
   expect(cloudinary.v2.uploader.destroy).toHaveBeenCalledWith("new");
 });
+
+// UPDATED: "Remove photo" on Edit Profile resets to the default picture and deletes the old Cloudinary file
+test("removing the avatar saves the default picture and deletes the old upload", async () => {
+  jest.spyOn(User, "findById").mockResolvedValue({ avatar: { public_id: "old", provider: "cloudinary" } });
+  const update = jest.spyOn(User, "findByIdAndUpdate").mockResolvedValue({ _id: "u" });
+  cloudinary.v2.uploader.destroy.mockResolvedValue({ result: "ok" });
+  const res = response();
+  await require("../controllers/authController").updateProfile({ user: { id: "u" }, body: { name: "A", email: "a@b.co", removeAvatar: "true" } }, res, jest.fn());
+  expect(update.mock.calls[0][1].avatar).toMatchObject({ provider: "default" });
+  expect(cloudinary.v2.uploader.destroy).toHaveBeenCalledWith("old");
+  expect(cloudinary.v2.uploader.upload).not.toHaveBeenCalled();
+});

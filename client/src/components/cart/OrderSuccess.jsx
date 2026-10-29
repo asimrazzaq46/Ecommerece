@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 
 import MetaDAta from "../layouts/MetaDAta";
@@ -12,7 +14,15 @@ import "./Checkout.css";
 // After a refresh the order is no longer in memory, so a short generic confirmation is shown.
 const OrderSuccess = () => {
   const { t, i18n } = useTranslation();
-  const order = useSelector((state) => state.newOrder.order?.order);
+  const savedOrder = useSelector((state) => state.newOrder.order?.order);
+  // UPDATED: after a refresh Redux is empty; reload the order from the server (owner-only API) using the saved id
+  const lastId = sessionStorage.getItem("lastOrderId");
+  const reloaded = useQuery({
+    queryKey: ["orders", "detail", lastId],
+    queryFn: async () => (await axios.get(`/api/v1/order/${lastId}`)).data.order,
+    enabled: !savedOrder && Boolean(lastId),
+  });
+  const order = savedOrder || reloaded.data;
   const user = useSelector((state) => state.auth.user);
   const firstName = user?.name?.split(" ")[0];
   const shortId = order?._id?.slice(-8).toUpperCase();

@@ -33,6 +33,14 @@ const userSchema = mongoose.Schema({
       required: true,
     },
   },
+  // UPDATED: single saved default shipping address (orders keep their own snapshot)
+  shippingInfo: {
+    type: new mongoose.Schema(
+      { address: String, city: String, postalCode: String, phoneNo: String, country: String },
+      { _id: false },
+    ),
+    default: undefined,
+  },
   role: {
     type: String,
     default: "user",

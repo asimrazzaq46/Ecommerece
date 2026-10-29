@@ -10,7 +10,7 @@ import {
   messageFor,
 } from "../../queries/products";
 import { addItemToCart } from "../../actions";
-import { formatPrice } from "../../i18n";
+import { formatPrice, translateServerError } from "../../i18n";
 import Loader from "../layouts/Loader";
 import MetaDAta from "../layouts/MetaDAta";
 import ListReviews from "../reviews/ListReviews";
@@ -83,7 +83,7 @@ function ProductDetailContent({ id }) {
       await dispatch(addItemToCart(id, quantity));
       alert.success(t("product.added"));
     } catch (error) {
-      alert.error(messageFor(error));
+      alert.error(translateServerError(t, messageFor(error)));
     } finally {
       setAdding(false);
     }

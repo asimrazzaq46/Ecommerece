@@ -46,3 +46,16 @@ test("reset password blocks mismatches and explains an expired link", async () =
   expect(await screen.findByRole("link", { name: "Request a new link" })).toHaveAttribute("href", "/password/forgot");
   expect(axios.put.mock.calls[0][0]).toContain("/password/reset/tok");
 });
+
+// UPDATED: the server signs the user in after a reset, so the app must load that session
+test("a successful reset loads the signed-in user", async () => {
+  axios.put.mockResolvedValue({ data: { success: true } });
+  axios.get.mockResolvedValue({ data: { user: { _id: "u1", name: "A" } } });
+  open("/password/reset/tok", <NewPassword />, "/password/reset/:token");
+  fireEvent.change(screen.getByLabelText("New password"), { target: { value: "secret12" } });
+  fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "secret12" } });
+  fireEvent.click(screen.getByRole("button", { name: "Update password" }));
+  await screen.findByRole("button", { name: "Update password" });
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  expect(axios.get).toHaveBeenCalledWith("/api/v1/me");
+});

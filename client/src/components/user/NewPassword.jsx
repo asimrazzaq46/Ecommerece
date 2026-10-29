@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import MetaDAta from "../layouts/MetaDAta";
 import LanguageSwitcher from "../layouts/LanguageSwitcher";
-import { resetPassword, clearError } from "../../actions";
+import { resetPassword, loadUser, clearError } from "../../actions";
 import { UPDATE_PASSWORD_RESET } from "../../constants/userConstants";
 import { translateServerError } from "../../i18n";
 import { AuthShowcase, Field, PasswordInput, PasswordStrength, Wordmark } from "./AuthFields";
@@ -61,7 +61,9 @@ const NewPassword = () => {
     if (success) {
       alert.success(t("reset.success"));
       dispatch({ type: UPDATE_PASSWORD_RESET });
-      navigate("/login");
+      // UPDATED: the server signs the user in after a reset; load that session so the app agrees
+      dispatch(loadUser());
+      navigate("/");
     }
   }, [dispatch, alert, error, success, navigate, t]);
 

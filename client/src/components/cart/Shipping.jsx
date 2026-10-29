@@ -1,31 +1,43 @@
 import { useNavigate, Link } from "react-router-dom";
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { countries } from "countries-list";
 
 import { saveShippingInfo } from "../../actions";
 import MetaDAta from "../layouts/MetaDAta";
+import { translateServerError } from "../../i18n";
+import { messageFor } from "../../queries/products";
 import CheckoutSteps from "./CheckoutSteps";
 import OrderSummary from "./OrderSummary";
 import { orderTotals } from "./orderTotals";
 
 const PHONE_RE = /^\+?[\d\s().-]{6,20}$/;
+const FIELDS = ["address", "city", "postalCode", "phoneNo", "country"];
+const pick = (info) => Object.fromEntries(FIELDS.map((key) => [key, (info && info[key]) || ""]));
+const sameAddress = (a, b) => FIELDS.every((key) => (a[key] || "").trim() === (b[key] || "").trim());
 
 const Shipping = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const { shippingInfo, cartItems } = useSelector((state) => state.cart);
+  const { shippingInfo, savedShippingInfo, cartItems } = useSelector((state) => state.cart);
 
   //ALL STATES COMES HERE
 
-  const [address, setAddress] = useState(shippingInfo.address || "");
-  const [city, setCity] = useState(shippingInfo.city || "");
-  const [postalCode, setPostalCode] = useState(shippingInfo.postalCode || "");
-  const [phoneNo, setPhoneNo] = useState(shippingInfo.phoneNo || "");
-  const [country, setCountry] = useState(shippingInfo.country || "");
+  // UPDATED: one form object so the saved account address can be applied at once
+  const [form, setForm] = useState(() => pick(shippingInfo));
+  const { address, city, postalCode, phoneNo, country } = form;
+  const onField = (key) => (e) => setForm((current) => ({ ...current, [key]: e.target.value }));
   const [errors, setErrors] = useState({}); // UPDATED: translated inline validation
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+
+  // UPDATED: the account address arrives after login sync; prefill only an untouched (empty) form
+  useEffect(() => {
+    setForm((current) => (FIELDS.some((key) => current[key]) ? current : pick(shippingInfo)));
+  }, [shippingInfo]);
+  const showSaved = savedShippingInfo && savedShippingInfo.address && !sameAddress(form, savedShippingInfo);
 
   const dispatch = useDispatch();
 
@@ -42,7 +54,7 @@ const Shipping = () => {
       .sort((a, b) => a.label.localeCompare(b.label, i18n.language));
   }, [i18n.language]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const required = (value) => (value.trim() ? undefined : "checkout.shipping.errors.required");
     const next = {
@@ -54,8 +66,17 @@ const Shipping = () => {
     };
     setErrors(next);
     if (Object.values(next).some(Boolean)) return;
-    dispatch(saveShippingInfo({ address, city, postalCode, phoneNo, country }));
-    navigate(`/confirm`);
+    setSaving(true);
+    setSaveError("");
+    try {
+      // UPDATED: signed-in users save this as their default address on the account
+      await dispatch(saveShippingInfo({ address, city, postalCode, phoneNo, country }));
+      navigate(`/confirm`);
+    } catch (error) {
+      setSaveError(translateServerError(t, messageFor(error)));
+    } finally {
+      setSaving(false);
+    }
   };
 
   // Field wrapper: label + control + translated error, wired with aria-describedby.
@@ -98,11 +119,27 @@ const Shipping = () => {
                 <span className="vx-label">* {t("checkout.shipping.required")}</span>
               </div>
 
+              {showSaved && (
+                <div className="vx-saved-address" role="status">
+                  <i className="fa fa-bookmark-o" aria-hidden="true" />
+                  <div>
+                    <p className="vx-secure-title">{t("checkout.shipping.savedTitle")}</p>
+                    <p>
+                      {savedShippingInfo.address}, {savedShippingInfo.postalCode} {savedShippingInfo.city}, {savedShippingInfo.country}
+                    </p>
+                    <p className="vx-field-hint">{t("checkout.shipping.savedHint")}</p>
+                  </div>
+                  <button type="button" className="vx-btn vx-btn--soft" onClick={() => setForm(pick(savedShippingInfo))}>
+                    {t("checkout.shipping.useSaved")}
+                  </button>
+                </div>
+              )}
+              {saveError && <p role="alert" className="vx-form-alert">{saveError}</p>}
               {field(
                 "country_field",
                 "country",
                 t("checkout.shipping.country"),
-                <select className="vx-control" value={country} onChange={(e) => setCountry(e.target.value)}>
+                <select className="vx-control" value={country} onChange={onField("country")}>
                   <option value="" disabled>
                     {t("checkout.shipping.selectCountry")}
                   </option>
@@ -123,7 +160,7 @@ const Shipping = () => {
                   autoComplete="street-address"
                   placeholder={t("checkout.shipping.addressPlaceholder")}
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={onField("address")}
                 />,
               )}
               <div className="vx-form-row">
@@ -131,13 +168,13 @@ const Shipping = () => {
                   "city_field",
                   "city",
                   t("checkout.shipping.city"),
-                  <input type="text" className="vx-control" autoComplete="address-level2" value={city} onChange={(e) => setCity(e.target.value)} />,
+                  <input type="text" className="vx-control" autoComplete="address-level2" value={city} onChange={onField("city")} />,
                 )}
                 {field(
                   "postal_code_field",
                   "postalCode",
                   t("checkout.shipping.postalCode"),
-                  <input type="text" className="vx-control" autoComplete="postal-code" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />,
+                  <input type="text" className="vx-control" autoComplete="postal-code" value={postalCode} onChange={onField("postalCode")} />,
                 )}
               </div>
               {field(
@@ -150,7 +187,7 @@ const Shipping = () => {
                   autoComplete="tel"
                   placeholder={t("checkout.shipping.phonePlaceholder")}
                   value={phoneNo}
-                  onChange={(e) => setPhoneNo(e.target.value)}
+                  onChange={onField("phoneNo")}
                 />,
                 t("checkout.shipping.phoneHint"),
               )}
@@ -160,7 +197,7 @@ const Shipping = () => {
               <Link to="/cart" className="vx-back-link">
                 <i className="fa fa-arrow-left" aria-hidden="true" /> {t("checkout.shipping.back")}
               </Link>
-              <button type="submit" form="shipping_form" className="vx-btn vx-btn--primary vx-checkout-next">
+              <button type="submit" form="shipping_form" className="vx-btn vx-btn--primary vx-checkout-next" disabled={saving}>
                 {t("checkout.shipping.submit")} <i className="fa fa-arrow-right" aria-hidden="true" />
               </button>
             </div>

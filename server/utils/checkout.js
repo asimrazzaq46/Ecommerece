@@ -17,15 +17,20 @@ exports.validateCheckout = body => {
     seen.add(item.product.toLowerCase());
     return { product: item.product.toLowerCase(), quantity: item.quantity };
   }).sort((a, b) => a.product.localeCompare(b.product));
+  return { orderItems, shippingInfo: exports.validateShippingInfo(body.shippingInfo) };
+};
+
+// UPDATED: shared by checkout and the saved default address (PUT /me/shipping)
+exports.validateShippingInfo = input => {
   const shippingInfo = {};
   for (const key of ["address", "city", "postalCode", "phoneNo", "country"]) {
-    const value = body.shippingInfo && body.shippingInfo[key];
+    const value = input && input[key];
     if (typeof value !== "string" || !value.trim() || value.length > 300) {
       throw new ErrorHandler(`Please provide a valid shipping ${key}`, 400);
     }
     shippingInfo[key] = value.trim();
   }
-  return { orderItems, shippingInfo };
+  return shippingInfo;
 };
 
 exports.priceCheckout = async ({ orderItems, shippingInfo }) => {

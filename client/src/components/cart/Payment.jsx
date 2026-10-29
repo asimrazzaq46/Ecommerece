@@ -17,7 +17,7 @@ import MetaDAta from "../layouts/MetaDAta";
 import { formatPrice } from "../../i18n";
 import CheckoutSteps from "./CheckoutSteps";
 import OrderSummary from "./OrderSummary";
-import { clearError, createOrder, removeItemFromCart } from "../../actions";
+import { clearError, createOrder, loadCart } from "../../actions";
 // UPDATED: Stripe fields styled to match the Veyra inputs
 const options = {
   style: {
@@ -109,8 +109,10 @@ const Payment = () => {
         setMessage(t("checkout.payment.savedPending", { ref: attempt.paymentId }));
         return;
       }
-      // Fix: clear every ordered product; the old exact-quantity match left items behind.
-      attempt.orderItems.forEach(item => dispatch(removeItemFromCart(item.product)));
+      // UPDATED: the verified order already removed the purchased quantities from the account cart;
+      // reload it so extra units or items added meanwhile stay.
+      await dispatch(loadCart());
+      sessionStorage.setItem("lastOrderId", saved._id); // UPDATED: lets the success page survive a refresh
       sessionStorage.removeItem("pendingCheckout");
       sessionStorage.removeItem("orderInfo");
       navigate("/success");

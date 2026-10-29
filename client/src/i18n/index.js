@@ -44,6 +44,26 @@ const SERVER_ERRORS = {
   "The Password token is invalid or has been expired.": "errors.resetTokenInvalid",
   "The Password doesnot match.": "errors.passwordMismatch",
   "Unable to send recovery email. Please try again": "errors.recoveryEmailFailed",
+  // UPDATED: password change, orders and admin product errors
+  "Old password is incorrect": "errors.oldPasswordWrong",
+  "You cannot access this order": "errors.orderForbidden",
+  "No Order Found With This Id": "errors.orderNotFound",
+  "Please provide product images": "errors.productImages",
+  "product not exist": "errors.productNotExist",
+  // UPDATED: admin order/user rules
+  "You cannot delete your own account": "errors.deleteSelf",
+  "You cannot remove your own admin role": "errors.demoteSelf",
+  "Remove the admin role before deleting this user": "errors.deleteAdmin",
+  "Invalid order status transition": "errors.orderTransition",
+  "Order is not paid": "errors.orderNotPaid",
+  "User not found": "errors.userNotFound",
+  "Order not found": "errors.orderNotFound",
+  "No Order Found!": "errors.orderNotFound",
+  // UPDATED: account cart / saved address
+  "Requested quantity is not available": "errors.stockUnavailable",
+  "Your cart is full": "errors.cartFull",
+  "Product not found": "errors.productNotFound",
+  "Invalid cart item": "errors.invalidCartItem",
 };
 export const translateServerError = (t, message) =>
   SERVER_ERRORS[message] ? t(SERVER_ERRORS[message]) : message;

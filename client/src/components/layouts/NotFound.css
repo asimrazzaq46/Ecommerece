@@ -1,0 +1,6 @@
+/* UPDATED: 404 page */
+.vx-notfound { padding: 5rem 0 6rem; text-align: center; }
+.vx-notfound-code { display: block; font: 700 96px/1 var(--v-display); letter-spacing: -0.04em; color: var(--v-surface-highest); }
+.vx-notfound .vx-title-xl { margin-top: 0.5rem; }
+.vx-notfound .vx-muted { max-width: 32rem; margin: 1rem auto 0; }
+.vx-notfound-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2rem; }

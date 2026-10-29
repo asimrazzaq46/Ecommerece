@@ -158,11 +158,12 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
   const newUserData = { name: req.body.name, email: req.body.email };
   let oldAvatar;
-  if (req.body.avatar) {
+  // UPDATED: removeAvatar="true" switches back to the default picture; the old Cloudinary file is deleted below
+  if (req.body.avatar || req.body.removeAvatar === "true") {
     const existing = await User.findById(req.user.id);
     if (!existing) return next(new ErrorHandler("User not found", 404));
     oldAvatar = existing.avatar;
-    newUserData.avatar = await saveAvatar(req.body.avatar);
+    newUserData.avatar = await saveAvatar(req.body.avatar || "");
   }
   try {
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {

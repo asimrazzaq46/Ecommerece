@@ -52,6 +52,7 @@ const ProductReviews = lazy(() => import("./components/admin/ProductReviews"));
 
 //FOOTER
 import Footer from "./components/layouts/Footer";
+import NotFound from "./components/layouts/NotFound";
 
 import "./App.css";
 import { loadUser } from "./actions";
@@ -246,6 +247,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<NotFound />} /> {/* UPDATED: simple 404 */}
           </Routes>
         </Suspense>
         </main>

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { useNavigate, MemoryRouter } from "react-router-dom";
 import { makeStore } from "../../store";
@@ -8,7 +8,7 @@ jest.mock("react-router-dom", () => ({
   useNavigate: jest.fn(),
 }));
 afterEach(() => localStorage.clear());
-test("shipping requires an explicit country and preserves international postal codes", () => {
+test("shipping requires an explicit country and preserves international postal codes", async () => {
   const navigate = jest.fn();
   useNavigate.mockReturnValue(navigate);
   const store = makeStore();
@@ -30,7 +30,7 @@ test("shipping requires an explicit country and preserves international postal c
   ])
     fireEvent.change(screen.getByLabelText(label), { target: { value } });
   fireEvent.click(screen.getByRole("button", { name: "Continue to review" }));
-  expect(navigate).toHaveBeenCalledWith("/confirm");
+  await waitFor(() => expect(navigate).toHaveBeenCalledWith("/confirm")); // UPDATED: save is async now
   expect(store.getState().cart.shippingInfo).toMatchObject({
     postalCode: "SW1A 1AA",
     country: "United Kingdom",

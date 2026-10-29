@@ -20,5 +20,6 @@ export const store = makeStore({
   cart: {
     cartItems: readStorage("cartItems", []),
     shippingInfo: readStorage("shippingInfo", {}),
+    savedShippingInfo: null, // UPDATED: filled from the account after login
   },
 });

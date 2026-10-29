@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 import { useAlert } from "../ui/Alerts";
 
 import { addItemToCart, removeItemFromCart } from "../../actions";
-import { formatPrice } from "../../i18n";
+import { formatPrice, translateServerError } from "../../i18n";
+import { messageFor } from "../../queries/products";
 import MetaDAta from "../layouts/MetaDAta";
 import { FREE_SHIPPING_FROM, orderTotals } from "./orderTotals";
 import "./Cart.css";
@@ -19,26 +20,30 @@ const Cart = () => {
   const alert = useAlert();
   const { cartItems } = useSelector((state) => state.cart);
 
+  // UPDATED: account-cart writes can fail (stock, network); show a translated message
+  const showError = (error) => alert.error(translateServerError(t, messageFor(error)));
+
   // DECREASE THE QUANTITY
 
   const decreaseQty = (id, quantity) => {
     const newQty = quantity - 1;
     if (newQty <= 0) return;
-    dispatch(addItemToCart(id, newQty)).catch(error => alert.error(error.message));
+    dispatch(addItemToCart(id, newQty)).catch(showError);
   };
   // INCREASE  THE QUANTITY
 
   const increaseQty = (id, quantity, stock) => {
     const newQty = quantity + 1;
     if (newQty > stock) return;
-    dispatch(addItemToCart(id, newQty)).catch(error => alert.error(error.message));
+    dispatch(addItemToCart(id, newQty)).catch(showError);
   };
 
   // REMOVE FROM CART
 
   const removeCartItemHandler = (id) => {
-    dispatch(removeItemFromCart(id));
-    alert.success(t("cart.removed"));
+    dispatch(removeItemFromCart(id))
+      .then(() => alert.success(t("cart.removed")))
+      .catch(showError);
   };
 
   // CLICK ON CHECKOUT BUTTON

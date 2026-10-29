@@ -72,11 +72,16 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
       new ErrorHandler(`User does not found with id: ${req.params.id}`, 404)
     );
   }
+  // UPDATED: an admin must be demoted first, so admin accounts are never removed by accident
+  if (user.role === "admin") {
+    return next(new ErrorHandler("Remove the admin role before deleting this user", 400));
+  }
   //REMOVE AVATAR FROM CLOUDINARY
 
   await removeAvatar(user.avatar);
 
   await user.deleteOne();
+  await require("../models/cart").deleteOne({ user: user._id }); // UPDATED: no orphaned account cart
 
   res.status(200).json({
     success: true,
@@ -88,7 +93,8 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
 // Get ALL orders => api/v1/admin/orders/
 
 exports.allOrders = catchAsyncError(async (req, res, next) => {
-  const orders = await Orders.find();
+  // UPDATED: customer name/email for the admin dashboard (admin-only route)
+  const orders = await Orders.find().populate("user", "name email");
   let totalAmount = 0;
 
   if (!orders) {

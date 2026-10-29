@@ -210,3 +210,16 @@
 .vx-stepper input:focus { outline: none; }
 
 .vx-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* UPDATED: destructive button + confirm dialog (admin delete) */
+.vx-btn--danger { background: var(--v-error); color: #fff !important; }
+.vx-btn--danger:hover { background: #93000a; }
+.vx-dialog { width: min(32rem, calc(100vw - 2rem)); padding: 1.5rem; border: 0; border-radius: 0.75rem; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); font-family: var(--v-sans); color: var(--v-on-surface); }
+.vx-dialog::backdrop { background: rgb(4 20 24 / 0.4); backdrop-filter: blur(4px); }
+.vx-dialog-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem; }
+.vx-confirm { width: min(26rem, calc(100vw - 2rem)); }
+.vx-confirm-icon { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-bottom: 1rem; border-radius: 50%; background: #ffdad6; color: var(--v-error); font-size: 20px; }
+.vx-confirm .vx-muted { margin-top: 0.5rem; font-size: 14px; line-height: 20px; }
+
+/* UPDATED: Bootstrap 4 reboot sets `dialog { display: block }`, which showed closed dialogs in the page */
+.vx-dialog:not([open]) { display: none; }

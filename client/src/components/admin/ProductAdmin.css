@@ -1,0 +1,121 @@
+/* UPDATED: Veyra product management + product form (admin). */
+.vx-admin-crumb { margin-bottom: 0.75rem; }
+.vx-pm-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; }
+.vx-pm-count { padding: 2px 10px; border-radius: 9999px; background: var(--v-surface-mid); font-size: 13px; color: var(--v-on-surface-variant); }
+.vx-pm-out { color: var(--v-error); }
+.vx-pm-card { overflow: hidden; }
+.vx-pm-tools { display: flex; flex-direction: column; gap: 1rem; padding: 1rem; }
+.vx-pm-tabs { display: flex; gap: 0.25rem; padding: 4px; border-radius: 0.5rem; background: var(--v-surface-low); overflow-x: auto; }
+.vx-pm-tabs button { display: inline-flex; align-items: center; gap: 0.5rem; flex: none; min-height: 36px; padding: 0 0.875rem; border: 0; border-radius: 0.375rem; background: transparent; font: 600 12px/16px var(--v-sans); letter-spacing: 0.04em; text-transform: uppercase; color: var(--v-on-surface-variant); cursor: pointer; }
+.vx-pm-tabs button span { font-size: 11px; opacity: 0.8; }
+.vx-pm-tabs button.is-active { background: var(--v-primary); color: #fff; box-shadow: var(--v-shadow-sm); }
+.vx-pm-filters { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+.vx-pm-filters .vx-control { height: 40px; font-size: 13px; }
+.vx-pm-search { position: relative; }
+.vx-pm-search .fa { position: absolute; top: 12px; left: 12px; color: var(--v-outline); }
+.vx-pm-search .vx-control { padding-left: 2.25rem; }
+@media (min-width: 768px) { .vx-pm-filters { grid-template-columns: 2fr 1.2fr 1.2fr; } }
+@media (min-width: 1200px) { .vx-pm-tools { flex-direction: row; align-items: center; justify-content: space-between; } .vx-pm-filters { flex: 1; max-width: 46rem; } }
+.vx-pm-table td, .vx-pm-table th { white-space: nowrap; }
+.vx-pm-product { display: flex; align-items: center; gap: 0.75rem; }
+.vx-pm-product img { flex: none; width: 44px; height: 44px; border-radius: 0.375rem; object-fit: contain; background: var(--v-surface-low); mix-blend-mode: multiply; }
+.vx-pm-name { max-width: 20rem; overflow: hidden; text-overflow: ellipsis; color: var(--v-primary) !important; }
+.vx-pm-name:hover { color: var(--v-secondary) !important; }
+.vx-pm-rating { display: inline-flex; align-items: center; gap: 0.5rem; }
+.vx-pm-rating .vx-stars { font-size: 11px; }
+.vx-pm-actions { display: inline-flex; gap: 0.5rem; }
+.vx-admin .vx-stock-pill.is-in { background: var(--v-surface-mid); color: var(--v-on-surface-variant); }
+.vx-admin .vx-stock-pill.is-low { background: rgb(252 219 173 / 0.6); color: #594321; }
+.vx-admin .vx-stock-pill.is-out { background: #ffdad6; color: #93000a; }
+.vx-icon-btn--danger { color: var(--v-error) !important; }
+.vx-icon-btn--danger:hover { background: #ffdad6; }
+.vx-pm-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; padding: 0.5rem 1rem 1rem; font-size: 13px; }
+.vx-pm-foot .pagination-controls { margin: 0 !important; padding: 0 !important; border: 0; background: none; gap: 0.5rem; }
+.vx-pm-foot .pagination-controls .btn { min-height: 36px; border: 0; border-radius: 0.5rem; background: var(--v-surface-low); color: var(--v-primary); font-size: 13px; }
+.vx-pm-foot .pagination-controls .btn:disabled { background: var(--v-surface-low); color: var(--v-outline); }
+.vx-pm-foot .pagination-controls span { margin: 0 0.5rem !important; }
+
+/* form */
+.vx-pf { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+@media (min-width: 1100px) { .vx-pf { grid-template-columns: 8fr 4fr; } .vx-pf-side { position: sticky; top: 88px; } }
+.vx-pf-main, .vx-pf-side { display: flex; flex-direction: column; gap: 2rem; min-width: 0; }
+.vx-pf-card { padding: 1.5rem; }
+.vx-pf-card > .vx-muted { margin-top: 0.25rem; font-size: 13px; line-height: 18px; }
+.vx-pf-fields { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.25rem; }
+.vx-pf-fields.vx-form-row { display: grid; }
+.vx-pf-textarea { height: auto; padding: 0.75rem 0.875rem; resize: vertical; }
+.vx-pf-gallery { margin-top: 1.25rem; }
+.vx-pf-gallery.is-replaced { opacity: 0.5; }
+.vx-pf-gallery ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 0.75rem; margin: 0.5rem 0 0; padding: 0; list-style: none; }
+.vx-pf-gallery li { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 0.5rem; background: var(--v-surface-low); box-shadow: var(--v-shadow-sm); }
+.vx-pf-gallery img { width: 100%; height: 100%; padding: 0.25rem; object-fit: contain; mix-blend-mode: multiply; }
+.vx-pf-cover { position: absolute; left: 6px; top: 6px; padding: 1px 6px; border-radius: 0.25rem; background: var(--v-primary); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.vx-pf-remove { position: absolute; right: 6px; top: 6px; width: 28px; height: 28px; min-height: 28px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.95); color: var(--v-error); box-shadow: var(--v-shadow-sm); cursor: pointer; }
+.vx-pf-drop { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; margin: 1.25rem 0 0; padding: 1.5rem; border-radius: 0.75rem; background: var(--v-surface-low); text-align: center; cursor: pointer; transition: background-color 0.15s; }
+.vx-pf-drop:hover { background: var(--v-surface-mid); }
+.vx-pf-drop .fa { font-size: 28px; color: var(--v-secondary); }
+.vx-pf-drop.is-invalid { box-shadow: 0 0 0 1px var(--v-error); }
+.vx-pf-drop + input:focus-visible { outline: none; }
+.vx-pf-card:has(#images_field:focus-visible) .vx-pf-drop { outline: 2px solid var(--v-primary); outline-offset: 2px; }
+.vx-pf-preview-img { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; margin: 1rem 0 0.75rem; overflow: hidden; border-radius: 0.5rem; background: var(--v-surface-low); color: var(--v-outline); font-size: 32px; }
+.vx-pf-preview-img img { width: 100%; height: 100%; padding: 0.75rem; object-fit: contain; mix-blend-mode: multiply; }
+.vx-pf-preview-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin: 0.25rem 0 !important; }
+.vx-pf-preview-meta strong { font-family: var(--v-display); font-size: 20px; color: var(--v-primary); }
+.vx-pf-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.75rem; }
+.vx-pf-actions .vx-btn { min-height: 44px; }
+.vx-admin .vx-field-label { color: var(--v-on-surface-variant); }
+
+/* UPDATED: orders, users, order processing and reviews (admin) */
+.vx-pm-filters--two { grid-template-columns: 1fr; }
+@media (min-width: 768px) { .vx-pm-filters--two { grid-template-columns: 2fr 1fr; } }
+.vx-btn--sm { min-height: 34px; padding: 0 0.75rem; font-size: 12px; }
+.vx-initials { display: flex; align-items: center; justify-content: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--v-surface-mid); font: 600 13px/1 var(--v-display); color: var(--v-primary); }
+.vx-user-avatar { flex: none; width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--v-surface-high); }
+.vx-user-avatar--lg { width: 64px; height: 64px; }
+.vx-user-head { display: flex; align-items: center; gap: 1rem; }
+.vx-you { font-weight: 400; color: var(--v-secondary); }
+.vx-role { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: var(--v-surface-mid); color: var(--v-on-surface-variant); }
+.vx-role.is-admin { background: var(--v-primary); color: #fff; }
+.vx-icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.vx-po { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+@media (min-width: 1100px) { .vx-po { grid-template-columns: 8fr 4fr; } }
+.vx-po-main, .vx-po-side { display: flex; flex-direction: column; gap: 2rem; min-width: 0; }
+.vx-po-main .vx-eyebrow { display: block; margin-bottom: 0.25rem; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--v-secondary); }
+.vx-po-status { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin-top: 1.25rem; }
+.vx-po-status .vx-field { flex: 1; min-width: 14rem; }
+.vx-po-line { margin: 0.5rem 0 0; font-size: 14px; line-height: 20px; overflow-wrap: anywhere; }
+.vx-po-break { overflow-wrap: anywhere; text-align: right; font-size: 11px; }
+.vx-po-total { border-top: 1px solid var(--v-surface-high); margin-top: 0.5rem; padding-top: 0.75rem !important; }
+.vx-po-total dd { font: 700 20px/26px var(--v-display); }
+.vx-po-history { display: flex; flex-direction: column; gap: 0.75rem; margin: 1rem 0 0; padding: 0 0 0 1rem; border-left: 2px solid var(--v-surface-high); list-style: none; font-size: 13px; line-height: 18px; }
+.vx-po-history li { display: flex; flex-direction: column; }
+.vx-po-main .vx-pm-card .vx-pf-card { padding-bottom: 0.5rem; }
+@media print { .vx-admin-side, .vx-admin-top, .vx-po-status, .vx-pm-actions { display: none !important; } .vx-admin-body { padding-left: 0; } }
+
+.vx-rv { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+@media (min-width: 1100px) { .vx-rv { grid-template-columns: 4fr 8fr; } .vx-rv-pick { position: sticky; top: 88px; } }
+.vx-rv-pick .vx-pm-search { margin: 1rem 0; }
+.vx-rv-list { display: flex; flex-direction: column; gap: 0.375rem; max-height: 26rem; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+.vx-rv-list button { display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 56px; padding: 0.5rem; border: 0; border-radius: 0.5rem; background: transparent; text-align: left; cursor: pointer; }
+.vx-rv-list button:hover { background: var(--v-surface-low); }
+.vx-rv-list button.is-active { background: var(--v-surface-mid); box-shadow: inset 3px 0 0 var(--v-secondary); }
+.vx-rv-list img { flex: none; width: 40px; height: 40px; border-radius: 0.375rem; object-fit: contain; background: var(--v-surface-low); mix-blend-mode: multiply; }
+.vx-rv-name { max-width: 15rem; overflow: hidden; text-overflow: ellipsis; }
+.vx-rv-main { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+.vx-rv-summary { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 900px) { .vx-rv-summary { grid-template-columns: 2fr 1fr 2fr; align-items: center; } }
+.vx-rv-score { display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+.vx-rv-score strong { font: 700 40px/1 var(--v-display); color: var(--v-primary); }
+.vx-rv-cards { display: flex; flex-direction: column; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.vx-rv-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.vx-rv-card-head > div { display: flex; flex-direction: column; gap: 0.25rem; }
+.vx-rv-comment { margin: 0.75rem 0 0 !important; overflow-wrap: anywhere; font-size: 14px; line-height: 20px; }
+
+/* breadcrumb inside the admin shell (not wrapped in .vx-page) */
+.vx-admin-crumb { display: flex; align-items: center; gap: 0.5rem; font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--v-on-surface-variant); }
+.vx-admin-crumb a { color: var(--v-on-surface-variant) !important; }
+.vx-admin-crumb a:hover { color: var(--v-primary) !important; }
+.vx-admin-crumb > :last-child { color: var(--v-primary); }
+.vx-admin a.vx-mono { color: var(--v-primary) !important; text-decoration: none; }
+.vx-admin .vx-title-xl { font-weight: 600; }
