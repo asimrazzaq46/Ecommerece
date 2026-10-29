@@ -1,58 +1,43 @@
-// UPDATED: dashboard figures come only from the loaded orders/users/products
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+// UPDATED: the dashboard renders the aggregated /admin/stats response (no full order/user downloads)
+import { render, screen, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
-import Dashboard, { monthlyTotals } from "./Dashboard";
+import axios from "axios";
+import Dashboard, { fillMonths } from "./Dashboard";
 
+jest.mock("axios");
 jest.mock("../layouts/MetaDAta", () => () => null);
-jest.mock("../../actions", () => ({ allOrders: () => ({ type: "noop" }), allUsers: () => ({ type: "noop" }) }));
-jest.mock("../../queries/products", () => ({
-  messageFor: (e) => e.message,
-  useAdminProducts: () => ({
-    isPending: false,
-    data: [
-      { _id: "p1", name: "Bag", stock: 0, images: [{ url: "/b.png" }] },
-      { _id: "p2", name: "Lamp", stock: 3, images: [{ url: "/l.png" }] },
-      { _id: "p3", name: "Chair", stock: 40, images: [{ url: "/c.png" }] },
-    ],
-  }),
-}));
+jest.mock("./AdminLayout", () => ({ children }) => <div>{children}</div>);
 
 const now = new Date();
-const orders = [
-  { _id: "aaaaaaaaaaaaaaaaaaaa0001", createdAt: now.toISOString(), totalPrice: 100, orderStatus: "Processing", user: { name: "Ann", email: "a@x.co" }, orderItems: [{ product: "p1", image: "/b.png", quantity: 2 }] },
-  { _id: "aaaaaaaaaaaaaaaaaaaa0002", createdAt: new Date(now.getFullYear() - 2, 0, 1).toISOString(), totalPrice: 50, orderStatus: "Delivered", user: { name: "Bo", email: "b@x.co" }, orderItems: [] },
-];
+const stats = {
+  revenue: 150, orders: 2, processing: 1, users: 2, newUsers: 1, products: 3, outOfStock: 1, lowStockCount: 1,
+  monthly: [{ year: now.getFullYear(), month: now.getMonth() + 1, revenue: 100, orders: 1 }],
+  recent: [{ _id: "aaaaaaaaaaaaaaaaaaaa0001", createdAt: now.toISOString(), totalPrice: 100, orderStatus: "Processing", user: { name: "Ann", email: "a@x.co" }, orderItems: [{ product: "p1", image: "/b.png", quantity: 2 }] }],
+  lowStock: [{ _id: "p1", name: "Bag", stock: 0, image: "/b.png" }, { _id: "p2", name: "Lamp", stock: 3, image: "/l.png" }],
+};
 
-test("monthly totals cover the last 6 months only", () => {
-  const months = monthlyTotals(orders, now);
+test("months are filled for the last 6 calendar months", () => {
+  const months = fillMonths(stats.monthly, now);
   expect(months).toHaveLength(6);
   expect(months[5]).toMatchObject({ revenue: 100, orders: 1 });
-  expect(months.reduce((s, m) => s + m.orders, 0)).toBe(1);
+  expect(months.slice(0, 5).every((m) => m.orders === 0)).toBe(true);
 });
 
-test("KPIs, recent orders and low stock reflect real data", () => {
-  const store = configureStore({
-    reducer: () => ({
-      auth: { user: { name: "Admin", role: "admin" } },
-      allOrders: { orders, totalAmount: 150, loading: false },
-      allUsers: { users: [{ createdAt: now.toISOString() }, { createdAt: "2020-01-01" }] },
-    }),
-  });
+test("KPIs, recent orders and low stock come from one stats request", async () => {
+  axios.get.mockResolvedValue({ data: { success: true, stats } });
   render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <Dashboard />
-      </MemoryRouter>
-    </Provider>,
+    <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+      <MemoryRouter><Dashboard /></MemoryRouter>
+    </QueryClientProvider>,
   );
-  expect(screen.getByText("$150.00")).toBeInTheDocument();
-  expect(screen.getByText("1 processing")).toBeInTheDocument();
+  expect(await screen.findByText("$150.00")).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText("1 processing")).toBeInTheDocument());
   expect(screen.getByText("1 new this month")).toBeInTheDocument();
   expect(screen.getByText("1 out of stock • 1 low stock")).toBeInTheDocument();
   expect(screen.getByText("Ann")).toBeInTheDocument();
   expect(screen.getByText("Out of stock")).toBeInTheDocument();
   expect(screen.getByText("3 left")).toBeInTheDocument();
-  expect(screen.queryByText("Chair")).not.toBeInTheDocument();
+  expect(axios.get).toHaveBeenCalledTimes(1);
+  expect(axios.get.mock.calls[0][0]).toBe("/api/v1/admin/stats");
 });

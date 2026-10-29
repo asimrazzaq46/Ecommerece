@@ -1,4 +1,5 @@
 const ErrorHandler = require("./errorHandler");
+const { categoriesForKeyword } = require("./categories");
 // UPDATED: whitelisted catalog sort orders (?sort=), newest first by default
 const SORTS = { newest: {createdAt: -1, _id: -1}, price_asc: {price: 1, _id: -1}, price_desc: {price: -1, _id: -1}, rating: {rating: -1, _id: -1} };
 class ApiFeatures {
@@ -6,7 +7,12 @@ class ApiFeatures {
   search() {
     const keyword = this.querystr.keyword;
     if (keyword !== undefined && (typeof keyword !== "string" || keyword.length > 100)) throw new ErrorHandler("Invalid search keyword", 400);
-    if (keyword) this.query = this.query.find({name: {$regex: keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i"}});
+    if (keyword) {
+      const name = {$regex: keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i"};
+      // UPDATED: a keyword that names a category also returns that category's products
+      const categories = categoriesForKeyword(keyword);
+      this.query = this.query.find(categories.length ? {$or: [{name}, {catagory: {$in: categories}}]} : {name});
+    }
     return this;
   }
   filter() {

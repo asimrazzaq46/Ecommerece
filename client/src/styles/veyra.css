@@ -22,7 +22,8 @@
   --v-sans: "DM Sans", system-ui, sans-serif;
   --v-display: "Manrope", system-ui, sans-serif;
   --v-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --v-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --v-shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 /* Full-bleed page wrapper: escapes the bootstrap .container the routes render in */
@@ -35,11 +36,29 @@
   line-height: 22px;
   -webkit-font-smoothing: antialiased;
 }
-.vx-page h1, .vx-page h2, .vx-page h3, .vx-page p { margin: 0; }
-.vx-page a { color: inherit; }
-.vx-page a:hover { text-decoration: none; }
-.vx-container { max-width: 80rem; margin: 0 auto; padding: 0 1rem; }
-@media (min-width: 640px) { .vx-container { padding: 0 2rem; } }
+.vx-page h1,
+.vx-page h2,
+.vx-page h3,
+.vx-page p {
+  margin: 0;
+}
+.vx-page a {
+  color: inherit;
+}
+.vx-page a:hover {
+  text-decoration: none;
+}
+.vx-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  margin-bottom: 0.8rem;
+}
+@media (min-width: 640px) {
+  .vx-container {
+    padding: 0 2rem;
+  }
+}
 
 .vx-label {
   font-size: 11px;
@@ -49,12 +68,43 @@
   text-transform: uppercase;
   color: var(--v-on-surface-variant);
 }
-.vx-title-sm { font-family: var(--v-display); font-size: 18px; line-height: 24px; font-weight: 600; color: var(--v-primary); }
-.vx-title-md { font-family: var(--v-display); font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.01em; color: var(--v-primary); }
-.vx-title-xl { font-family: var(--v-display); font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.02em; color: var(--v-primary); }
-@media (min-width: 1024px) { .vx-title-xl { font-size: 40px; line-height: 48px; } }
-.vx-muted { color: var(--v-on-surface-variant); }
-.vx-card { background: var(--v-surface-lowest); border-radius: 0.75rem; box-shadow: var(--v-shadow-sm); }
+.vx-title-sm {
+  font-family: var(--v-display);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--v-primary);
+}
+.vx-title-md {
+  font-family: var(--v-display);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-primary);
+}
+.vx-title-xl {
+  font-family: var(--v-display);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--v-primary);
+}
+@media (min-width: 1024px) {
+  .vx-title-xl {
+    font-size: 40px;
+    line-height: 48px;
+  }
+}
+.vx-muted {
+  color: var(--v-on-surface-variant);
+}
+.vx-card {
+  background: var(--v-surface-lowest);
+  border-radius: 0.75rem;
+  box-shadow: var(--v-shadow-sm);
+}
 
 /* Buttons (class-scoped so bootstrap/App.css button rules don't leak in) */
 .vx-btn {
@@ -69,14 +119,34 @@
   font: 500 14px/20px var(--v-sans);
   cursor: pointer;
   text-decoration: none !important;
-  transition: background-color 0.15s, color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
 }
-.vx-btn--primary { background: var(--v-primary); color: #fff !important; }
-.vx-btn--primary:hover { background: var(--v-primary-hover); }
-.vx-btn--soft { background: var(--v-surface-low); color: var(--v-primary) !important; }
-.vx-btn--soft:hover { background: var(--v-surface-mid); }
-.vx-btn--caps { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-.vx-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.vx-btn--primary {
+  background: var(--v-primary);
+  color: #fff !important;
+}
+.vx-btn--primary:hover {
+  background: var(--v-primary-hover);
+}
+.vx-btn--soft {
+  background: var(--v-surface-low);
+  color: var(--v-primary) !important;
+}
+.vx-btn--soft:hover {
+  background: var(--v-surface-mid);
+}
+.vx-btn--caps {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.vx-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 .vx-icon-btn {
   display: inline-flex;
   align-items: center;
@@ -91,10 +161,16 @@
   color: var(--v-primary) !important;
   cursor: pointer;
 }
-.vx-icon-btn:hover { background: var(--v-surface-mid); }
-.vx-icon-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.vx-icon-btn:hover {
+  background: var(--v-surface-mid);
+}
+.vx-icon-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
-.vx-input, .vx-select {
+.vx-input,
+.vx-select {
   height: 40px;
   padding: 0 0.75rem;
   border: 0;
@@ -103,9 +179,20 @@
   color: var(--v-on-surface);
   font: 400 13px/18px var(--v-sans);
 }
-.vx-input:focus, .vx-select:focus { outline: none; background: #fff; box-shadow: 0 0 0 1px var(--v-primary); }
+.vx-input:focus,
+.vx-select:focus {
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--v-primary);
+}
 
-.vx-stars { display: inline-flex; gap: 2px; color: var(--v-secondary); font-size: 14px; line-height: 1; }
+.vx-stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--v-secondary);
+  font-size: 14px;
+  line-height: 1;
+}
 
 .vx-chip {
   display: inline-flex;
@@ -133,7 +220,9 @@
   color: inherit;
   cursor: pointer;
 }
-.vx-chip button:hover { color: var(--v-error); }
+.vx-chip button:hover {
+  color: var(--v-error);
+}
 
 .vx-link-btn {
   min-height: 24px;
@@ -163,26 +252,24 @@
   color: var(--v-on-surface-variant);
   font-size: 26px;
 }
-.vx-state p { max-width: 28rem; margin: 0.25rem auto 1.25rem; color: var(--v-on-surface-variant); }
-
-/* Language switcher (shared by header and auth pages) */
-.lang-switch { display: inline-flex; padding: 2px; border-radius: 0.125rem; background: var(--v-surface-low); }
-.lang-switch button {
-  min-height: 26px; /* overrides the global 44px button minimum; still above the 24px target size */
-  padding: 2px 10px;
-  border: 0;
-  border-radius: 0.125rem;
-  background: transparent;
-  font: 500 11px/14px var(--v-sans);
-  letter-spacing: 0.1em;
+.vx-state p {
+  max-width: 28rem;
+  margin: 0.25rem auto 1.25rem;
   color: var(--v-on-surface-variant);
-  cursor: pointer;
 }
-.lang-switch button[aria-pressed="true"] { background: var(--v-primary-container); color: #fff; }
-.lang-switch button:focus-visible { outline: 2px solid var(--v-secondary); outline-offset: 1px; }
+
 
 /* quantity stepper (product page + cart) */
-.vx-stepper { display: flex; align-items: center; flex: none; height: 44px; padding: 0 0.5rem; border-radius: 0.75rem; background: #fff; box-shadow: var(--v-shadow-sm); }
+.vx-stepper {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: 44px;
+  padding: 0 0.5rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: var(--v-shadow-sm);
+}
 .vx-stepper button {
   width: 32px;
   height: 32px;
@@ -195,8 +282,14 @@
   font-size: 12px;
   cursor: pointer;
 }
-.vx-stepper button:hover:not(:disabled) { color: var(--v-primary); background: var(--v-surface-low); }
-.vx-stepper button:disabled { opacity: 0.35; cursor: not-allowed; }
+.vx-stepper button:hover:not(:disabled) {
+  color: var(--v-primary);
+  background: var(--v-surface-low);
+}
+.vx-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
 .vx-stepper input {
   width: 36px;
   border: 0;
@@ -206,20 +299,99 @@
   color: var(--v-primary);
   -moz-appearance: textfield;
 }
-.vx-stepper input::-webkit-inner-spin-button, .vx-stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.vx-stepper input:focus { outline: none; }
+.vx-stepper input::-webkit-inner-spin-button,
+.vx-stepper input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vx-stepper input:focus {
+  outline: none;
+}
 
-.vx-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.vx-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 
 /* UPDATED: destructive button + confirm dialog (admin delete) */
-.vx-btn--danger { background: var(--v-error); color: #fff !important; }
-.vx-btn--danger:hover { background: #93000a; }
-.vx-dialog { width: min(32rem, calc(100vw - 2rem)); padding: 1.5rem; border: 0; border-radius: 0.75rem; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); font-family: var(--v-sans); color: var(--v-on-surface); }
-.vx-dialog::backdrop { background: rgb(4 20 24 / 0.4); backdrop-filter: blur(4px); }
-.vx-dialog-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem; }
-.vx-confirm { width: min(26rem, calc(100vw - 2rem)); }
-.vx-confirm-icon { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-bottom: 1rem; border-radius: 50%; background: #ffdad6; color: var(--v-error); font-size: 20px; }
-.vx-confirm .vx-muted { margin-top: 0.5rem; font-size: 14px; line-height: 20px; }
+.vx-btn--danger {
+  background: var(--v-error);
+  color: #fff !important;
+}
+.vx-btn--danger:hover {
+  background: #93000a;
+}
+.vx-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 0;
+  border-radius: 0.75rem;
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  font-family: var(--v-sans);
+  color: var(--v-on-surface);
+}
+.vx-dialog::backdrop {
+  background: rgb(4 20 24 / 0.4);
+  backdrop-filter: blur(4px);
+}
+.vx-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+.vx-confirm {
+  width: min(26rem, calc(100vw - 2rem));
+}
+.vx-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: #ffdad6;
+  color: var(--v-error);
+  font-size: 20px;
+}
+.vx-confirm .vx-muted {
+  margin-top: 0.5rem;
+  font-size: 14px;
+  line-height: 20px;
+}
 
 /* UPDATED: Bootstrap 4 reboot sets `dialog { display: block }`, which showed closed dialogs in the page */
-.vx-dialog:not([open]) { display: none; }
+.vx-dialog:not([open]) {
+  display: none;
+}
+
+/* UPDATED: shared by Header and Footer (wordmark) and by Footer, Cart and Order Success (payment badges) */
+.vx-logo {
+  font-family: var(--v-display);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--v-primary) !important;
+}
+.vx-footer-pay {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.vx-pay-badge {
+  padding: 4px 8px;
+  border-radius: 0.25rem;
+  background: var(--v-surface-low);
+}

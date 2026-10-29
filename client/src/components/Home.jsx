@@ -78,6 +78,16 @@ const Home = () => {
   }, [filtersOpen]);
 
   const priceActive = price[0] !== PRICE_RANGE[0] || price[1] !== PRICE_RANGE[1];
+  // UPDATED: the hero belongs to the plain home page only: not on search results, a chosen category,
+  // active filters or later result pages
+  const showHero = !keyWord && !categorySelection && !priceActive && rating === 0 && currentPage === 1;
+  // "Shop now" / "Browse categories": smooth scroll to the products (offset handled by scroll-margin-top);
+  // on small screens "Browse categories" opens the filter drawer, which holds the category list.
+  const goToCatalog = (openFilters) => {
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById("catalog")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    if (openFilters && window.matchMedia?.("(max-width: 1023px)").matches) setFiltersOpen(true);
+  };
   const chips = [
     keyWord && { label: `“${keyWord}”`, to: "/" },
     categorySelection && { label: t(`categories.${categorySelection}`), clear: () => setCategory("") },
@@ -116,7 +126,7 @@ const Home = () => {
               </div>
             </div>
           </section>
-        ) : (
+        ) : showHero ? (
           <>
             <section className="vx-hero">
               <div className="vx-container vx-hero-grid">
@@ -127,12 +137,12 @@ const Home = () => {
                   <h1 className="vx-hero-title">{t("catalog.hero.title")}</h1>
                   <p className="vx-hero-text">{t("catalog.hero.subtitle")}</p>
                   <div className="vx-hero-actions">
-                    <a className="vx-btn vx-btn--primary" href="#catalog">
+                    <button type="button" className="vx-btn vx-btn--primary" onClick={() => goToCatalog(false)}>
                       {t("catalog.hero.shop")}
-                    </a>
-                    <a className="vx-btn vx-btn--soft" href="#categories">
+                    </button>
+                    <button type="button" className="vx-btn vx-btn--soft" onClick={() => goToCatalog(true)}>
                       {t("catalog.hero.browse")} <i className="fa fa-arrow-right" aria-hidden="true" />
-                    </a>
+                    </button>
                   </div>
                 </div>
                 <div className="vx-hero-media">
@@ -140,23 +150,8 @@ const Home = () => {
                 </div>
               </div>
             </section>
-            <section className="vx-pills" id="categories" aria-label={t("catalog.categories")}>
-              <div className="vx-container vx-pills-row">
-                {["", ...PRODUCT_CATEGORIES].map((value) => (
-                  <button
-                    key={value || "all"}
-                    type="button"
-                    className={`vx-pill${categorySelection === value ? " is-active" : ""}`}
-                    aria-pressed={categorySelection === value}
-                    onClick={() => setCategory(value)}
-                  >
-                    {value ? t(`categories.${value}`) : t("catalog.allProducts")}
-                  </button>
-                ))}
-              </div>
-            </section>
           </>
-        )}
+        ) : null}
 
         <section className="vx-container vx-catalog-body" id="catalog">
           {chips.length > 0 && (

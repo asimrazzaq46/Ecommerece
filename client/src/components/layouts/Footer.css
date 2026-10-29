@@ -1,0 +1,69 @@
+/* UPDATED: Veyra footer. */
+.vx-footer {
+  margin-top: 0; /* overrides legacy App.css footer margin */
+  background: #fff;
+  box-shadow: 0 -1px 8px rgb(0 0 0 / 0.04);
+  color: var(--v-on-surface-variant);
+  font-family: var(--v-sans);
+  font-size: 13px;
+  line-height: 18px;
+}
+.vx-footer a {
+  color: var(--v-on-surface-variant);
+  text-decoration: none;
+}
+.vx-footer a:hover {
+  color: var(--v-on-surface);
+}
+.vx-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  padding: 2.5rem 0;
+}
+.vx-footer-brand p {
+  max-width: 24rem;
+  margin: 1rem 0 0;
+  font-size: 15px;
+  line-height: 22px;
+}
+.vx-footer-title {
+  margin: 0 0 1rem;
+  font-family: var(--v-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v-primary);
+}
+.vx-footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vx-footer li + li {
+  margin-top: 0.5rem;
+}
+.vx-footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--v-surface-high);
+  text-align: center;
+}
+.vx-footer-bottom p {
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .vx-footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  .vx-footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}

@@ -8,7 +8,7 @@ import { logout } from "../../actions";
 import { PRODUCT_CATEGORIES } from "../../constants/productCategories";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Search from "./Search";
-import "./Storefront.css";
+import "./Header.css";
 
 // UPDATED: Login/Register/password recovery are full-screen designs without the storefront chrome.
 // UPDATED: admin pages already redesigned with AdminLayout (they bring their own sidebar + top bar)
@@ -70,7 +70,7 @@ const Header = () => {
 
           {user ? (
             <div
-              className="vx-account"
+              className="vx-header-account"
               onBlur={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget)) setMenuOpen(false);
               }}
@@ -80,14 +80,14 @@ const Header = () => {
             >
               <button
                 onClick={() => setMenuOpen((open) => !open)}
-                className="vx-account-btn"
+                className="vx-header-account-btn"
                 type="button"
                 aria-haspopup="true"
                 aria-expanded={menuOpen}
                 aria-label={t("nav.account")}
               >
-                <img src={user.avatar && user.avatar.url} alt="" className="vx-avatar" />
-                <span className="vx-account-name">{user.name}</span>
+                <img src={user.avatar && user.avatar.url} alt="" className="vx-header-avatar" />
+                <span className="vx-header-account-name">{user.name}</span>
                 <i className="fa fa-angle-down" aria-hidden="true" />
               </button>
 

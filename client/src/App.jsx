@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 
 import { useEffect, lazy, Suspense } from "react";
@@ -17,26 +18,26 @@ import ProductDetails from "./components/products/productDetails";
 
 // AUTH IMPORTS
 
-import Register from "./components/user/Register";
+const Register = lazy(() => import("./components/user/Register")); // UPDATED: loaded on demand
 import Login from "./components/user/Login";
-import Profile from "./components/user/Profile";
-import UpdateProfile from "./components/user/UpdateProfile";
-import UpdatePassword from "./components/user/UpdatePassword";
-import ForgotPassword from "./components/user/ForgotPassword";
-import NewPassword from "./components/user/NewPassword";
+const Profile = lazy(() => import("./components/user/Profile")); // UPDATED: loaded on demand
+const UpdateProfile = lazy(() => import("./components/user/UpdateProfile")); // UPDATED: loaded on demand
+const UpdatePassword = lazy(() => import("./components/user/UpdatePassword")); // UPDATED: loaded on demand
+const ForgotPassword = lazy(() => import("./components/user/ForgotPassword")); // UPDATED: loaded on demand
+const NewPassword = lazy(() => import("./components/user/NewPassword")); // UPDATED: loaded on demand
 
 // CART IMPORTS
 
-import Cart from "./components/cart/Cart";
-import Shipping from "./components/cart/Shipping";
-import ConfirmOrder from "./components/cart/ConfirmOrder";
+const Cart = lazy(() => import("./components/cart/Cart")); // UPDATED: loaded on demand
+const Shipping = lazy(() => import("./components/cart/Shipping")); // UPDATED: loaded on demand
+const ConfirmOrder = lazy(() => import("./components/cart/ConfirmOrder")); // UPDATED: loaded on demand
 const PaymentPage = lazy(() => import("./components/cart/PaymentPage"));
-import OrderSuccess from "./components/cart/OrderSuccess";
+const OrderSuccess = lazy(() => import("./components/cart/OrderSuccess")); // UPDATED: loaded on demand
 
 // ORDER IMPORTS
 
-import ListOrders from "./components/orders/ListOrders";
-import OrderDetails from "./components/orders/OrderDetails";
+const ListOrders = lazy(() => import("./components/orders/ListOrders")); // UPDATED: loaded on demand
+const OrderDetails = lazy(() => import("./components/orders/OrderDetails")); // UPDATED: loaded on demand
 
 // ADMIN IMPORTS
 
@@ -59,6 +60,15 @@ import { loadUser } from "./actions";
 
 //PAYMENT
 
+// UPDATED: a new page (path change) starts at the top; query-string changes (filters) keep the scroll position
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   const { loading, user, isAuthenticated } = useSelector((state) => state.auth);
 
@@ -71,6 +81,7 @@ function App() {
     <Router>
       <div className="App">
         <a className="skip-link" href="#main-content">Skip to main content</a>
+        <ScrollToTop />
         <Header />
         <main id="main-content" tabIndex={-1}>
         <Suspense fallback={<p role="status">Loading page…</p>}>

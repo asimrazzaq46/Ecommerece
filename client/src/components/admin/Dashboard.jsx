@@ -1,74 +1,54 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 
-import { useAdminProducts, messageFor } from "../../queries/products";
+import { messageFor } from "../../queries/products";
 import { formatPrice } from "../../i18n";
 import MetaDAta from "../layouts/MetaDAta";
 import AdminLayout from "./AdminLayout";
 
-import { allUsers, allOrders } from "../../actions";
 
 const LOW_STOCK = 5;
 
-// Revenue + order count for the last 6 calendar months (current month included).
-export const monthlyTotals = (orders, now = new Date()) => {
-  const months = Array.from({ length: 6 }, (_, i) => new Date(now.getFullYear(), now.getMonth() - 5 + i, 1));
-  return months.map((start) => {
-    const inMonth = orders.filter((order) => {
-      const date = new Date(order.createdAt);
-      return date.getFullYear() === start.getFullYear() && date.getMonth() === start.getMonth();
-    });
-    return { start, revenue: inMonth.reduce((sum, o) => sum + Number(o.totalPrice || 0), 0), orders: inMonth.length };
+// The server returns only months that have orders; this fills the last 6 calendar months (current included).
+export const fillMonths = (rows, now = new Date()) =>
+  Array.from({ length: 6 }, (_, i) => {
+    const start = new Date(now.getFullYear(), now.getMonth() - 5 + i, 1);
+    const row = rows.find((r) => r.year === start.getFullYear() && r.month === start.getMonth() + 1);
+    return { start, revenue: row ? row.revenue : 0, orders: row ? row.orders : 0 };
   });
-};
 
 // UPDATED: Veyra admin dashboard (Stitch design) built only from real orders, users and products.
 const Dashboard = () => {
-  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
 
-  const productQuery = useAdminProducts();
-  const products = productQuery.data || [];
-  const { users = [], error: usersError } = useSelector((state) => state.allUsers);
-  const { orders = [], loading, totalAmount = 0, error: ordersError } = useSelector((state) => state.allOrders);
+  // UPDATED: one aggregated request instead of downloading every order, user and product
+  const query = useQuery({
+    queryKey: ["admin", "stats"],
+    queryFn: async ({ signal }) => (await axios.get("/api/v1/admin/stats", { signal })).data.stats,
+  });
+  const stats = query.data;
+  const pending = query.isPending;
+  const error = query.error ? messageFor(query.error) : null;
+  const retry = () => query.refetch();
 
-  useEffect(() => {
-    dispatch(allOrders());
-    dispatch(allUsers());
-  }, [dispatch]);
-
-  const now = new Date();
-  const outOfStock = products.filter((p) => p.stock === 0).length;
-  const lowStock = products.filter((p) => p.stock > 0 && p.stock <= LOW_STOCK).length;
-  const processing = orders.filter((o) => o.orderStatus === "Processing").length;
-  const newUsers = users.filter((u) => {
-    const d = new Date(u.createdAt);
-    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-  }).length;
-  const recent = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
-  const stockList = products.filter((p) => p.stock <= LOW_STOCK).sort((a, b) => a.stock - b.stock).slice(0, 6);
-  const months = monthlyTotals(orders, now);
+  const recent = stats?.recent || [];
+  const stockList = stats?.lowStock || [];
+  const months = fillMonths(stats?.monthly || []);
   const maxRevenue = Math.max(1, ...months.map((m) => m.revenue));
-  const error = ordersError || usersError || (productQuery.error && messageFor(productQuery.error));
-  const pending = loading || productQuery.isPending;
-  const retry = () => {
-    dispatch(allOrders());
-    dispatch(allUsers());
-    productQuery.refetch();
-  };
 
   const kpis = [
-    { icon: "fa-money", label: t("admin.dashboard.revenue"), value: formatPrice(totalAmount), note: t("admin.dashboard.revenueNote") },
-    { icon: "fa-shopping-bag", label: t("admin.dashboard.orders"), value: orders.length, note: t("admin.dashboard.processing", { count: processing }) },
-    { icon: "fa-users", label: t("admin.dashboard.customers"), value: users.length, note: t("admin.dashboard.newThisMonth", { count: newUsers }) },
+    { icon: "fa-money", label: t("admin.dashboard.revenue"), value: formatPrice(stats?.revenue || 0), note: t("admin.dashboard.revenueNote") },
+    { icon: "fa-shopping-bag", label: t("admin.dashboard.orders"), value: stats?.orders ?? 0, note: t("admin.dashboard.processing", { count: stats?.processing ?? 0 }) },
+    { icon: "fa-users", label: t("admin.dashboard.customers"), value: stats?.users ?? 0, note: t("admin.dashboard.newThisMonth", { count: stats?.newUsers ?? 0 }) },
     {
       icon: "fa-cube",
       label: t("admin.dashboard.products"),
-      value: products.length,
-      note: `${t("admin.dashboard.outOfStock", { count: outOfStock })} • ${t("admin.dashboard.lowStock", { count: lowStock })}`,
-      alert: outOfStock > 0,
+      value: stats?.products ?? 0,
+      note: `${t("admin.dashboard.outOfStock", { count: stats?.outOfStock ?? 0 })} • ${t("admin.dashboard.lowStock", { count: stats?.lowStockCount ?? 0 })}`,
+      alert: (stats?.outOfStock ?? 0) > 0,
     },
   ];
 
@@ -202,7 +182,7 @@ const Dashboard = () => {
               <ul>
                 {stockList.map((product) => (
                   <li key={product._id}>
-                    <img src={product.images?.[0]?.url} alt="" />
+                    <img src={product.image} alt="" />
                     <span className="vx-stock-info">
                       <span className="vx-cell-main">{product.name}</span>
                       <span className={`vx-stock-pill${product.stock === 0 ? " is-out" : ""}`}>

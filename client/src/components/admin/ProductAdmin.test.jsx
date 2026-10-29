@@ -69,3 +69,24 @@ test("edit form is prefilled and can be saved without new images", () => {
   expect(data.get("catagory")).toBe("Home");
   expect(data.getAll("images")).toEqual([]);
 });
+
+// UPDATED: image management in the edit form
+test("edit form: set another image as main, remove one, and send the ordered selection", () => {
+  const onSubmit = jest.fn();
+  const images = [{ url: "/a.png", public_id: "P/a" }, { url: "/b.png", public_id: "P/b" }, { url: "/c.png", public_id: "P/c" }];
+  wrap(<ProductForm mode="edit" initial={{ name: "Lamp", seller: "V", description: "d", catagory: "Home", price: 1, stock: 1 }} existingImages={images} onSubmit={onSubmit} />);
+  fireEvent.click(screen.getByRole("button", { name: "Set image 3 as main image" }));
+  fireEvent.click(screen.getByRole("button", { name: "Remove image 2" }));
+  fireEvent.click(screen.getByRole("button", { name: /Save changes/ }));
+  const data = onSubmit.mock.calls[0][0];
+  expect(JSON.parse(data.get("order"))).toEqual(["e:P/c", "e:P/b"]);
+});
+
+test("edit form refuses to save with no images left", () => {
+  const onSubmit = jest.fn();
+  wrap(<ProductForm mode="edit" initial={{ name: "Lamp", seller: "V", description: "d", catagory: "Home", price: 1, stock: 1 }} existingImages={[{ url: "/a.png", public_id: "P/a" }]} onSubmit={onSubmit} />);
+  fireEvent.click(screen.getByRole("button", { name: "Remove image 1" }));
+  fireEvent.click(screen.getByRole("button", { name: /Save changes/ }));
+  expect(screen.getByText("Please add at least one image.")).toBeInTheDocument();
+  expect(onSubmit).not.toHaveBeenCalled();
+});

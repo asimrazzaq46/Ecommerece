@@ -134,3 +134,21 @@ test("removing the avatar saves the default picture and deletes the old upload",
   expect(cloudinary.v2.uploader.destroy).toHaveBeenCalledWith("old");
   expect(cloudinary.v2.uploader.upload).not.toHaveBeenCalled();
 });
+
+// UPDATED: category-aware search
+const { categoriesForKeyword } = require("../utils/categories");
+test.each([
+  ["beauty", ["Beauty/Health"]], ["BEAUTY", ["Beauty/Health"]], ["accessories", ["Accessories"]], ["laptops", ["Laptops"]],
+  ["electronics", ["Electronics"]], ["phones", ["Phones"]], ["bellezza", ["Beauty/Health"]], ["cuffie", ["Headphones"]], ["xyz", []], ["", []],
+])("keyword %j maps to categories %j", (keyword, expected) => {
+  expect(categoriesForKeyword(keyword)).toEqual(expected);
+});
+test("a category keyword searches name OR category and combines with the other filters", () => {
+  const q = new ApiFeatures(Product.find(), { keyword: "beauty", price: { gte: "5", lte: "50" }, rating: { gte: "3" }, sort: "price_asc", page: "2" }).search().filter().pagination(12);
+  const filter = q.query.getFilter();
+  expect(filter.$or).toEqual([{ name: { $regex: "beauty", $options: "i" } }, { catagory: { $in: ["Beauty/Health"] } }]);
+  expect(filter.price).toEqual({ $gte: 5, $lte: 50 });
+  expect(filter.rating).toEqual({ $gte: 3 });
+  expect(q.query.options.sort).toEqual({ price: 1, _id: -1 });
+  expect(q.query.options.skip).toBe(12);
+});

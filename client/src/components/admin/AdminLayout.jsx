@@ -32,7 +32,9 @@ export default function AdminLayout({ title, children }) {
   const user = useSelector((state) => state.auth.user);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => setOpen(false), [pathname]); // close the mobile drawer after navigating
+  useEffect(() => {
+    setOpen(false); // close the mobile drawer after navigating
+  }, [pathname]);
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => e.key === "Escape" && setOpen(false);

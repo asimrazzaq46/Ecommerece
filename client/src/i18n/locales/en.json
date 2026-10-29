@@ -816,7 +816,13 @@
         "stockInvalid": "Enter a whole number of 0 or more.",
         "imagesRequired": "Please add at least one image.",
         "imageInvalid": "Choose PNG, JPEG, GIF or WebP images under 5 MB."
-      }
+      },
+      "newBadge": "New",
+      "setMain": "Set as main image",
+      "setMainNamed": "Set image {{n}} as main image",
+      "remove": "Remove image",
+      "stagedNote": "Changes to images are saved when you press Save. Discard keeps every current image.",
+      "orderNote": "The first image is the main image. Use the star to change it."
     }
   },
   "adminOrders": {

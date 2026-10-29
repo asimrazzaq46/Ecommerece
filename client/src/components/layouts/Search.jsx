@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import "./Search.css";
 
 // UPDATED: Veyra search bar; `variant` switches between the header bar and the search-page box.
 const Search = ({ variant = "header", defaultValue = "" }) => {

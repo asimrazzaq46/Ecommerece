@@ -1,0 +1,232 @@
+/* UPDATED: Veyra header (topbar, main row, cart, account menu, category nav). Search styles: Search.css. */
+.vx-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgb(255 255 255 / 0.92);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 8px rgb(0 0 0 / 0.04);
+  font-family: var(--v-sans);
+  --vx-header-control: 44px; /* one height for the cart link and the account button */
+}
+.vx-header a {
+  text-decoration: none;
+}
+
+.vx-topbar {
+  background: var(--v-primary-container);
+  color: #f9f9f6;
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.04em;
+}
+.vx-topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+}
+.vx-topbar .fa {
+  margin-right: 4px;
+  color: var(--v-gold);
+}
+.vx-topbar .lang-switch {
+  background: rgb(255 255 255 / 0.1);
+}
+.vx-topbar .lang-switch button {
+  color: rgb(249 249 246 / 0.8);
+  min-height: 24px;
+  padding: 1px 8px;
+}
+.vx-topbar .lang-switch button[aria-pressed="true"] {
+  background: #f9f9f6;
+  color: var(--v-primary);
+}
+
+.vx-header-main {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  height: 88px; /* UPDATED: more air between the search row and the category nav */
+}
+.vx-header-search {
+  max-width: 42rem;
+  width: 100%;
+  justify-self: center;
+}
+
+.vx-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.vx-cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--vx-header-control);
+  height: var(--vx-header-control);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--v-on-surface) !important;
+}
+.vx-cart-link:hover {
+  color: var(--v-secondary) !important;
+}
+.vx-cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: var(--v-secondary);
+  color: #fff;
+  font: 700 10px/17px var(--v-sans);
+  text-align: center;
+}
+.vx-auth-links {
+  display: flex;
+  gap: 0.5rem;
+}
+.vx-auth-links .vx-btn {
+  min-height: 38px;
+  padding: 0 1rem;
+  font-size: 13px;
+}
+
+/* Account dropdown. Namespaced vx-header-* on purpose: Account.css uses .vx-account for the account PAGE wrapper
+   (padding 2rem 0 4rem), which used to stretch this wrapper and push the button out of line with the cart. */
+.vx-header-account {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.vx-header-account-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: var(--vx-header-control);
+  padding: 0 0.5rem 0 0.375rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--v-on-surface-variant);
+  font: 500 13px/18px var(--v-sans);
+  cursor: pointer;
+}
+.vx-header-account-btn:hover {
+  background: var(--v-surface-low);
+  color: var(--v-on-surface);
+}
+.vx-header-account-btn .fa {
+  line-height: 1;
+}
+.vx-header-avatar {
+  display: block;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--v-surface-high);
+}
+.vx-header-account-name {
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--v-on-surface);
+}
+.vx-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 190px;
+  padding: 6px;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 10px 30px -6px rgb(4 20 24 / 0.18);
+}
+.vx-menu a {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 0.5rem;
+  font-size: 14px;
+  color: var(--v-on-surface) !important;
+}
+.vx-menu a:hover {
+  background: var(--v-surface-low);
+}
+.vx-menu a.is-danger {
+  color: var(--v-error) !important;
+}
+
+.vx-catnav {
+  border-top: 1px solid var(--v-surface-high);
+  display: flex;
+  gap: 2rem;
+  height: 44px;
+  align-items: stretch;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+.vx-catnav::-webkit-scrollbar {
+  display: none;
+}
+.vx-catnav a {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v-on-surface-variant) !important;
+}
+.vx-catnav a:hover {
+  color: var(--v-on-surface) !important;
+}
+.vx-catnav a.is-active {
+  color: var(--v-primary) !important;
+  border-bottom-color: var(--v-primary);
+}
+
+@media (max-width: 767px) {
+  .vx-header-main {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "logo actions" "search search";
+    height: auto;
+    gap: 0.75rem 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  .vx-logo {
+    grid-area: logo;
+  }
+  .vx-header-actions {
+    grid-area: actions;
+    gap: 0.5rem;
+  }
+  .vx-header-search {
+    grid-area: search;
+    max-width: none;
+  }
+  .vx-header-account-name,
+  .vx-hide-sm {
+    display: none !important;
+  }
+  .vx-topbar-inner > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vx-catnav {
+    gap: 1.5rem;
+  }
+}

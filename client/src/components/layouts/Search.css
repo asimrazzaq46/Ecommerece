@@ -1,0 +1,88 @@
+/* UPDATED: search bar (header and search-page variants). */
+.vx-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 6px 6px 6px 1rem;
+  border-radius: 0.5rem;
+  background: var(--v-surface-low);
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
+}
+.vx-search:focus-within {
+  background: #fff;
+  box-shadow:
+    0 4px 20px -2px rgb(25 41 45 / 0.08),
+    0 0 0 1px var(--v-outline-variant);
+}
+.vx-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  font: 400 13px/18px var(--v-sans);
+  color: var(--v-on-surface);
+}
+.vx-search-input:focus,
+.vx-search-input:focus-visible {
+  outline: none !important;
+}
+.vx-search-input::placeholder {
+  color: var(--v-on-surface-variant);
+}
+.vx-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+.vx-search-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--v-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.vx-search--header .vx-search-submit {
+  width: 32px;
+  padding: 0;
+  font-size: 14px;
+}
+.vx-search-submit:hover {
+  background: var(--v-primary-hover);
+}
+.vx-search--page {
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: var(--v-shadow-sm);
+  padding-left: 0.75rem;
+}
+.vx-search-icon {
+  color: var(--v-outline);
+  font-size: 15px;
+}
+.vx-search-clear {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--v-on-surface-variant);
+  cursor: pointer;
+}
+.vx-search-clear:hover {
+  background: var(--v-surface-low);
+}

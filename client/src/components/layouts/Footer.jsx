@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PRODUCT_CATEGORIES } from "../../constants/productCategories";
 import { isAuthPath } from "./Header";
+import "./Footer.css";
 
 // UPDATED: Veyra footer from the Stitch storefront design (links point to real routes only).
 const Footer = () => {

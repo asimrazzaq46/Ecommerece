@@ -33,7 +33,12 @@ export default function ProductForm({ mode, initial = {}, existingImages = [], l
     price: initial.price ?? "",
     stock: initial.stock ?? "",
   });
-  const [images, setImages] = useState([]); // data URLs of newly chosen images
+  // UPDATED: one ordered list of existing + pending images; the first one is the main image.
+  // Removals are staged here and only sent on Save, so Discard never destroys an existing image.
+  const [items, setItems] = useState(() =>
+    existingImages.map((image) => ({ key: `e:${image.public_id}`, id: image.public_id, url: image.url, isNew: false })),
+  );
+  const [seq, setSeq] = useState(0);
   const [errors, setErrors] = useState({});
   const set = (key) => (e) => setForm((current) => ({ ...current, [key]: e.target.value }));
 
@@ -46,7 +51,9 @@ export default function ProductForm({ mode, initial = {}, existingImages = [], l
       return;
     }
     const urls = await Promise.all(files.map(readFile));
-    setImages((current) => [...current, ...urls]);
+    // new images go to the END: adding a photo never takes over the main slot
+    setItems((current) => [...current, ...urls.map((url, i) => ({ key: `n:${seq + i}`, url, isNew: true }))]);
+    setSeq((n) => n + urls.length);
     setErrors((current) => ({ ...current, images: undefined }));
   };
 
@@ -60,7 +67,7 @@ export default function ProductForm({ mode, initial = {}, existingImages = [], l
       description: form.description.trim() ? undefined : "descriptionRequired",
       price: form.price === "" || !Number.isFinite(price) || price < 0 ? "priceInvalid" : undefined,
       stock: form.stock === "" || !Number.isSafeInteger(stock) || stock < 0 ? "stockInvalid" : undefined,
-      images: !editing && images.length === 0 ? "imagesRequired" : undefined,
+      images: items.length === 0 ? "imagesRequired" : undefined,
     };
     setErrors(next);
     if (Object.values(next).some(Boolean)) return;
@@ -72,7 +79,10 @@ export default function ProductForm({ mode, initial = {}, existingImages = [], l
     formData.set("catagory", form.catagory);
     formData.set("stock", stock);
     formData.set("seller", form.seller);
-    images.forEach((image) => formData.append("images", image));
+    const fresh = items.filter((item) => item.isNew);
+    fresh.forEach((item) => formData.append("images", item.url));
+    // Edit: tokens in display order ("e:<public_id>" kept, "n:<index>" new); the server validates them.
+    if (editing) formData.set("order", JSON.stringify(items.map((item) => (item.isNew ? `n:${fresh.indexOf(item)}` : `e:${item.id}`))));
     onSubmit(formData);
   };
 
@@ -92,7 +102,9 @@ export default function ProductForm({ mode, initial = {}, existingImages = [], l
     </div>
   );
 
-  const cover = images[0] || existingImages[0]?.url;
+  const cover = items[0]?.url;
+  const makeMain = (index) => setItems((current) => [current[index], ...current.filter((_, i) => i !== index)]);
+  const removeAt = (index) => setItems((current) => current.filter((_, i) => i !== index));
   const stockNumber = Number(form.stock);
 
   return (
@@ -122,40 +134,28 @@ export default function ProductForm({ mode, initial = {}, existingImages = [], l
           <h2 className="vx-title-sm">{t("adminProducts.form.mediaTitle")}</h2>
           <p className="vx-muted">{t("adminProducts.form.mediaText")}</p>
 
-          {editing && existingImages.length > 0 && (
-            <div className={`vx-pf-gallery${images.length ? " is-replaced" : ""}`}>
-              <span className="vx-label">{t("adminProducts.form.currentImages")}</span>
-              <ul>
-                {existingImages.map((image, index) => (
-                  <li key={image.public_id || image.url}>
-                    <img src={image.url} alt={t("adminProducts.form.imageAlt", { n: index + 1 })} />
-                    {index === 0 && <span className="vx-pf-cover">{t("adminProducts.form.cover")}</span>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {images.length > 0 && (
+          {items.length > 0 && (
             <div className="vx-pf-gallery">
-              <span className="vx-label">{t("adminProducts.form.newImages")}</span>
               <ul>
-                {images.map((src, index) => (
-                  <li key={src.slice(-40) + index}>
-                    <img src={src} alt={t("adminProducts.form.imageAlt", { n: index + 1 })} />
+                {items.map((item, index) => (
+                  <li key={item.key} className={index === 0 ? "is-main" : ""}>
+                    <img src={item.url} alt={t("adminProducts.form.imageAlt", { n: index + 1 })} />
                     {index === 0 && <span className="vx-pf-cover">{t("adminProducts.form.cover")}</span>}
-                    <button
-                      type="button"
-                      className="vx-pf-remove"
-                      aria-label={t("adminProducts.form.removeImage", { n: index + 1 })}
-                      onClick={() => setImages((current) => current.filter((_, i) => i !== index))}
-                    >
-                      <i className="fa fa-times" aria-hidden="true" />
-                    </button>
+                    {item.isNew && <span className="vx-pf-new">{t("adminProducts.form.newBadge")}</span>}
+                    <div className="vx-pf-tools">
+                      {index !== 0 && (
+                        <button type="button" onClick={() => makeMain(index)} aria-label={t("adminProducts.form.setMainNamed", { n: index + 1 })} title={t("adminProducts.form.setMain")}>
+                          <i className="fa fa-star-o" aria-hidden="true" />
+                        </button>
+                      )}
+                      <button type="button" className="is-danger" onClick={() => removeAt(index)} aria-label={t("adminProducts.form.removeImage", { n: index + 1 })} title={t("adminProducts.form.remove")}>
+                        <i className="fa fa-trash-o" aria-hidden="true" />
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
-              {editing && <p className="vx-field-hint">{t("adminProducts.form.replaceNote")}</p>}
+              <p className="vx-field-hint">{t(editing ? "adminProducts.form.stagedNote" : "adminProducts.form.orderNote")}</p>
             </div>
           )}
 

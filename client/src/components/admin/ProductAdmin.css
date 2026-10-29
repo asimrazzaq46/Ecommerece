@@ -50,7 +50,7 @@
 .vx-pf-gallery li { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 0.5rem; background: var(--v-surface-low); box-shadow: var(--v-shadow-sm); }
 .vx-pf-gallery img { width: 100%; height: 100%; padding: 0.25rem; object-fit: contain; mix-blend-mode: multiply; }
 .vx-pf-cover { position: absolute; left: 6px; top: 6px; padding: 1px 6px; border-radius: 0.25rem; background: var(--v-primary); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-.vx-pf-remove { position: absolute; right: 6px; top: 6px; width: 28px; height: 28px; min-height: 28px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.95); color: var(--v-error); box-shadow: var(--v-shadow-sm); cursor: pointer; }
+.vx-pf-remove-old { position: absolute; right: 6px; top: 6px; width: 28px; height: 28px; min-height: 28px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.95); color: var(--v-error); box-shadow: var(--v-shadow-sm); cursor: pointer; }
 .vx-pf-drop { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; margin: 1.25rem 0 0; padding: 1.5rem; border-radius: 0.75rem; background: var(--v-surface-low); text-align: center; cursor: pointer; transition: background-color 0.15s; }
 .vx-pf-drop:hover { background: var(--v-surface-mid); }
 .vx-pf-drop .fa { font-size: 28px; color: var(--v-secondary); }
@@ -119,3 +119,14 @@
 .vx-admin-crumb > :last-child { color: var(--v-primary); }
 .vx-admin a.vx-mono { color: var(--v-primary) !important; text-decoration: none; }
 .vx-admin .vx-title-xl { font-weight: 600; }
+
+/* UPDATED: image tiles with "set as main" / remove actions (shown on hover and keyboard focus, always on touch) */
+.vx-pf-gallery li.is-main { box-shadow: 0 0 0 2px var(--v-secondary); }
+.vx-pf-new { position: absolute; left: 6px; bottom: 6px; padding: 1px 6px; border-radius: 0.25rem; background: var(--v-secondary-container); color: #594321; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.vx-pf-tools { position: absolute; right: 6px; top: 6px; display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
+.vx-pf-gallery li:hover .vx-pf-tools, .vx-pf-gallery li:focus-within .vx-pf-tools { opacity: 1; }
+@media (hover: none) { .vx-pf-tools { opacity: 1; } }
+.vx-pf-tools button { width: 32px; height: 32px; min-height: 32px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.95); color: var(--v-primary); box-shadow: var(--v-shadow-sm); cursor: pointer; }
+.vx-pf-tools button:hover { background: var(--v-primary); color: #fff; }
+.vx-pf-tools button.is-danger { color: var(--v-error); }
+.vx-pf-tools button.is-danger:hover { background: var(--v-error); color: #fff; }

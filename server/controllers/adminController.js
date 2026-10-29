@@ -169,3 +169,35 @@ exports.getAdminProducts = catchAsyncError(async (req, res, next) => {
     products,
   });
 });
+
+// UPDATED: one aggregated response for the admin dashboard => /api/v1/admin/stats
+// (replaces downloading every order and user just to count and sum them in the browser)
+const LOW_STOCK = 5;
+exports.dashboardStats = catchAsyncError(async (req, res) => {
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+  const [totals, monthly, recent, users, newUsers, products, outOfStock, lowStockCount, lowStock] = await Promise.all([
+    Orders.aggregate([{ $group: { _id: null, orders: { $sum: 1 }, revenue: { $sum: "$totalPrice" }, processing: { $sum: { $cond: [{ $eq: ["$orderStatus", "Processing"] }, 1, 0] } } } }]),
+    Orders.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo } } },
+      { $group: { _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } }, revenue: { $sum: "$totalPrice" }, orders: { $sum: 1 } } },
+    ]),
+    Orders.find().sort({ createdAt: -1 }).limit(5).select("createdAt totalPrice orderStatus orderItems.product orderItems.image orderItems.quantity shippingInfo.city user").populate("user", "name email"),
+    User.countDocuments(),
+    User.countDocuments({ createdAt: { $gte: monthStart } }),
+    Product.countDocuments(),
+    Product.countDocuments({ stock: 0 }),
+    Product.countDocuments({ stock: { $gt: 0, $lte: LOW_STOCK } }),
+    Product.find({ stock: { $lte: LOW_STOCK } }).sort({ stock: 1 }).limit(6).select("name stock images"),
+  ]);
+  const t = totals[0] || { orders: 0, revenue: 0, processing: 0 };
+  res.status(200).json({
+    success: true,
+    stats: {
+      revenue: t.revenue, orders: t.orders, processing: t.processing, users, newUsers, products, outOfStock, lowStockCount,
+      monthly: monthly.map((m) => ({ year: m._id.year, month: m._id.month, revenue: m.revenue, orders: m.orders })),
+      recent, lowStock: lowStock.map((p) => ({ _id: p._id, name: p.name, stock: p.stock, image: p.images && p.images[0] ? p.images[0].url : null })),
+    },
+  });
+});

@@ -14,7 +14,12 @@ const {
   updateOrder,
   deleteOrder,
   getAdminProducts,
+  dashboardStats,
 } = require("../controllers/adminController");
+
+router
+  .route("/admin/stats")
+  .get(isAuthenticatedUser, authorizeRole("admin"), dashboardStats);
 
 //PRODUCTS
 router

@@ -1,7 +1,6 @@
 import axios from "axios";
 import {
   QueryClient,
-  keepPreviousData,
   useMutation,
   useQuery,
   useQueryClient,
@@ -30,7 +29,12 @@ export function useProducts({
 }) {
   return useQuery({
     queryKey: ["products", "list", { keyword, page, price, category, rating, sort }],
-    placeholderData: keepPreviousData,
+    // UPDATED: keep the previous list only while paging/sorting within the SAME search + category; a different
+    // category or keyword shows the loading state instead of the old (wrong) products
+    placeholderData: (previous, previousQuery) => {
+      const before = previousQuery?.queryKey?.[2];
+      return before && before.keyword === keyword && before.category === category ? previous : undefined;
+    },
     queryFn: async ({ signal }) => {
       const params = new URLSearchParams({
         keyword,

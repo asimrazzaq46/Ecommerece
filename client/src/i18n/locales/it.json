@@ -816,7 +816,13 @@
         "stockInvalid": "Inserisci un numero intero pari o superiore a 0.",
         "imagesRequired": "Aggiungi almeno un'immagine.",
         "imageInvalid": "Scegli immagini PNG, JPEG, GIF o WebP inferiori a 5 MB."
-      }
+      },
+      "newBadge": "Nuova",
+      "setMain": "Imposta come immagine principale",
+      "setMainNamed": "Imposta l'immagine {{n}} come principale",
+      "remove": "Rimuovi immagine",
+      "stagedNote": "Le modifiche alle immagini vengono salvate quando premi Salva. Annulla conserva tutte le immagini attuali.",
+      "orderNote": "La prima immagine è quella principale. Usa la stella per cambiarla."
     }
   },
   "adminOrders": {
