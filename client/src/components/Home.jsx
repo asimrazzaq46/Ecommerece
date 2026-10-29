@@ -1,13 +1,14 @@
 import { useParams, useSearchParams, Link } from "react-router-dom";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAlert } from "./ui/Alerts";
 import Pagination from "./ui/Pagination";
+import Select from "./ui/Select";
 
 import { useProducts, messageFor } from "../queries/products";
 import { PRODUCT_CATEGORIES } from "../constants/productCategories";
 import { formatPrice } from "../i18n";
-import MetaDAta from "./layouts/MetaDAta";
+import Seo, { absoluteUrl } from "./layouts/Seo";
 import Search from "./layouts/Search";
 import Products from "./products/products";
 import CatalogFilters, { PRICE_RANGE } from "./products/CatalogFilters";
@@ -22,31 +23,51 @@ const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categorySelection = searchParams.get("category") || "";
 
-  // here come all the states for the homepage
-  const [page, setPage] = useState({ key: "", value: 1 });
-  const [price, setPrice] = useState(PRICE_RANGE);
-  const [rating, setRating] = useState(0);
-  const [sort, setSort] = useState("newest");
+  // UPDATED: every filter, the sort and the page live in the URL (?category, rating, min, max, sort, page),
+  // so Back/Forward and shared links restore the same results.
   const [filtersOpen, setFiltersOpen] = useState(false);
-
   const alert = useAlert();
-
   const keyWord = params.keyword; // getting the search word from pramas that was in backend with req.params.keyword
 
-  const filterKey = JSON.stringify([keyWord, price, categorySelection, rating, sort]);
-  const currentPage = page.key === filterKey ? page.value : 1;
-
-  // function for setting currentpage for pagination
-  const setCurrentPageNumber = (pageNumber) => {
-    setPage({ key: filterKey, value: pageNumber });
+  const num = (name, fallback, min, max) => {
+    const n = Number(searchParams.get(name));
+    return Number.isFinite(n) && searchParams.get(name) !== null && n >= min && n <= max ? n : fallback;
   };
+  const price = [num("min", PRICE_RANGE[0], PRICE_RANGE[0], PRICE_RANGE[1]), num("max", PRICE_RANGE[1], PRICE_RANGE[0], PRICE_RANGE[1])];
+  const rating = num("rating", 0, 0, 4);
+  const sortParam = searchParams.get("sort");
+  const sort = SORTS.includes(sortParam) ? sortParam : "newest";
+  const currentPage = Math.floor(num("page", 1, 1, 1000));
 
-  const setCategory = (category) => setSearchParams(category ? { category } : {});
-  const resetFilters = () => {
-    setPrice(PRICE_RANGE);
-    setCategory("");
-    setRating(0);
+  // UPDATED: single entry point for every catalog change. Applies the patch to the URL (dropping defaults),
+  // returns to page 1 unless the page itself changed, closes the mobile drawer and asks for one scroll.
+  const scrollAfterChange = useRef(false);
+  const update = (patch) => {
+    const next = new URLSearchParams(searchParams);
+    const merged = { page: 1, ...patch };
+    const defaults = { category: "", rating: 0, min: PRICE_RANGE[0], max: PRICE_RANGE[1], sort: "newest", page: 1 };
+    Object.entries(merged).forEach(([k, v]) => (v === defaults[k] || v === undefined ? next.delete(k) : next.set(k, v)));
+    if (next.toString() === searchParams.toString()) return;
+    scrollAfterChange.current = true;
+    setFiltersOpen(false);
+    setSearchParams(next);
   };
+  // After the new results render (so a vanishing hero cannot shift the target), bring the catalog top into view
+  // below the sticky header. Runs for zero results too and never on first load (flag is only set by update()).
+  const queryString = searchParams.toString();
+  useEffect(() => {
+    if (!scrollAfterChange.current) return;
+    scrollAfterChange.current = false;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById("catalog")?.scrollIntoView?.({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }, [queryString]);
+
+  const setCategory = (category) => update({ category });
+  const setCurrentPageNumber = (pageNumber) => update({ page: pageNumber });
+  const setPrice = ([min, max]) => update({ min, max });
+  const setRating = (value) => update({ rating: value });
+  const setSort = (value) => update({ sort: value });
+  const resetFilters = () => update({ category: "", rating: 0, min: PRICE_RANGE[0], max: PRICE_RANGE[1] });
 
   // taking out aal the data from reducers or from the state
   const query = useProducts({
@@ -85,7 +106,7 @@ const Home = () => {
   // on small screens "Browse categories" opens the filter drawer, which holds the category list.
   const goToCatalog = (openFilters) => {
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    document.getElementById("catalog")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    document.getElementById("catalog")?.scrollIntoView?.({ behavior: reduce ? "auto" : "smooth", block: "start" });
     if (openFilters && window.matchMedia?.("(max-width: 1023px)").matches) setFiltersOpen(true);
   };
   const chips = [
@@ -100,7 +121,20 @@ const Home = () => {
   // Rendering the home page with products
   return (
     <Fragment>
-      <MetaDAta title={keyWord ? t("catalog.searchPageTitle", { keyword: keyWord }) : t("catalog.pageTitle")} />
+      {/* UPDATED: only the plain home page and a single-category listing are indexable; keyword searches and
+          price/rating/sort/page variants are noindex so they cannot create duplicate content. */}
+      <Seo
+        title={keyWord ? t("catalog.searchPageTitle", { keyword: keyWord }) : categorySelection ? t(`categories.${categorySelection}`) : t("seo.homeTitle")}
+        description={categorySelection ? t("seo.categoryDescription", { category: t(`categories.${categorySelection}`) }) : t("seo.homeDescription")}
+        path={categorySelection ? `/?category=${encodeURIComponent(categorySelection)}` : "/"}
+        image="/assets/home-hero-image.webp"
+        follow
+        noindex={Boolean(keyWord) || priceActive || rating > 0 || searchParams.has("sort") || searchParams.has("page")}
+        jsonLd={categorySelection ? [] : [
+          { "@context": "https://schema.org", "@type": "WebSite", name: "Veyra", url: absoluteUrl("/"), potentialAction: { "@type": "SearchAction", target: absoluteUrl("/search/{search_term_string}"), "query-input": "required name=search_term_string" } },
+          { "@context": "https://schema.org", "@type": "Organization", name: "Veyra", url: absoluteUrl("/") },
+        ]}
+      />
       {/* UPDATED: Veyra catalog (Stitch homepage + search results designs) */}
       <div className="vx-page vx-catalog">
         {keyWord ? (
@@ -146,7 +180,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="vx-hero-media">
-                  <img src="/assets/home-hero-image.webp" alt="" width="500" height="625" />
+                  <img src="/assets/home-hero-image.webp" alt="" width="500" height="625" fetchPriority="high" /> {/* UPDATED: LCP image */}
                 </div>
               </div>
             </section>
@@ -195,7 +229,7 @@ const Home = () => {
 
             <div className="vx-results">
               <div className="vx-toolbar vx-card">
-                <p className="vx-muted">
+                <p className="vx-muted" role="status" aria-live="polite">
                   {query.isFetching && !loading ? t("catalog.updating") : t("catalog.showing", { from, to, total: count })}
                 </p>
                 <div className="vx-toolbar-actions">
@@ -204,13 +238,12 @@ const Home = () => {
                   </button>
                   <label className="vx-sort">
                     <span className="vx-label">{t("catalog.sortBy")}</span>
-                    <select className="vx-select" value={sort} onChange={(e) => setSort(e.target.value)}>
-                      {SORTS.map((value) => (
-                        <option key={value} value={value}>
-                          {t(`catalog.sort.${value}`)}
-                        </option>
-                      ))}
-                    </select>
+                    <Select
+                      value={sort}
+                      onChange={setSort}
+                      label={t("catalog.sortBy")}
+                      options={SORTS.map((value) => ({ value, label: t(`catalog.sort.${value}`) }))}
+                    />
                   </label>
                 </div>
               </div>

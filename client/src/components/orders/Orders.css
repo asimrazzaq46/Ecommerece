@@ -74,4 +74,3 @@
 .vx-detail-facts dt { font-weight: 400; color: var(--v-on-surface-variant); }
 .vx-detail-facts dd { margin: 0; color: var(--v-primary); }
 .vx-order-detail .vx-recap-box { margin-top: 1rem; }
-@media print { .vx-header, .vx-footer, .vx-order-title .vx-btn, .vx-breadcrumb { display: none !important; } }

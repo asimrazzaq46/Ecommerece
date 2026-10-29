@@ -1,0 +1,41 @@
+/* UPDATED: accessible Veyra select (see Select.jsx). Focus ring comes from the global :focus-visible rule. */
+.vx-select-wrap { position: relative; display: inline-block; min-width: 11rem; }
+.vx-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  height: 40px;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--v-surface-low);
+  color: var(--v-on-surface);
+  font: 400 13px/18px var(--v-sans);
+  text-align: left;
+  cursor: pointer;
+}
+.vx-select-trigger:hover:not(:disabled) { background: var(--v-surface-mid); }
+.vx-select-trigger:disabled { opacity: 0.55; cursor: not-allowed; }
+.vx-select-trigger .fa { color: var(--v-on-surface-variant); }
+.vx-select-list {
+  position: absolute;
+  z-index: 70;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100%;
+  max-height: 16rem;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 10px 30px -6px rgb(4 20 24 / 0.2);
+}
+.vx-select-list li { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 9px 10px; border-radius: 0.375rem; font-size: 13px; line-height: 18px; color: var(--v-on-surface); cursor: pointer; white-space: nowrap; }
+.vx-select-list li.is-active { background: var(--v-surface-low); }
+.vx-select-list li.is-selected { font-weight: 600; color: var(--v-primary); }
+.vx-select-list li[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+.vx-select-list .fa { color: var(--v-secondary); }

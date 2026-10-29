@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAlert } from "../ui/Alerts";
 
 import { getOrderDetails, clearError } from "../../actions";
-import { formatPrice, translateServerError } from "../../i18n";
+import { formatPrice, translateServerError, countryLabel } from "../../i18n";
 import MetaDAta from "../layouts/MetaDAta";
 import Loader from "../layouts/Loader";
 import "../user/Account.css";
@@ -171,7 +171,7 @@ const OrderDetails = () => {
                     <p className="vx-muted">
                       {shippingInfo.address}
                       <br />
-                      {shippingInfo.postalCode} {shippingInfo.city}, {shippingInfo.country}
+                      {shippingInfo.postalCode} {shippingInfo.city}, {countryLabel(shippingInfo.country)}
                       <br />
                       {t("orders.detail.contact")}: {shippingInfo.phoneNo}
                     </p>

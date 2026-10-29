@@ -14,7 +14,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 import MetaDAta from "../layouts/MetaDAta";
-import { formatPrice } from "../../i18n";
+import { formatPrice, countryLabel } from "../../i18n";
 import CheckoutSteps from "./CheckoutSteps";
 import OrderSummary from "./OrderSummary";
 import { clearError, createOrder, loadCart } from "../../actions";
@@ -170,7 +170,7 @@ const Payment = () => {
                 </div>
                 <div className="vx-recap-box">
                   <p className="vx-title-sm">{user && user.name}</p>
-                  <p className="vx-muted">{address.address}, {address.postalCode} {address.city}, {address.country} • {address.phoneNo}</p>
+                  <p className="vx-muted">{address.address}, {address.postalCode} {address.city}, {countryLabel(address.country)} • {address.phoneNo}</p>
                 </div>
               </section>
             )}

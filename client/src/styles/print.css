@@ -1,0 +1,35 @@
+/* UPDATED: print layout for receipts (Order Success, Order Details, Admin Process Order).
+   Forces dark text on white, removes the shell/decoration, and keeps each card on one page. */
+@media print {
+  @page { size: A4; margin: 14mm; }
+  html, body { background: #fff !important; color: #000 !important; font-size: 11pt; }
+  .skip-link, .vx-header, .vx-footer, .vx-breadcrumb, .vx-success-actions, .vx-order-title .vx-btn,
+  .vx-admin-side, .vx-admin-top, .vx-admin-scrim, .vx-po-status, .vx-pm-actions .vx-btn, .vx-edit-link, .vx-summary-edit { display: none !important; }
+
+  .vx-page, .vx-admin, .vx-admin-body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  .vx-container, .vx-admin-main { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+
+  /* readable text everywhere inside the receipts */
+  .vx-success *, .vx-order-detail *, .vx-po * { color: #000 !important; opacity: 1 !important; text-shadow: none !important; }
+  .vx-success .vx-label, .vx-order-detail .vx-label, .vx-success dt, .vx-order-detail dt, .vx-po dt { color: #222 !important; font-weight: 600; letter-spacing: 0; }
+  .vx-muted, .vx-field-hint { color: #222 !important; }
+
+  .vx-card { background: #fff !important; box-shadow: none !important; border: 1px solid #999; border-radius: 0 !important; break-inside: avoid; page-break-inside: avoid; }
+  .vx-success-hero::before, .vx-success-hero::after { display: none !important; }
+  .vx-success-hero { padding: 0 0 12pt !important; align-items: flex-start; text-align: left; gap: 6pt; border: 0; border-bottom: 1px solid #000; }
+  .vx-success-icon { display: none; }
+  .vx-success-title, .vx-title-xl { font-size: 20pt !important; line-height: 1.2 !important; }
+  .vx-success-facts { grid-template-columns: repeat(2, 1fr) !important; gap: 6pt; max-width: none; }
+  .vx-success-facts > div { background: #fff !important; border: 1px solid #bbb; border-radius: 0; }
+  .vx-success-grid, .vx-detail-grid, .vx-po { display: block !important; }
+  .vx-success-grid > *, .vx-detail-grid > *, .vx-po > * { margin-top: 10pt; }
+  .vx-summary { position: static !important; }
+  .vx-summary-total, .vx-recap-box, .vx-summary-items li, .vx-timeline-card { background: #fff !important; border: 1px solid #bbb; border-radius: 0; }
+  .vx-status, .vx-pay-pill { background: #fff !important; border: 1px solid #000; border-radius: 0; padding: 1pt 6pt; }
+  .vx-timeline { display: block !important; }
+  .vx-timeline li { flex-direction: row !important; margin-bottom: 6pt; }
+  .vx-timeline li::after { display: none !important; }
+  .vx-timeline-dot { background: #fff !important; border: 1px solid #000; }
+  img { max-width: 60pt; }
+  a { text-decoration: none; }
+}

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 
 import MetaDAta from "../layouts/MetaDAta";
-import { formatPrice } from "../../i18n";
+import { formatPrice, countryLabel } from "../../i18n";
 import OrderSummary from "./OrderSummary";
 import "./Checkout.css";
 
@@ -52,7 +52,7 @@ const OrderSuccess = () => {
                 </div>
                 <div>
                   <dt>{t("checkout.success.destination")}</dt>
-                  <dd>{[order.shippingInfo?.city, order.shippingInfo?.country].filter(Boolean).join(", ")}</dd>
+                  <dd>{[order.shippingInfo?.city, countryLabel(order.shippingInfo?.country)].filter(Boolean).join(", ")}</dd>
                 </div>
                 <div>
                   <dt>{t("checkout.success.status")}</dt>
@@ -87,7 +87,7 @@ const OrderSuccess = () => {
                   <p className="vx-muted">
                     {order.shippingInfo?.address}
                     <br />
-                    {order.shippingInfo?.postalCode} {order.shippingInfo?.city}, {order.shippingInfo?.country}
+                    {order.shippingInfo?.postalCode} {order.shippingInfo?.city}, {countryLabel(order.shippingInfo?.country)}
                     <br />
                     {order.shippingInfo?.phoneNo}
                   </p>

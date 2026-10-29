@@ -5,8 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useAlert } from "../ui/Alerts";
 
 import { updateOrder, getOrderDetails, clearError } from "../../actions";
-import { formatPrice, translateServerError } from "../../i18n";
+import { formatPrice, translateServerError, countryLabel } from "../../i18n";
 import MetaDAta from "../layouts/MetaDAta";
+import Select from "../ui/Select";
 import Loader from "../layouts/Loader";
 import AdminLayout from "./AdminLayout";
 import AdminHead from "./AdminHead";
@@ -109,9 +110,7 @@ const ProcessOrder = () => {
               <div className="vx-po-status">
                 <div className="vx-field">
                   <label htmlFor="status_field" className="vx-field-label">{t("adminOrders.process.action")}</label>
-                  <select id="status_field" className="vx-control" value={status} disabled={locked} onChange={(e) => setStatus(e.target.value)}>
-                    {options.map((s) => <option key={s} value={s}>{t(`orders.statuses.${s}`)}</option>)}
-                  </select>
+                  <Select id="status_field" className="vx-select-wrap--block" value={status} disabled={locked} onChange={setStatus} label={t("adminOrders.process.action")} options={options.map((s) => ({ value: s, label: t(`orders.statuses.${s}`) }))} />
                 </div>
                 <button
                   type="button"
@@ -174,7 +173,7 @@ const ProcessOrder = () => {
                 <p className="vx-muted vx-po-line">
                   {shippingInfo.address}
                   <br />
-                  {shippingInfo.postalCode} {shippingInfo.city}, {shippingInfo.country}
+                  {shippingInfo.postalCode} {shippingInfo.city}, {countryLabel(shippingInfo.country)}
                   <br />
                   {shippingInfo.phoneNo}
                 </p>

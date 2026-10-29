@@ -91,7 +91,6 @@
 .vx-po-history { display: flex; flex-direction: column; gap: 0.75rem; margin: 1rem 0 0; padding: 0 0 0 1rem; border-left: 2px solid var(--v-surface-high); list-style: none; font-size: 13px; line-height: 18px; }
 .vx-po-history li { display: flex; flex-direction: column; }
 .vx-po-main .vx-pm-card .vx-pf-card { padding-bottom: 0.5rem; }
-@media print { .vx-admin-side, .vx-admin-top, .vx-po-status, .vx-pm-actions { display: none !important; } .vx-admin-body { padding-left: 0; } }
 
 .vx-rv { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
 @media (min-width: 1100px) { .vx-rv { grid-template-columns: 4fr 8fr; } .vx-rv-pick { position: sticky; top: 88px; } }
@@ -130,3 +129,11 @@
 .vx-pf-tools button:hover { background: var(--v-primary); color: #fff; }
 .vx-pf-tools button.is-danger { color: var(--v-error); }
 .vx-pf-tools button.is-danger:hover { background: var(--v-error); color: #fff; }
+
+/* UPDATED: status badge + action buttons share one centered row (they used to stretch to the button height) */
+.vx-pm-actions { align-items: center; }
+.vx-dash-head .vx-pm-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.vx-admin .vx-dash-head .vx-status { padding: 6px 14px; font-size: 12px; line-height: 16px; letter-spacing: 0.04em; text-transform: uppercase; cursor: default; user-select: none; }
+.vx-admin .vx-status.is-processing { background: rgb(252 219 173 / 0.6); color: #594321; }
+.vx-select-wrap--block { display: block; width: 100%; }
+.vx-select-wrap--block .vx-select-trigger { height: 44px; font-size: 15px; }

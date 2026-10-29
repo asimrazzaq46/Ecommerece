@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import MetaDAta from "../layouts/MetaDAta";
-import { formatPrice } from "../../i18n";
+import { formatPrice, countryLabel } from "../../i18n";
 import CheckoutSteps from "./CheckoutSteps";
 import OrderSummary from "./OrderSummary";
 import { orderTotals } from "./orderTotals";
@@ -77,7 +77,7 @@ const ConfirmOrder = () => {
                       <br />
                       {shippingInfo.postalCode} {shippingInfo.city}
                       <br />
-                      {shippingInfo.country}
+                      {countryLabel(shippingInfo.country)}
                     </p>
                   </div>
                   <div>

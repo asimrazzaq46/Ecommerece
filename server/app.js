@@ -40,6 +40,7 @@ app.use("/api/v1", order);
 app.use("/api/v1", review);
 app.use("/api/v1", payment);
 app.use("/api/v1", cart);
+app.use(require("./routes/seo")); // UPDATED: robots.txt + sitemap.xml
 
 // Error handling with middlwares
 app.use(errorMiddleware);

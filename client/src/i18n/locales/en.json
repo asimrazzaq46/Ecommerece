@@ -1031,5 +1031,14 @@
     "title": "We can't find this page",
     "text": "The link may be broken or the page may have been removed. Try one of these instead.",
     "home": "Back to the store"
+  },
+  "seo": {
+    "homeTitle": "Shop electronics, fashion and home",
+    "homeDescription": "Browse electronics, laptops, phones, clothing, books and home essentials at Veyra, with secure checkout and easy order tracking.",
+    "categoryTitle": "{{category}}",
+    "categoryDescription": "Shop {{category}} at Veyra, with secure checkout and easy order tracking.",
+    "productFallbackDescription": "Buy {{name}} at Veyra, with secure checkout and easy order tracking.",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock"
   }
 }

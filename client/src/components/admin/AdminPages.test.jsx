@@ -51,11 +51,12 @@ test("order deletion needs confirmation", () => {
 test("process order only offers forward status changes and locks unpaid or delivered orders", () => {
   const id = "aaaaaaaaaaaaaaaaaaaa0002";
   const { unmount } = wrap({ orderDetails: { order: order(id, "Shipped") }, order: {} }, <ProcessOrder />, "/admin/order/" + id, "/admin/order/:id");
+  fireEvent.click(screen.getByRole("combobox")); // UPDATED: custom Select, options render once opened
   expect(screen.queryByRole("option", { name: "Processing" })).not.toBeInTheDocument();
   expect(screen.getByRole("option", { name: "Delivered" })).toBeInTheDocument();
   unmount();
   wrap({ orderDetails: { order: order(id, "Processing", false) }, order: {} }, <ProcessOrder />, "/admin/order/" + id, "/admin/order/:id");
-  expect(screen.getByLabelText("Status")).toBeDisabled();
+  expect(screen.getByRole("combobox")).toBeDisabled();
 });
 
 test("users: you and other admins cannot be deleted, customers can after confirming", () => {

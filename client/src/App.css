@@ -1,12 +1,14 @@
+/* UPDATED: overflow-x:hidden + height:100% on html AND body turned <body> into the scroller, so window.scrollTo
+   (ScrollToTop) and the sticky header's viewport never worked. clip hides sideways overflow without a scroll container. */
 html,
 body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   width: 100%;
-  height: 100%;
   margin: 0px;
   padding: 0px;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
+body { min-height: 100%; }
 
 /* Scroll Bar */
 

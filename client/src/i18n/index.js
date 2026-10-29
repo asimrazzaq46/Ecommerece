@@ -75,4 +75,26 @@ export const formatPrice = (value) =>
     currency: "USD",
   }).format(Number(value) || 0);
 
+// UPDATED: orders and addresses store the English country name (history must not change). This shows it in the
+// active language by mapping the name back to its ISO code with Intl; unknown names are shown as stored.
+let countryCodes;
+export const countryLabel = (name) => {
+  if (!name) return name;
+  try {
+    if (!countryCodes) {
+      countryCodes = new Map();
+      const en = new Intl.DisplayNames(["en"], { type: "region" });
+      for (const a of "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        for (const b of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+          const label = en.of(a + b);
+          if (label && label !== a + b) countryCodes.set(label.toLowerCase(), a + b);
+        }
+    }
+    const code = countryCodes.get(String(name).toLowerCase());
+    return code ? new Intl.DisplayNames([i18n.language], { type: "region" }).of(code) : name;
+  } catch {
+    return name;
+  }
+};
+
 export default i18n;

@@ -1031,5 +1031,14 @@
     "title": "Non troviamo questa pagina",
     "text": "Il link potrebbe essere errato o la pagina è stata rimossa. Prova una di queste alternative.",
     "home": "Torna al negozio"
+  },
+  "seo": {
+    "homeTitle": "Acquista elettronica, moda e casa",
+    "homeDescription": "Scopri elettronica, laptop, telefoni, abbigliamento, libri e articoli per la casa su Veyra, con pagamento sicuro e tracciamento degli ordini.",
+    "categoryTitle": "{{category}}",
+    "categoryDescription": "Acquista {{category}} su Veyra, con pagamento sicuro e tracciamento degli ordini.",
+    "productFallbackDescription": "Acquista {{name}} su Veyra, con pagamento sicuro e tracciamento degli ordini.",
+    "inStock": "Disponibile",
+    "outOfStock": "Non disponibile"
   }
 }

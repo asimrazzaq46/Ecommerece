@@ -190,6 +190,11 @@
 @media (min-width: 768px) {
   .vx-grid { grid-template-columns: repeat(2, 1fr); }
 }
+/* UPDATED: tablets use the width: image beside the text from 768px (it used to stay one narrow column up to 1023px) */
+@media (min-width: 768px) {
+  .vx-hero-grid { grid-template-columns: 1fr 1fr; gap: 2rem; padding-top: 4rem; padding-bottom: 4rem; }
+  .vx-hero-media { max-height: 480px; }
+}
 @media (min-width: 1024px) {
   .vx-hero-grid { grid-template-columns: 7fr 5fr; padding-top: 6rem; padding-bottom: 6rem; }
   .vx-hero-title { font-size: 56px; line-height: 64px; letter-spacing: -0.03em; }
@@ -230,5 +235,9 @@
 }
 
 /* UPDATED: scroll target clears the sticky header (topbar 36 + main 80 + category nav 44 + breathing room) */
-.vx-catalog-body { scroll-margin-top: 184px; }
-@media (max-width: 767px) { .vx-catalog-body { scroll-margin-top: 220px; } }
+.vx-catalog-body { scroll-margin-top: 210px; } /* UPDATED: sticky header is ~194px tall */
+@media (max-width: 767px) { .vx-catalog-body { scroll-margin-top: 240px; } }
+
+/* UPDATED: keep the results area at least one viewport tall so the scroll-to-catalog target is reachable
+   even while loading or with zero results (the browser clamps scrolling on a short page). */
+.vx-results { min-height: calc(100vh - 210px); }

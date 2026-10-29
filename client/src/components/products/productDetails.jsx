@@ -13,6 +13,7 @@ import { addItemToCart } from "../../actions";
 import { formatPrice, translateServerError } from "../../i18n";
 import Loader from "../layouts/Loader";
 import MetaDAta from "../layouts/MetaDAta";
+import Seo, { absoluteUrl } from "../layouts/Seo";
 import ListReviews from "../reviews/ListReviews";
 import Stars from "../ui/Stars";
 import ProductCard from "./products";
@@ -60,14 +61,20 @@ function ProductDetailContent({ id }) {
   if (query.isError)
     return (
       <div className="vx-page">
+        <MetaDAta title={query.error?.response?.status === 404 ? t("notFound.pageTitle") : t("product.loadError")} /> {/* UPDATED: error / unknown product pages are never indexed */}
         <div className="vx-container vx-pd">
           <div className="vx-card vx-state" role="alert">
             <span className="vx-state-icon"><i className="fa fa-exclamation-triangle" aria-hidden="true" /></span>
-            <h1 className="vx-title-md">{t("product.loadError")}</h1>
-            <p>{messageFor(query.error)}</p>
-            <button className="vx-btn vx-btn--primary" onClick={() => query.refetch()}>
-              {t("product.retry")}
-            </button>
+            {/* UPDATED: a missing product is a real "not found" page (no retry), other failures keep the retry */}
+            <h1 className="vx-title-md">{query.error?.response?.status === 404 ? t("notFound.title") : t("product.loadError")}</h1>
+            <p>{query.error?.response?.status === 404 ? t("notFound.text") : messageFor(query.error)}</p>
+            {query.error?.response?.status === 404 ? (
+              <Link to="/" className="vx-btn vx-btn--primary">{t("notFound.home")}</Link>
+            ) : (
+              <button className="vx-btn vx-btn--primary" onClick={() => query.refetch()}>
+                {t("product.retry")}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -101,7 +108,35 @@ function ProductDetailContent({ id }) {
   };
   return (
     <>
-      <MetaDAta title={product.name} />
+      {/* UPDATED: metadata + Product/Breadcrumb JSON-LD built only from the real product record */}
+      <Seo
+        title={product.name}
+        description={String(product.description || "").replace(/\s+/g, " ").trim().slice(0, 155) || t("seo.productFallbackDescription", { name: product.name })}
+        path={`/product/${id}`}
+        image={images[0]?.url}
+        type="product"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: product.description,
+            image: images.map((img) => img.url),
+            url: absoluteUrl(`/product/${id}`),
+            offers: { "@type": "Offer", url: absoluteUrl(`/product/${id}`), price: Number(product.price).toFixed(2), priceCurrency: "USD", availability: `https://schema.org/${inStock ? "InStock" : "OutOfStock"}` },
+            ...(product.NumOfReviews > 0 && { aggregateRating: { "@type": "AggregateRating", ratingValue: Number(product.rating).toFixed(1), reviewCount: product.NumOfReviews } }),
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: t("nav.home"), item: absoluteUrl("/") },
+              ...(product.catagory ? [{ "@type": "ListItem", position: 2, name: categoryLabel, item: absoluteUrl(`/?category=${encodeURIComponent(product.catagory)}`) }] : []),
+              { "@type": "ListItem", position: product.catagory ? 3 : 2, name: product.name },
+            ],
+          },
+        ]}
+      />
       {/* UPDATED: Veyra product page (Stitch product details design) */}
       <div className="vx-page">
         <div className="vx-container vx-pd">

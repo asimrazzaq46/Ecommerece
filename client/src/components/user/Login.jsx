@@ -25,11 +25,14 @@ const Login = () => {
   const [errors, setErrors] = useState({}); // UPDATED: translated inline validation
 
   const { isAuthenticated, loading, error } = useSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const requested = new URLSearchParams(location.search).get("redirect") || "/";
-  const redirect = requested.startsWith("/") && !requested.startsWith("//") ? requested : `/${requested.replace(/^\/+/, "")}`;
+  const redirect =
+    requested.startsWith("/") && !requested.startsWith("//")
+      ? requested
+      : `/${requested.replace(/^\/+/, "")}`;
 
   const alert = useAlert();
 
@@ -81,9 +84,16 @@ const Login = () => {
                 </div>
 
                 <form className="auth-form" onSubmit={submitHandler} noValidate>
-                  <Field id="email_field" label={t("fields.email")} error={errors.email}>
+                  <Field
+                    id="email_field"
+                    label={t("fields.email")}
+                    error={errors.email}
+                  >
                     <div className="auth-input-wrap has-icon">
-                      <i className="fa fa-at auth-input-icon" aria-hidden="true" />
+                      <i
+                        className="fa fa-at auth-input-icon"
+                        aria-hidden="true"
+                      />
                       <input
                         type="email"
                         id="email_field"
@@ -92,7 +102,9 @@ const Login = () => {
                         placeholder="name@example.com"
                         value={email}
                         aria-invalid={Boolean(errors.email)}
-                        aria-describedby={errors.email ? "email_field_error" : undefined}
+                        aria-describedby={
+                          errors.email ? "email_field_error" : undefined
+                        }
                         onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
@@ -115,12 +127,18 @@ const Login = () => {
                       placeholder="••••••••"
                       value={password}
                       aria-invalid={Boolean(errors.password)}
-                      aria-describedby={errors.password ? "password_field_error" : undefined}
+                      aria-describedby={
+                        errors.password ? "password_field_error" : undefined
+                      }
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </Field>
 
-                  <button id="login_button" type="submit" className="auth-submit auth-submit--caps">
+                  <button
+                    id="login_button"
+                    type="submit"
+                    className="auth-submit auth-submit--caps"
+                  >
                     <span>{t("login.submit")}</span>
                     <i className="fa fa-arrow-right" aria-hidden="true" />
                   </button>
@@ -139,10 +157,16 @@ const Login = () => {
               </section>
 
               <aside className="auth-showcase auth-showcase--login">
-                <img className="auth-showcase-img" src="/assets/login-brand-image.webp" alt="" />
+                <img
+                  className="auth-showcase-img"
+                  src="/assets/login-brand-image.webp"
+                  alt=""
+                />
                 <div className="auth-showcase-scrim" />
                 <div className="auth-showcase-top">
-                  <span className="auth-glass-badge">{t("login.showcase.badge")}</span>
+                  <span className="auth-glass-badge">
+                    {t("login.showcase.badge")}
+                  </span>
                   <i className="fa fa-star-o" aria-hidden="true" />
                 </div>
                 <div className="auth-showcase-body">
@@ -150,23 +174,37 @@ const Login = () => {
                     <span className="auth-pill-dot" />
                     {t("login.showcase.pill")}
                   </span>
-                  <blockquote className="auth-quote">“{t("login.showcase.quote")}”</blockquote>
+                  <blockquote className="auth-quote">
+                    “{t("login.showcase.quote")}”
+                  </blockquote>
                   <div className="auth-person">
                     <span className="auth-person-initials">V</span>
                     <div>
-                      <div className="auth-person-name">{t("login.showcase.author")}</div>
-                      <div className="auth-person-role">{t("login.showcase.authorRole")}</div>
+                      <div className="auth-person-name">
+                        {t("login.showcase.author")}
+                      </div>
+                      <div className="auth-person-role">
+                        {t("login.showcase.authorRole")}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="auth-stats">
                   <div className="auth-stat">
-                    <div className="auth-stat-label">{t("login.showcase.stat1Label")}</div>
-                    <div className="auth-stat-value">{t("login.showcase.stat1Value")}</div>
+                    <div className="auth-stat-label">
+                      {t("login.showcase.stat1Label")}
+                    </div>
+                    <div className="auth-stat-value">
+                      {t("login.showcase.stat1Value")}
+                    </div>
                   </div>
                   <div className="auth-stat">
-                    <div className="auth-stat-label">{t("login.showcase.stat2Label")}</div>
-                    <div className="auth-stat-value">{t("login.showcase.stat2Value")}</div>
+                    <div className="auth-stat-label">
+                      {t("login.showcase.stat2Label")}
+                    </div>
+                    <div className="auth-stat-value">
+                      {t("login.showcase.stat2Value")}
+                    </div>
                   </div>
                 </div>
               </aside>
